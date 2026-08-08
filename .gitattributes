@@ -1,0 +1,33 @@
+*.ts filter=stripcomments
+*.tsx filter=stripcomments
+*.js filter=stripcomments
+*.mjs filter=stripcomments
+*.cjs filter=stripcomments
+*.css filter=stripcomments
+*.html filter=stripcomments
+*.svg filter=stripcomments
+*.md filter=stripcomments
+*.json filter=stripcomments
+*.webmanifest filter=stripcomments
+*.sh filter=stripcomments
+*.yml filter=stripcomments
+*.yaml filter=stripcomments
+*.sql filter=stripcomments
+*.template filter=stripcomments
+.env filter=stripcomments
+.env.* filter=stripcomments
+Dockerfile filter=stripcomments
+.dockerignore filter=stripcomments
+.gitignore filter=stripcomments
+.gitattributes filter=stripcomments
+
+
+
+
+*.png -filter -diff
+*.jpg -filter -diff
+*.jpeg -filter -diff
+*.gif -filter -diff
+*.ico -filter -diff
+*.woff -filter -diff
+*.woff2 -filter -diff
