@@ -1,0 +1,27 @@
+name: On pull request
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    uses: ./.github/workflows/verify.yml
+    secrets: inherit
+
+  dast:
+    uses: ./.github/workflows/dast.yml
+    secrets: inherit
+
+  docker:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-build-and-scan.yml
+    with:
+      push: false
