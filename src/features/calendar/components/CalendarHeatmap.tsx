@@ -50,10 +50,9 @@ function groupEventsByDayKey(events: CalendarEvent[]): Map<string, CalendarEvent
 
 
 
-function heatLevel(count: number): 0 | 1 | 2 | 3 | 4 | 5 {
-  if (count <= 0) return 0;
-  if (count >= 5) return 5;
-  return count as 1 | 2 | 3 | 4;
+
+function heatLevel(count: number): 0 | 1 {
+  return count > 0 ? 1 : 0;
 }
 
 export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
@@ -188,14 +187,6 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
             );
           })}
         </motion.div>
-
-        <div className={styles.legend}>
-          <span>Fewer</span>
-          {[0, 1, 2, 3, 4, 5].map((level) => (
-            <span key={level} className={[styles.legendSquare, styles[`heat${level}`]].join(' ')} />
-          ))}
-          <span>More</span>
-        </div>
       </div>
     </div>
   );
