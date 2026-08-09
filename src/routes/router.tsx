@@ -86,6 +86,20 @@ export const router = createBrowserRouter([
               { path: paths.myInstructorProfile, element: lazyPage(routeModules[paths.myInstructorProfile]) },
             ],
           },
+          {
+            element: <RoleRoute allowed={['Manager', 'SuperAdmin']} />,
+            children: [
+              { path: paths.pendingApprovals, element: lazyPage(routeModules[paths.pendingApprovals]) },
+              { path: paths.auditLog, element: lazyPage(routeModules[paths.auditLog]) },
+            ],
+          },
+          {
+            element: <RoleRoute allowed={['SuperAdmin']} />,
+            children: [
+              { path: paths.superAdminUsers, element: lazyPage(routeModules[paths.superAdminUsers]) },
+              { path: paths.superAdminSessions, element: lazyPage(routeModules[paths.superAdminSessions]) },
+            ],
+          },
         ],
       },
     ],
