@@ -1,0 +1,31 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--space-3) + env(safe-area-inset-top, 0px)) var(--space-5) var(--space-3);
+  background-color: rgb(255 255 255 / 86%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+:root[data-theme='dark'] .header {
+  background-color: rgb(24 24 27 / 86%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .header {
+    background-color: rgb(24 24 27 / 86%);
+  }
+}
+
+.date {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

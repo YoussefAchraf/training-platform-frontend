@@ -1,0 +1,21 @@
+.wrapper {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  text-align: center;
+  padding: var(--space-6);
+}
+
+.icon {
+  color: var(--color-danger);
+  margin-bottom: var(--space-2);
+}
+
+.wrapper p {
+  color: var(--color-text-muted);
+  max-width: 40ch;
+  margin-bottom: var(--space-4);
+}
