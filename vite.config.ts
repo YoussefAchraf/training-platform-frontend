@@ -78,6 +78,40 @@ function obfuscateBuild(): Plugin {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+function preloadFonts(): Plugin {
+  return {
+    name: 'preload-critical-fonts',
+    apply: 'build',
+    transformIndexHtml(html, ctx) {
+      const bundle = ctx.bundle
+      if (!bundle) return html
+      const weights = ['inter-latin-400-normal', 'inter-latin-600-normal']
+      const tags = weights
+        .map((weight) =>
+          Object.values(bundle).find((item) => item.fileName.includes(weight) && item.fileName.endsWith('.woff2')),
+        )
+        .filter((item): item is NonNullable<typeof item> => Boolean(item))
+        .map(
+          (item) =>
+            `<link rel="preload" as="font" type="font/woff2" href="/${item.fileName}" crossorigin>`,
+        )
+      if (tags.length === 0) return html
+      return html.replace('</head>', `${tags.join('\n    ')}\n  </head>`)
+    },
+  }
+}
+
+// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const siteUrl = env.SITE_URL || 'http://localhost:3000'
@@ -88,16 +122,20 @@ export default defineConfig(({ mode }) => {
       Sitemap({
         hostname: siteUrl,
         dynamicRoutes: DYNAMIC_ROUTES,
+        // Without this, the plugin's dist/*.html scan picks up 404.html as
+        // if it were a real indexable page and lists /404 in the sitemap.
+        exclude: ['/404'],
         changefreq: 'monthly',
         priority: { '/': 1, '/login': 0.8, '/signup': 0.8, '*': 0.5 },
         robots: [{ userAgent: '*', allow: ALLOWED_ROUTES, disallow: DISALLOWED_ROUTES }],
       }),
       obfuscateBuild(),
-      
-      
-      
-      
-      
+      preloadFonts(),
+      // manifest: false - public/site.webmanifest is already hand-maintained
+      // (icons, maskable variants, theme colors) from earlier PWA-icon work;
+      // injectManifest (not generateSW) because push notifications need a
+      // hand-written `push`/`notificationclick` handler in src/sw.ts
+      // alongside Workbox's precaching, which generateSW doesn't allow.
       VitePWA({
         strategies: 'injectManifest',
         srcDir: 'src',
@@ -120,11 +158,11 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         output: {
-          
-          
-          
-          
-          
+          // Vendor deps rarely change between deploys; app code changes on
+          // every one. Splitting them into their own long-lived chunks means
+          // a returning visitor's browser cache for React/motion/react-query
+          // survives a normal app deploy instead of being invalidated by it
+          // (the index chunk that DOES change every deploy stays much smaller).
           manualChunks(id) {
             if (!id.includes('node_modules')) return undefined
             if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/react-router')) {

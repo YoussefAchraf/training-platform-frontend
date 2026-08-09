@@ -13,7 +13,6 @@ import { useViewportFillHeight } from '@/shared/hooks/useViewportFillHeight';
 import { useDeleteCalendarEvent, useGlobalCalendar, useMyCalendar } from '../hooks/useCalendar';
 import { CalendarAgenda } from '../components/CalendarAgenda';
 import { CalendarHeatmap } from '../components/CalendarHeatmap';
-import { CalendarTimeline } from '../components/CalendarTimeline';
 import { EditCalendarEventModal } from '../components/EditCalendarEventModal';
 import styles from './CalendarPage.module.css';
 
@@ -85,38 +84,42 @@ export function CalendarPage() {
             : 'Sessions assigned to you.'
         }
         actions={
-          canManageCatalog && (
-            <div className={styles.viewToggle}>
-              <button
-                type="button"
-                className={viewMode === 'heatmap' ? styles.viewToggleActive : styles.viewToggleButton}
-                onClick={() => setViewMode('heatmap')}
-                aria-pressed={viewMode === 'heatmap'}
-              >
-                <LayoutGrid size={14} /> Heatmap
-              </button>
-              <button
-                type="button"
-                className={viewMode === 'agenda' ? styles.viewToggleActive : styles.viewToggleButton}
-                onClick={() => setViewMode('agenda')}
-                aria-pressed={viewMode === 'agenda'}
-              >
-                <List size={14} /> Agenda
-              </button>
-            </div>
-          )
+          <div className={styles.viewToggle}>
+            <button
+              type="button"
+              className={viewMode === 'heatmap' ? styles.viewToggleActive : styles.viewToggleButton}
+              onClick={() => setViewMode('heatmap')}
+              aria-pressed={viewMode === 'heatmap'}
+            >
+              <LayoutGrid size={14} /> Heatmap
+            </button>
+            <button
+              type="button"
+              className={viewMode === 'agenda' ? styles.viewToggleActive : styles.viewToggleButton}
+              onClick={() => setViewMode('agenda')}
+              aria-pressed={viewMode === 'agenda'}
+            >
+              <List size={14} /> Agenda
+            </button>
+          </div>
         }
       />
 
       <div ref={bodyRef} className={styles.body} style={{ height: bodyHeight }}>
         {query.isError ? (
           <ErrorBanner error={query.error} onRetry={() => query.refetch()} />
-        ) : canManageCatalog && viewMode === 'heatmap' ? (
+        ) : viewMode === 'heatmap' ? (
           <CalendarHeatmap events={query.data ?? []} isLoading={query.isPending} />
-        ) : canManageCatalog ? (
-          <CalendarAgenda events={query.data ?? []} isLoading={query.isPending} renderActions={renderActions} />
         ) : (
-          <CalendarTimeline events={query.data ?? []} isLoading={query.isPending} />
+          <CalendarAgenda
+            events={query.data ?? []}
+            isLoading={query.isPending}
+            // Editing/canceling sessions from the calendar stays a
+            // Sales/Manager/SuperAdmin action - Instructors get the same
+            // heatmap/agenda UI now, but view-only, matching what they were
+            // already restricted to on the old timeline view.
+            renderActions={canManageCatalog ? renderActions : undefined}
+          />
         )}
       </div>
 
