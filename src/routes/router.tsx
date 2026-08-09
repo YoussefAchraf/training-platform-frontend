@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ShellRouter } from './ShellRouter';
 import { AuthLayout } from '@/layouts/AuthLayout';
+import { PublicLayout } from '@/layouts/PublicLayout';
 import { SuperAdminAuthLayout } from '@/layouts/SuperAdminAuthLayout';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { GuestRoute } from './guards/GuestRoute';
@@ -33,6 +34,17 @@ export const router = createBrowserRouter([
       {
         element: <SuperAdminAuthLayout />,
         children: [{ path: paths.superAdminLogin, element: lazyPage(routeModules[paths.superAdminLogin]) }],
+      },
+    ],
+  },
+  {
+    element: <PublicLayout />,
+    children: [
+      {
+        path: '/survey/:sessionId',
+        element: lazyPage(() =>
+          import('@/features/survey/pages/SurveyFormPage').then((m) => ({ default: m.SurveyFormPage })),
+        ),
       },
     ],
   },
