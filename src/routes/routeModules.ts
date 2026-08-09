@@ -13,6 +13,8 @@ export const routeModules: Record<string, PageModule> = {
   [paths.account]: () => import('@/features/auth/pages/AccountPage').then((m) => ({ default: m.AccountPage })),
   [paths.chat]: () => import('@/pwa/pages/PwaChatPage').then((m) => ({ default: m.PwaChatPage })),
   [paths.pwaProfile]: () => import('@/pwa/pages/PwaProfilePage').then((m) => ({ default: m.PwaProfilePage })),
+  [paths.providers]: () =>
+    import('@/features/providers/pages/ProvidersPage').then((m) => ({ default: m.ProvidersPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };
