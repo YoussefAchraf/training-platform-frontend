@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,17 +11,16 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { ProviderLogo } from '@/shared/components/ProviderLogo';
 import { useToast } from '@/shared/hooks/useToast';
 import type { Provider } from '@/shared/types/domain';
+import { PROVIDER_ICONS, findProviderIcon } from '@/shared/data/providerIcons';
 import { useCreateProvider, useUpdateProvider } from '../hooks/useProviders';
 import styles from './ProviderFormModal.module.css';
 
 const providerSchema = z.object({
   name: z.string().trim().min(1, 'Provider name is required').max(150),
   description: z.string().trim().max(2000).optional(),
-  
-  
-  
-  logoUrl: z.union([z.string().trim().url('Must be a valid URL').max(500), z.literal('')]).optional(),
 });
+
+const PROVIDER_NAME_DATALIST_ID = 'provider-name-catalog';
 
 type ProviderFormValues = z.infer<typeof providerSchema>;
 
@@ -46,13 +46,17 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
     formState: { errors },
   } = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
-    values: editing
-      ? { name: editing.name, description: editing.description ?? '', logoUrl: editing.logoUrl ?? '' }
-      : undefined,
+    values: editing ? { name: editing.name, description: editing.description ?? '' } : undefined,
   });
 
   const nameValue = watch('name');
-  const logoUrlValue = watch('logoUrl');
+  
+  
+  
+  const resolvedLogoUrl = useMemo(
+    () => findProviderIcon(nameValue ?? '') ?? editing?.logoUrl ?? undefined,
+    [nameValue, editing],
+  );
 
   const handleClose = () => {
     reset();
@@ -65,7 +69,7 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
       toast.success(editing ? `${values.name} was updated.` : `${values.name} was added to providers.`);
       handleClose();
     };
-    const payload = { ...values, logoUrl: values.logoUrl || undefined };
+    const payload = { ...values, logoUrl: resolvedLogoUrl };
 
     if (editing) {
       updateProvider.mutate({ id: editing.id, payload }, { onSuccess });
@@ -94,9 +98,16 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {mutation.isError && <ErrorBanner error={mutation.error} />}
 
-        <FormField label="Name" error={errors.name?.message} required>
-          {(fieldProps) => <Input placeholder="Red Hat" {...fieldProps} {...register('name')} />}
+        <FormField label="Name" error={errors.name?.message} required hint="Start typing to pick a known provider">
+          {(fieldProps) => (
+            <Input placeholder="Red Hat" list={PROVIDER_NAME_DATALIST_ID} {...fieldProps} {...register('name')} />
+          )}
         </FormField>
+        <datalist id={PROVIDER_NAME_DATALIST_ID}>
+          {PROVIDER_ICONS.map((entry) => (
+            <option key={entry.name} value={entry.name} />
+          ))}
+        </datalist>
 
         <FormField label="Description" error={errors.description?.message} hint="Optional">
           {(fieldProps) => (
@@ -109,19 +120,16 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
         </FormField>
 
         <FormField
-          label="Logo URL"
-          error={errors.logoUrl?.message}
-          hint="Optional — shown next to the provider name"
+          label="Icon"
+          hint={
+            resolvedLogoUrl
+              ? 'Matched automatically from the provider name'
+              : 'No catalog match for this name — a generic icon will show instead'
+          }
         >
-          {(fieldProps) => (
+          {() => (
             <div className={styles.logoField}>
-              <ProviderLogo name={nameValue || 'Provider'} logoUrl={logoUrlValue} size={44} />
-              <Input
-                type="url"
-                placeholder="https://example.com/logo.svg"
-                {...fieldProps}
-                {...register('logoUrl')}
-              />
+              <ProviderLogo name={nameValue || 'Provider'} logoUrl={resolvedLogoUrl} size={44} />
             </div>
           )}
         </FormField>
