@@ -6,12 +6,14 @@ import { ToastViewport } from '@/shared/components/ToastViewport';
 import { Spinner } from '@/shared/components/Spinner';
 import { router } from '@/routes/router';
 import { useServiceWorkerRegistration } from '@/pwa/hooks/useServiceWorkerRegistration';
+import { usePwaInstallListener } from '@/pwa/hooks/usePwaInstall';
 import { useTheme } from '@/shared/hooks/useTheme';
 import { useSessionBootstrap } from '@/features/auth/hooks/useSessionBootstrap';
 import { ErrorBoundary } from './ErrorBoundary';
 
 export function App() {
   useServiceWorkerRegistration();
+  usePwaInstallListener();
   useTheme();
   const isBootstrapped = useSessionBootstrap();
 

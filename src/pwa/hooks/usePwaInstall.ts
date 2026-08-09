@@ -5,15 +5,9 @@ import { useIsIos, useIsStandalone } from '@/shared/hooks/useMediaQuery';
 
 const PROMPT_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; 
 
-export function usePwaInstall() {
-  const isStandalone = useIsStandalone();
-  const installPromptEvent = usePwaStore((state) => state.installPromptEvent);
-  const lastPromptedAt = usePwaStore((state) => state.lastPromptedAt);
-  const dismissedPermanently = usePwaStore((state) => state.dismissedPermanently);
-  const isInstalled = usePwaStore((state) => state.isInstalled);
+
+export function usePwaInstallListener() {
   const setInstallPromptEvent = usePwaStore((state) => state.setInstallPromptEvent);
-  const recordPrompted = usePwaStore((state) => state.recordPrompted);
-  const dismissPermanently = usePwaStore((state) => state.dismissPermanently);
   const markInstalled = usePwaStore((state) => state.markInstalled);
 
   useEffect(() => {
@@ -32,6 +26,18 @@ export function usePwaInstall() {
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, [setInstallPromptEvent, markInstalled]);
+}
+
+export function usePwaInstall() {
+  const isStandalone = useIsStandalone();
+  const installPromptEvent = usePwaStore((state) => state.installPromptEvent);
+  const lastPromptedAt = usePwaStore((state) => state.lastPromptedAt);
+  const dismissedPermanently = usePwaStore((state) => state.dismissedPermanently);
+  const isInstalled = usePwaStore((state) => state.isInstalled);
+  const setInstallPromptEvent = usePwaStore((state) => state.setInstallPromptEvent);
+  const recordPrompted = usePwaStore((state) => state.recordPrompted);
+  const dismissPermanently = usePwaStore((state) => state.dismissPermanently);
+  const markInstalled = usePwaStore((state) => state.markInstalled);
 
   const dueForPrompt =
     !lastPromptedAt || Date.now() - new Date(lastPromptedAt).getTime() > PROMPT_COOLDOWN_MS;
