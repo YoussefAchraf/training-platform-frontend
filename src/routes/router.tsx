@@ -61,6 +61,12 @@ export const router = createBrowserRouter([
           { path: paths.clients, element: lazyPage(routeModules[paths.clients]) },
           { path: paths.trainings, element: lazyPage(routeModules[paths.trainings]) },
           {
+            path: '/reports/:sessionId',
+            element: lazyPage(() =>
+              import('@/features/reports/pages/ReportPage').then((m) => ({ default: m.ReportPage })),
+            ),
+          },
+          {
             element: <RoleRoute allowed={['Sales', 'Manager', 'SuperAdmin']} />,
             children: [{ path: paths.instructors, element: lazyPage(routeModules[paths.instructors]) }],
           },
