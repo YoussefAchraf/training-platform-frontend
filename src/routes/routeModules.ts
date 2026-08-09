@@ -24,6 +24,8 @@ export const routeModules: Record<string, PageModule> = {
     import('@/features/instructors/pages/MyInstructorProfilePage').then((m) => ({
       default: m.MyInstructorProfilePage,
     })),
+  [paths.calendar]: () =>
+    import('@/features/calendar/pages/CalendarPage').then((m) => ({ default: m.CalendarPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };
