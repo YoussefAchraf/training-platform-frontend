@@ -26,6 +26,8 @@ export const routeModules: Record<string, PageModule> = {
     })),
   [paths.calendar]: () =>
     import('@/features/calendar/pages/CalendarPage').then((m) => ({ default: m.CalendarPage })),
+  [paths.sessions]: () =>
+    import('@/features/sessions/pages/SessionsPage').then((m) => ({ default: m.SessionsPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };

@@ -60,6 +60,15 @@ export const router = createBrowserRouter([
           { path: paths.providers, element: lazyPage(routeModules[paths.providers]) },
           { path: paths.clients, element: lazyPage(routeModules[paths.clients]) },
           { path: paths.trainings, element: lazyPage(routeModules[paths.trainings]) },
+          { path: paths.sessions, element: lazyPage(routeModules[paths.sessions]) },
+          {
+            path: '/sessions/:id',
+            element: lazyPage(() =>
+              import('@/features/sessions/pages/SessionDetailPage').then((m) => ({
+                default: m.SessionDetailPage,
+              })),
+            ),
+          },
           { path: paths.calendar, element: lazyPage(routeModules[paths.calendar]) },
           {
             path: '/reports/:sessionId',
