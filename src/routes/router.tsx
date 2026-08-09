@@ -54,6 +54,7 @@ export const router = createBrowserRouter([
       {
         element: <ShellRouter />,
         children: [
+          { path: paths.dashboard, element: lazyPage(routeModules[paths.dashboard]) },
           { path: paths.account, element: lazyPage(routeModules[paths.account]) },
           { path: paths.chat, element: lazyPage(routeModules[paths.chat]) },
           { path: paths.pwaProfile, element: lazyPage(routeModules[paths.pwaProfile]) },

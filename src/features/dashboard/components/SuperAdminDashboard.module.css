@@ -1,0 +1,52 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (--sm) {
+  .grid {
+    
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (--lg) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quickLink {
+  display: block;
+}
+
+.quickLinkCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.quickLinkIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.quickLinkTitle {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-sm);
+}
+
+.quickLinkDescription {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
