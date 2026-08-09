@@ -6,6 +6,8 @@ type PageModule = () => Promise<{ default: ComponentType<Record<string, never>> 
 
 
 export const routeModules: Record<string, PageModule> = {
+  [paths.dashboard]: () =>
+    import('@/features/dashboard/pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
   [paths.login]: () => import('@/features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage })),
   [paths.signup]: () => import('@/features/auth/pages/SignupPage').then((m) => ({ default: m.SignupPage })),
   [paths.pendingApproval]: () =>
