@@ -1,0 +1,107 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  background-color: var(--color-overlay);
+}
+
+.drawer {
+  width: min(300px, 85vw);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (--md) {
+  .overlay {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding-inline: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-semibold);
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.closeButton {
+  display: inline-flex;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.closeButton:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  min-height: 48px;
+  transition: color var(--transition-fast);
+}
+
+.navLink:active {
+  background-color: var(--color-surface-hover);
+}
+
+.navLinkActive {
+  color: var(--color-primary);
+}
+
+.navContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.activePill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background-color: var(--color-primary-light);
+}

@@ -1,0 +1,90 @@
+
+.page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+
+.pageFullBleed {
+  border: none;
+  border-radius: 0;
+}
+
+
+.fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.fullscreen .header {
+  padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
+}
+
+.headerLeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  margin-left: calc(var(--space-2) * -1);
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+}
+
+.backButton:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-extrabold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.newChatButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-black);
+  color: var(--color-text-on-dark);
+}
+
+.newChatButton:hover {
+  background-color: var(--color-black-hover);
+}

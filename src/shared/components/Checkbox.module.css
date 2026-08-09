@@ -1,0 +1,55 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: var(--space-1);
+}
+
+.box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.check {
+  color: var(--color-text-on-primary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.input:checked ~ .check {
+  opacity: 1;
+}
+
+.box:has(.input:checked) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.box:has(.input:focus-visible) {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}

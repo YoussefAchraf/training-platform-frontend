@@ -1,0 +1,131 @@
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+
+.tableWrapper {
+  display: none;
+}
+
+@media (--md) {
+  .tableWrapper {
+    display: block;
+    overflow-x: auto;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th {
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.tr:last-child {
+  border-bottom: none;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.tr.clickable:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.td {
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-center {
+  text-align: center;
+}
+
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (--md) {
+  .cardList {
+    display: none;
+  }
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.card.clickable {
+  cursor: pointer;
+}
+
+.card.clickable:active {
+  background-color: var(--color-surface-hover);
+}
+
+.cardTitle {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
+  margin-bottom: var(--space-3);
+}
+
+.cardFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cardField {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.cardFieldLabel {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.cardFieldValue {
+  text-align: right;
+  min-width: 0;
+}
