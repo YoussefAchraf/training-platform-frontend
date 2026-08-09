@@ -9,6 +9,7 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { Skeleton } from '@/shared/components/Skeleton';
 import { useAuditLog } from '../hooks/useAuditLog';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import { getAuditActionMeta } from '@/shared/utils/statusMeta';
 import { staggerContainer, listItem } from '@/shared/motion/variants';
@@ -17,6 +18,13 @@ import type { AuditEntityType, AuditLogEntry } from '@/shared/types/domain';
 import styles from './AuditLogPage.module.css';
 
 const ENTITY_TYPES: AuditEntityType[] = ['Provider', 'Training', 'Client', 'Session', 'User'];
+
+
+
+
+function entityTypeOptionsFor(isSuperAdmin: boolean): AuditEntityType[] {
+  return isSuperAdmin ? ENTITY_TYPES : ENTITY_TYPES.filter((type) => type !== 'User');
+}
 
 const ISO_DATETIME_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 
@@ -175,8 +183,10 @@ function AuditLogRow({ entry }: { entry: AuditLogEntry }) {
 }
 
 export function AuditLogPage() {
+  const { isSuperAdmin } = useAuth();
   const [entityType, setEntityType] = useState<string>('');
   const [entityId, setEntityId] = useState<string>('');
+  const entityTypeOptions = entityTypeOptionsFor(isSuperAdmin);
 
   const auditQuery = useAuditLog({
     entityType: entityType ? (entityType as AuditEntityType) : undefined,
@@ -190,7 +200,7 @@ export function AuditLogPage() {
       <div className={styles.filters}>
         <Select value={entityType} onChange={(event) => setEntityType(event.target.value)} aria-label="Filter by entity type">
           <option value="">All entity types</option>
-          {ENTITY_TYPES.map((type) => (
+          {entityTypeOptions.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
