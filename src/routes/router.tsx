@@ -44,6 +44,7 @@ export const router = createBrowserRouter([
           { path: paths.account, element: lazyPage(routeModules[paths.account]) },
           { path: paths.chat, element: lazyPage(routeModules[paths.chat]) },
           { path: paths.pwaProfile, element: lazyPage(routeModules[paths.pwaProfile]) },
+          { path: paths.providers, element: lazyPage(routeModules[paths.providers]) },
         ],
       },
     ],
