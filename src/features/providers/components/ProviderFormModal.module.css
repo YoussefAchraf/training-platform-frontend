@@ -3,8 +3,3 @@
   align-items: center;
   gap: var(--space-3);
 }
-
-.logoField > input {
-  flex: 1;
-  min-width: 0;
-}
