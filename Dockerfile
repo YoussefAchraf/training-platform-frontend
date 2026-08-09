@@ -46,6 +46,10 @@ FROM nginxinc/nginx-unprivileged:1.27-alpine3.21-slim AS runtime
 
 
 USER root
+
+
+
+RUN apk update && apk upgrade --no-cache
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY docker/default.conf.template /etc/nginx/default.conf.template
 COPY docker/docker-entrypoint.sh /docker-entrypoint.d/40-render-nginx-config.sh
