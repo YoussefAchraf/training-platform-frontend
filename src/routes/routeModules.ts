@@ -16,6 +16,8 @@ export const routeModules: Record<string, PageModule> = {
   [paths.providers]: () =>
     import('@/features/providers/pages/ProvidersPage').then((m) => ({ default: m.ProvidersPage })),
   [paths.clients]: () => import('@/features/clients/pages/ClientsPage').then((m) => ({ default: m.ClientsPage })),
+  [paths.trainings]: () =>
+    import('@/features/trainings/pages/TrainingsPage').then((m) => ({ default: m.TrainingsPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };

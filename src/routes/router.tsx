@@ -46,6 +46,7 @@ export const router = createBrowserRouter([
           { path: paths.pwaProfile, element: lazyPage(routeModules[paths.pwaProfile]) },
           { path: paths.providers, element: lazyPage(routeModules[paths.providers]) },
           { path: paths.clients, element: lazyPage(routeModules[paths.clients]) },
+          { path: paths.trainings, element: lazyPage(routeModules[paths.trainings]) },
         ],
       },
     ],
