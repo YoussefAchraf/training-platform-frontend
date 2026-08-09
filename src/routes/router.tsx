@@ -4,6 +4,7 @@ import { AuthLayout } from '@/layouts/AuthLayout';
 import { SuperAdminAuthLayout } from '@/layouts/SuperAdminAuthLayout';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { GuestRoute } from './guards/GuestRoute';
+import { RoleRoute } from './guards/RoleRoute';
 import { RootRedirect } from './guards/RootRedirect';
 import { SuperAdminGuestRoute } from './guards/SuperAdminGuestRoute';
 import { NotFoundPage } from './NotFoundPage';
@@ -47,6 +48,16 @@ export const router = createBrowserRouter([
           { path: paths.providers, element: lazyPage(routeModules[paths.providers]) },
           { path: paths.clients, element: lazyPage(routeModules[paths.clients]) },
           { path: paths.trainings, element: lazyPage(routeModules[paths.trainings]) },
+          {
+            element: <RoleRoute allowed={['Sales', 'Manager', 'SuperAdmin']} />,
+            children: [{ path: paths.instructors, element: lazyPage(routeModules[paths.instructors]) }],
+          },
+          {
+            element: <RoleRoute allowed={['Instructor']} />,
+            children: [
+              { path: paths.myInstructorProfile, element: lazyPage(routeModules[paths.myInstructorProfile]) },
+            ],
+          },
         ],
       },
     ],
