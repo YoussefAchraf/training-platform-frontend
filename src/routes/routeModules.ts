@@ -28,6 +28,13 @@ export const routeModules: Record<string, PageModule> = {
     import('@/features/calendar/pages/CalendarPage').then((m) => ({ default: m.CalendarPage })),
   [paths.sessions]: () =>
     import('@/features/sessions/pages/SessionsPage').then((m) => ({ default: m.SessionsPage })),
+  [paths.pendingApprovals]: () =>
+    import('@/features/admin/pages/PendingApprovalsPage').then((m) => ({ default: m.PendingApprovalsPage })),
+  [paths.auditLog]: () => import('@/features/admin/pages/AuditLogPage').then((m) => ({ default: m.AuditLogPage })),
+  [paths.superAdminUsers]: () =>
+    import('@/features/admin/pages/SuperAdminUsersPage').then((m) => ({ default: m.SuperAdminUsersPage })),
+  [paths.superAdminSessions]: () =>
+    import('@/features/admin/pages/SuperAdminSessionsPage').then((m) => ({ default: m.SuperAdminSessionsPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };
