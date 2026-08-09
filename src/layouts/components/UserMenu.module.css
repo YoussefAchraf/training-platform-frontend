@@ -1,0 +1,151 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.wrapperCompact {
+  width: auto;
+}
+
+.compactTrigger {
+  display: inline-flex;
+  border-radius: var(--radius-full);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+  text-align: left;
+}
+
+.trigger:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.triggerInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.triggerName {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.triggerRole {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-text-faint);
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.panelDown {
+  top: calc(100% + var(--space-2));
+}
+
+.panelUp {
+  bottom: calc(100% + var(--space-2));
+}
+
+
+.panelCompact {
+  left: auto;
+  right: 0;
+  width: 240px;
+}
+
+
+.panelCompactLeft {
+  left: 0;
+  right: auto;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.panelInfo {
+  min-width: 0;
+}
+
+.panelName {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.panelEmail {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+}
+
+.menuLink:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+  border-radius: var(--radius-md);
+}
+
+.logoutButton:hover {
+  background-color: var(--color-danger-bg);
+}
+
+.logoutButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

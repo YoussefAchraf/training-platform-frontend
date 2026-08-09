@@ -1,0 +1,30 @@
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-on-primary);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.tone0 {
+  background-color: var(--red-600);
+}
+
+.tone1 {
+  background-color: var(--grey-700);
+}
+
+.tone2 {
+  background-color: var(--grey-900);
+}
+
+.tone3 {
+  background-color: var(--red-800);
+}
+
+.tone4 {
+  background-color: var(--grey-500);
+}

@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+}
+
+.mainColumn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+
+@media (--md) {
+  .content {
+    
+    padding: var(--space-6);
+  }
+}
+
+@media (--lg) {
+  .content {
+    padding: var(--space-8);
+  }
+}
