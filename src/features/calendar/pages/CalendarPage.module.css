@@ -1,0 +1,42 @@
+
+.body {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 2px;
+  background-color: var(--color-bg-subtle);
+  padding: 3px;
+  border-radius: var(--radius-full);
+}
+
+.viewToggleButton,
+.viewToggleActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.viewToggleButton {
+  color: var(--color-text-muted);
+}
+
+.viewToggleButton:hover {
+  color: var(--color-text);
+}
+
+.viewToggleActive {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}

@@ -1,0 +1,107 @@
+.wrapper {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+.brandPanel {
+  display: none;
+}
+
+.formPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.formPanelInner {
+  width: 100%;
+  max-width: 420px;
+}
+
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-8);
+}
+
+.brandMarkSmall {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+@media (--lg) {
+  .wrapper {
+    flex-direction: row;
+  }
+
+  .brandPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    max-width: 520px;
+    padding: var(--space-12);
+    background: linear-gradient(155deg, var(--color-black) 0%, var(--red-900) 130%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .brandPanel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgb(220 38 38 / 25%), transparent 45%);
+  }
+
+  .brandContent {
+    position: relative;
+    max-width: 380px;
+  }
+
+  .brandMark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-lg);
+    background-color: rgb(255 255 255 / 12%);
+    color: var(--color-text-on-dark);
+    margin-bottom: var(--space-6);
+  }
+
+  .brandTitle {
+    color: var(--color-text-on-dark);
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .brandTagline {
+    color: rgb(255 255 255 / 78%);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+  }
+
+  .formPanel {
+    flex: 1;
+    padding: var(--space-8);
+  }
+
+  .mobileBrand {
+    display: none;
+  }
+}
