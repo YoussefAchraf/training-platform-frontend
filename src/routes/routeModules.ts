@@ -15,6 +15,7 @@ export const routeModules: Record<string, PageModule> = {
   [paths.pwaProfile]: () => import('@/pwa/pages/PwaProfilePage').then((m) => ({ default: m.PwaProfilePage })),
   [paths.providers]: () =>
     import('@/features/providers/pages/ProvidersPage').then((m) => ({ default: m.ProvidersPage })),
+  [paths.clients]: () => import('@/features/clients/pages/ClientsPage').then((m) => ({ default: m.ClientsPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
 };
