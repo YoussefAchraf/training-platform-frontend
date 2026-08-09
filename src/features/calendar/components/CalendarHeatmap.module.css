@@ -221,42 +221,6 @@
 }
 
 .heat1 {
-  background-color: var(--color-heat-1);
-  color: var(--color-text);
-}
-
-.heat2 {
-  background-color: var(--color-heat-2);
-  color: var(--color-text);
-}
-
-.heat3 {
-  background-color: var(--color-heat-3);
+  background-color: var(--color-primary);
   color: var(--color-text-on-primary);
-}
-
-.heat4 {
-  background-color: var(--color-heat-4);
-  color: var(--color-text-on-primary);
-}
-
-.heat5 {
-  background-color: var(--color-heat-5);
-  color: var(--color-text-on-primary);
-}
-
-.legend {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  margin-top: var(--space-3);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-}
-
-.legendSquare {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
 }
