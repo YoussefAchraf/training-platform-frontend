@@ -7,7 +7,15 @@ import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
 declare const self: ServiceWorkerGlobalScope;
 
-const API_ORIGIN = new URL(import.meta.env.VITE_API_URL).origin;
+
+
+
+
+
+
+
+
+const API_PATH_PREFIX = '/api/';
 
 
 
@@ -22,21 +30,21 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
 
 
 
-registerRoute(({ url }) => url.origin === API_ORIGIN && url.pathname.startsWith('/auth'), new NetworkOnly());
+registerRoute(({ url }) => url.pathname.startsWith(`${API_PATH_PREFIX}auth`), new NetworkOnly());
 
-
-
-
+// Any non-GET request to the API (create/update/delete) must never be
+// served from cache and must never itself be cached - mutations are not
+// idempotent reads.
 registerRoute(
-  ({ url, request }) => url.origin === API_ORIGIN && request.method !== 'GET',
+  ({ url, request }) => url.pathname.startsWith(API_PATH_PREFIX) && request.method !== 'GET',
   new NetworkOnly(),
 );
 
-
-
-
+// ---- API: other GETs get NetworkFirst, so the app still shows the last-
+// known data (with a visible "offline" indicator elsewhere in the UI) when
+// the network is unavailable, but always prefers a live response first. ----
 registerRoute(
-  ({ url, request }) => url.origin === API_ORIGIN && request.method === 'GET',
+  ({ url, request }) => url.pathname.startsWith(API_PATH_PREFIX) && request.method === 'GET',
   new NetworkFirst({
     cacheName: 'api-cache',
     networkTimeoutSeconds: 8,
@@ -47,9 +55,9 @@ registerRoute(
   }),
 );
 
-
-
-
+// ---- Same-origin hashed build assets are immutable - safe to serve
+// cache-first indefinitely, matching nginx's own 1-year Cache-Control on
+// /assets/ for the exact same reason (filename changes when content does).
 registerRoute(
   ({ url, request }) => url.origin === self.location.origin && request.destination !== 'document',
   new CacheFirst({
@@ -58,8 +66,8 @@ registerRoute(
   }),
 );
 
-
-
+// ---- Push notifications (subscribe/unsubscribe UI lands in Phase 4; the
+// service worker's receiving end is wired here since it's the same file). --
 self.addEventListener('push', (event) => {
   if (!event.data) return;
   let payload: { title?: string; body?: string; url?: string };
@@ -90,10 +98,10 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-
-
-
-
+// ---- Update lifecycle: wait for the page to explicitly ask (see
+// useServiceWorkerRegistration.ts's "Refresh" toast action) rather than
+// silently taking over - a business app's users shouldn't have tabs
+// reloaded out from under them without a chance to save in-progress work. --
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting();
