@@ -5,7 +5,8 @@ import { z } from 'zod';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
-import { Input } from '@/shared/components/Input';
+import { Combobox } from '@/shared/components/Combobox';
+import type { ComboboxOption } from '@/shared/components/Combobox';
 import { Textarea } from '@/shared/components/Textarea';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { ProviderLogo } from '@/shared/components/ProviderLogo';
@@ -20,7 +21,11 @@ const providerSchema = z.object({
   description: z.string().trim().max(2000).optional(),
 });
 
-const PROVIDER_NAME_DATALIST_ID = 'provider-name-catalog';
+const PROVIDER_NAME_OPTIONS: ComboboxOption[] = PROVIDER_ICONS.map((entry) => ({
+  value: entry.name,
+  label: entry.name,
+  icon: <ProviderLogo name={entry.name} logoUrl={entry.iconUrl} size={20} />,
+}));
 
 type ProviderFormValues = z.infer<typeof providerSchema>;
 
@@ -43,6 +48,7 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
@@ -98,16 +104,18 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {mutation.isError && <ErrorBanner error={mutation.error} />}
 
-        <FormField label="Name" error={errors.name?.message} required hint="Start typing to pick a known provider">
+        <FormField label="Name" error={errors.name?.message} required hint="Click to browse providers, or type to filter">
           {(fieldProps) => (
-            <Input placeholder="Red Hat" list={PROVIDER_NAME_DATALIST_ID} {...fieldProps} {...register('name')} />
+            <Combobox
+              placeholder="Red Hat"
+              options={PROVIDER_NAME_OPTIONS}
+              value={nameValue ?? ''}
+              onSelect={(value) => setValue('name', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
+              {...fieldProps}
+              {...register('name')}
+            />
           )}
         </FormField>
-        <datalist id={PROVIDER_NAME_DATALIST_ID}>
-          {PROVIDER_ICONS.map((entry) => (
-            <option key={entry.name} value={entry.name} />
-          ))}
-        </datalist>
 
         <FormField label="Description" error={errors.description?.message} hint="Optional">
           {(fieldProps) => (
