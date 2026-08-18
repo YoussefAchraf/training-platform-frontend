@@ -3,7 +3,7 @@
 
 
 
-FROM node:22.22-alpine3.22 AS builder
+FROM node:26.3-alpine3.22 AS builder
 WORKDIR /app
 
 
@@ -22,8 +22,13 @@ COPY . .
 
 
 
-ARG VITE_API_URL=http://localhost:4000
-ARG VITE_CHATBOT_WEBHOOK_URL=http://localhost:5678/webhook/chatbot/message
+
+
+
+
+
+ARG VITE_API_URL=/api
+ARG VITE_CHATBOT_WEBHOOK_URL=/webhook/chatbot/message
 ARG VITE_VAPID_PUBLIC_KEY=""
 ARG SITE_URL=http://localhost:3000
 ENV VITE_API_URL=${VITE_API_URL} \
@@ -41,7 +46,7 @@ RUN npm run build
 
 
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine3.21-slim AS runtime
+FROM nginxinc/nginx-unprivileged:1.28-alpine3.21-slim AS runtime
 
 
 
@@ -59,8 +64,12 @@ USER nginx
 
 
 
-ENV API_ORIGIN=http://localhost:4000 \
-    CHATBOT_ORIGIN=http://localhost:5678
+
+
+
+
+ENV BACKEND_UPSTREAM=http://localhost:4000 \
+    CHATBOT_UPSTREAM=http://localhost:5678
 
 EXPOSE 8080
 

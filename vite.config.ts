@@ -115,6 +115,13 @@ function preloadFonts(): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const siteUrl = env.SITE_URL || 'http://localhost:3000'
+  // Mirrors nginx's own proxy_pass in docker/default.conf.template, so
+  // `npm run dev` behaves the same as the production container now that
+  // VITE_API_URL/VITE_CHATBOT_WEBHOOK_URL are same-origin relative paths -
+  // BACKEND_UPSTREAM/CHATBOT_UPSTREAM are plain (non-VITE_) vars, read here
+  // only, never shipped to the browser.
+  const backendUpstream = env.BACKEND_UPSTREAM || 'http://localhost:4000'
+  const chatbotUpstream = env.CHATBOT_UPSTREAM || 'http://localhost:5678'
 
   return {
     plugins: [
@@ -182,10 +189,32 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       strictPort: true,
+      proxy: {
+        '/api': {
+          target: backendUpstream,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+        '/webhook/chatbot/message': {
+          target: chatbotUpstream,
+          changeOrigin: true,
+        },
+      },
     },
     preview: {
       port: 3000,
       strictPort: true,
+      proxy: {
+        '/api': {
+          target: backendUpstream,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+        '/webhook/chatbot/message': {
+          target: chatbotUpstream,
+          changeOrigin: true,
+        },
+      },
     },
   }
 })
