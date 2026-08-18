@@ -3,7 +3,7 @@
 
 
 
-FROM node:22.22-alpine3.22 AS builder
+FROM node:26.3-alpine3.22 AS builder
 WORKDIR /app
 
 
