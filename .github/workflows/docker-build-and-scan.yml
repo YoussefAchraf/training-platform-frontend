@@ -27,6 +27,8 @@ jobs:
           push: false
           load: true
           tags: local/training-platform-frontend:scan
+          build-args: |
+            VITE_VAPID_PUBLIC_KEY=${{ vars.VITE_VAPID_PUBLIC_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -78,5 +80,44 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VITE_VAPID_PUBLIC_KEY=${{ vars.VITE_VAPID_PUBLIC_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Checkout training-platform-gitops
+        if: inputs.push
+        uses: actions/checkout@v7
+        with:
+          repository: YoussefAchraf/training-platform-gitops
+          token: ${{ secrets.GITOPS_REPO_TOKEN }}
+          ref: dev
+          path: gitops-bump
+
+      - name: Bump frontend image tag in training-platform-gitops
+        if: inputs.push
+        env:
+          GH_TOKEN: ${{ secrets.GITOPS_REPO_TOKEN }}
+        working-directory: gitops-bump
+        run: |
+          set -e
+          TAG="sha-$(echo "${{ github.sha }}" | cut -c1-7)"
+          sed -i 's/^  tag: ".*"/  tag: "'"$TAG"'"/' environments/local-okd/frontend-values.yaml
+          if git diff --quiet; then
+            echo "Already at $TAG, nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="chore/bump-frontend-image-$TAG"
+          git checkout -b "$BRANCH"
+          git add environments/local-okd/frontend-values.yaml
+          git commit -m "Bump frontend image tag to $TAG
+
+          Auto-opened after training-platform-frontend's own CI pushed a
+          new image. Source: youssefachraf/training-platform-frontend@${{ github.sha }}"
+          git push origin "$BRANCH"
+          gh pr create --repo YoussefAchraf/training-platform-gitops --base dev --head "$BRANCH" \
+            --title "Bump frontend image tag to $TAG" \
+            --body "Auto-opened after training-platform-frontend's CI pushed ghcr.io/youssefachraf/training-platform-frontend:$TAG. Auto-merges once dev's required checks pass. Source: youssefachraf/training-platform-frontend@${{ github.sha }}"
+          gh pr merge --repo YoussefAchraf/training-platform-gitops "$BRANCH" --auto --merge
