@@ -3,7 +3,7 @@
 
 
 
-FROM node:22.22-alpine3.22 AS builder
+FROM node:26.3-alpine3.22 AS builder
 WORKDIR /app
 
 
@@ -46,7 +46,7 @@ RUN npm run build
 
 
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine3.21-slim AS runtime
+FROM nginxinc/nginx-unprivileged:1.28-alpine3.21-slim AS runtime
 
 
 
