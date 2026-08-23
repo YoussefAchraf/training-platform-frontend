@@ -30,6 +30,8 @@ export type SessionStatus = 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
 
 export type AssignmentStatus = 'unassigned' | 'pending' | 'accepted' | 'refused';
 
+export type TrainingDurationUnit = 'days' | 'hours';
+
 export interface User {
   id: number;
   firstname: string;
@@ -56,6 +58,7 @@ export interface Training {
   providerName: string;
   description: string | null;
   duration: number | null;
+  durationUnit: TrainingDurationUnit | null;
   createdBy: number | null;
   creatorName: string | null;
   createdAt: string;
