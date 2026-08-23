@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,11 +7,13 @@ import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
 import { Select } from '@/shared/components/Select';
+import { Checkbox } from '@/shared/components/Checkbox';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { useToast } from '@/shared/hooks/useToast';
 import { useTrainings } from '@/features/trainings/hooks/useTrainings';
 import { useClients } from '@/features/clients/hooks/useClients';
 import { useCreateSession } from '../hooks/useSessions';
+import { computeSessionEndDate } from '../utils/sessionDuration';
 
 const sessionSchema = z
   .object({
@@ -37,16 +40,39 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
   const clientsQuery = useClients();
   const createSession = useCreateSession();
   const toast = useToast();
+  const [includeWeekends, setIncludeWeekends] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    setValue,
+    formState: { errors, dirtyFields },
   } = useForm<SessionFormInput, unknown, SessionFormOutput>({ resolver: zodResolver(sessionSchema) });
+
+  const trainingId = watch('trainingId');
+  const startDate = watch('startDate');
+  const selectedTraining = trainingsQuery.data?.find((training) => String(training.id) === String(trainingId));
+
+  
+  
+  
+  useEffect(() => {
+    if (dirtyFields.endDate) return;
+    if (!startDate || !selectedTraining?.duration || !selectedTraining.durationUnit) return;
+    const computed = computeSessionEndDate(
+      startDate,
+      selectedTraining.duration,
+      selectedTraining.durationUnit,
+      !includeWeekends,
+    );
+    if (computed) setValue('endDate', computed, { shouldValidate: true });
+  }, [startDate, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
 
   const handleClose = () => {
     reset();
+    setIncludeWeekends(false);
     createSession.reset();
     onClose();
   };
@@ -123,9 +149,26 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
             {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('startDate')} />}
           </FormField>
 
-          <FormField label="End date & time" error={errors.endDate?.message} required>
+          <FormField
+            label="End date & time"
+            error={errors.endDate?.message}
+            required
+            hint={
+              !dirtyFields.endDate && selectedTraining?.duration && selectedTraining.durationUnit
+                ? 'Filled in from the training duration - edit it directly to override'
+                : undefined
+            }
+          >
             {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('endDate')} />}
           </FormField>
+
+          {selectedTraining?.durationUnit === 'days' && (
+            <Checkbox
+              checked={includeWeekends}
+              onChange={(event) => setIncludeWeekends(event.target.checked)}
+              label="Include weekends when calculating the end date"
+            />
+          )}
         </div>
       </form>
     </Modal>
