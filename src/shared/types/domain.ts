@@ -114,6 +114,7 @@ export interface CalendarEvent {
   id: number;
   sessionId: number;
   eventDate: string;
+  endDate: string | null;
   title: string;
 }
 
