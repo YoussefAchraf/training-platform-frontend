@@ -10,6 +10,8 @@ import {
   isSameDay,
   isSameMonth,
   isToday,
+  isValid,
+  parseISO,
   startOfMonth,
   startOfWeek,
   subMonths,
@@ -18,7 +20,7 @@ import { CalendarDays, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { Skeleton } from '@/shared/components/Skeleton';
 import { EmptyState } from '@/shared/components/EmptyState';
-import { formatTime } from '@/shared/utils/formatDate';
+import { formatDate, formatTime } from '@/shared/utils/formatDate';
 import { fadeIn, listItem, staggerContainer } from '@/shared/motion/variants';
 import type { CalendarEvent } from '@/shared/types/domain';
 import styles from './CalendarHeatmap.module.css';
@@ -34,15 +36,24 @@ function dayKey(date: Date): string {
   return format(date, 'yyyy-MM-dd');
 }
 
+
+
+
 function groupEventsByDayKey(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
   const groups = new Map<string, CalendarEvent[]>();
   for (const event of events) {
-    const key = event.eventDate.slice(0, 10);
-    const existing = groups.get(key);
-    if (existing) {
-      existing.push(event);
-    } else {
-      groups.set(key, [event]);
+    const start = parseISO(event.eventDate);
+    if (!isValid(start)) continue;
+    const end = event.endDate ? parseISO(event.endDate) : start;
+    const days = isValid(end) && end >= start ? eachDayOfInterval({ start, end }) : [start];
+    for (const day of days) {
+      const key = dayKey(day);
+      const existing = groups.get(key);
+      if (existing) {
+        existing.push(event);
+      } else {
+        groups.set(key, [event]);
+      }
     }
   }
   return groups;
@@ -51,6 +62,16 @@ function groupEventsByDayKey(events: CalendarEvent[]): Map<string, CalendarEvent
 
 
 
+function formatEventWhen(event: CalendarEvent): string {
+  if (!event.endDate || event.eventDate.slice(0, 10) === event.endDate.slice(0, 10)) {
+    return formatTime(event.eventDate);
+  }
+  return `${formatDate(event.eventDate, 'MMM d')} – ${formatDate(event.endDate, 'MMM d')}`;
+}
+
+// Single "has sessions" state, not a graduated ramp - the count pill on the
+// cell already shows exactly how many, so the color itself only needs to
+// answer "anything scheduled today or not".
 function heatLevel(count: number): 0 | 1 {
   return count > 0 ? 1 : 0;
 }
@@ -67,10 +88,10 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
     return eachDayOfInterval({ start, end });
   }, [currentMonth]);
 
-  
-  
-  
-  
+  // Months span 5 or 6 weeks - pass the real count through as a CSS
+  // variable so week rows can flex to fill the available height evenly
+  // (grid-template-rows: repeat(var(--week-rows), 1fr)) instead of a
+  // hardcoded 6 leaving a blank row on 5-week months.
   const weekRows = gridDays.length / 7;
 
   const selectedEvents = (eventsByDay.get(dayKey(selectedDate)) ?? [])
@@ -107,7 +128,7 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
               <motion.div key={event.id} className={styles.eventCard} variants={listItem}>
                 <p className={styles.eventTitle}>{event.title}</p>
                 <p className={styles.eventTime}>
-                  <Clock size={12} /> {formatTime(event.eventDate)}
+                  <Clock size={12} /> {formatEventWhen(event)}
                 </p>
               </motion.div>
             ))}
@@ -162,10 +183,17 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
               {label}
             </div>
           ))}
-          {gridDays.map((day) => {
+          {gridDays.map((day, index) => {
             const key = dayKey(day);
-            const count = eventsByDay.get(key)?.length ?? 0;
+            const dayEvents = eventsByDay.get(key) ?? [];
+            const count = dayEvents.length;
             const inMonth = isSameMonth(day, currentMonth);
+            // gridDays starts on Monday (weekStartsOn: 1), so index % 7 is
+            // the column: 0 = leftmost, 6 = rightmost. A centered preview
+            // would run past the grid's edge for either column, so anchor
+            // it to the inside edge there instead.
+            const column = index % 7;
+            const previewEdge = column === 0 ? styles.previewLeft : column === 6 ? styles.previewRight : '';
             return (
               <button
                 key={key}
@@ -183,6 +211,18 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
               >
                 <span className={styles.dateNum}>{format(day, 'd')}</span>
                 {count > 0 && <span className={styles.countPill}>{count}</span>}
+
+                {count > 0 && (
+                  <span className={[styles.hoverPreview, previewEdge].filter(Boolean).join(' ')} role="tooltip">
+                    <span className={styles.hoverPreviewDate}>{format(day, 'EEEE, MMM d')}</span>
+                    {dayEvents.map((event) => (
+                      <span key={event.id} className={styles.hoverPreviewEvent}>
+                        <span className={styles.hoverPreviewTitle}>{event.title}</span>
+                        <span className={styles.hoverPreviewTime}>{formatEventWhen(event)}</span>
+                      </span>
+                    ))}
+                  </span>
+                )}
               </button>
             );
           })}
