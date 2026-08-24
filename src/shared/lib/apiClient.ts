@@ -68,9 +68,22 @@ export function refreshSessionOnce(): Promise<void> {
 // falling through this check and bouncing straight to the regular /login.
 const GUEST_ACCESSIBLE_PREFIXES = [paths.login, paths.signup, paths.pendingApproval, paths.superAdminLogin, '/survey/'];
 
+// An intentional logout (see useLogout) already knows the correct
+// destination - paths.superAdminLogin for a SuperAdmin, paths.login
+// otherwise - and navigates there itself. Without this flag, a request
+// that was already in flight when the user clicked "Log out" can still
+// 401 after the server invalidates the session and land here, which has
+// no idea the user was a SuperAdmin and would hard-redirect to the wrong
+// (regular) login page, racing and sometimes beating the SPA navigation.
+let intentionalLogoutInProgress = false;
+
+export function setIntentionalLogoutInProgress(value: boolean): void {
+  intentionalLogoutInProgress = value;
+}
+
 export function redirectToLoginAfterRefreshFailure(): void {
   useAuthStore.getState().clearSession();
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || intentionalLogoutInProgress) return;
   const isGuestAccessible = GUEST_ACCESSIBLE_PREFIXES.some((prefix) => window.location.pathname.startsWith(prefix));
   if (!isGuestAccessible) {
     window.location.href = paths.login;
