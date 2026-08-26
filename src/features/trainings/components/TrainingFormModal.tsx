@@ -12,16 +12,26 @@ import { useToast } from '@/shared/hooks/useToast';
 import { useProviders } from '@/features/providers/hooks/useProviders';
 import type { Training } from '@/shared/types/domain';
 import { useCreateTraining, useUpdateTraining } from '../hooks/useTrainings';
+import styles from './TrainingFormModal.module.css';
 
-const trainingSchema = z.object({
-  name: z.string().trim().min(1, 'Training name is required').max(150),
-  providerId: z.coerce.number({ error: 'Select a provider' }).int().positive('Select a provider'),
-  description: z.string().trim().max(2000).optional(),
-  duration: z.preprocess(
-    (value) => (value === '' || value === undefined || value === null ? undefined : value),
-    z.coerce.number().int().positive('Duration must be a positive number').optional(),
-  ),
-});
+const trainingSchema = z
+  .object({
+    name: z.string().trim().min(1, 'Training name is required').max(150),
+    providerId: z.coerce.number({ error: 'Select a provider' }).int().positive('Select a provider'),
+    description: z.string().trim().max(2000).optional(),
+    duration: z.preprocess(
+      (value) => (value === '' || value === undefined || value === null ? undefined : value),
+      z.coerce.number().int().positive('Duration must be a positive number').optional(),
+    ),
+    durationUnit: z.preprocess(
+      (value) => (value === '' || value === undefined || value === null ? undefined : value),
+      z.enum(['days', 'hours']).optional(),
+    ),
+  })
+  .refine((data) => (data.duration === undefined) === (data.durationUnit === undefined), {
+    message: 'Pick a unit for the duration',
+    path: ['durationUnit'],
+  });
 
 type TrainingFormInput = z.input<typeof trainingSchema>;
 type TrainingFormOutput = z.output<typeof trainingSchema>;
@@ -55,6 +65,7 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
           providerId: editing.providerId,
           description: editing.description ?? '',
           duration: editing.duration ?? undefined,
+          durationUnit: editing.durationUnit ?? undefined,
         }
       : undefined,
   });
@@ -73,7 +84,15 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
 
     if (editing) {
       updateTraining.mutate(
-        { id: editing.id, payload: { name: values.name, description: values.description, duration: values.duration } },
+        {
+          id: editing.id,
+          payload: {
+            name: values.name,
+            description: values.description,
+            duration: values.duration,
+            durationUnit: values.durationUnit,
+          },
+        },
         { onSuccess },
       );
     } else {
@@ -130,8 +149,37 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
           )}
         </FormField>
 
-        <FormField label="Duration" error={errors.duration?.message} hint="Optional, in hours or days">
-          {(fieldProps) => <Input type="number" min={1} placeholder="40" {...fieldProps} {...register('duration')} />}
+        <FormField
+          label="Duration"
+          error={errors.duration?.message ?? errors.durationUnit?.message}
+          hint="Optional"
+        >
+          {(fieldProps) => (
+            <div className={styles.durationRow}>
+              <Input
+                type="number"
+                min={1}
+                placeholder="40"
+                className={styles.durationInput}
+                {...fieldProps}
+                {...register('duration')}
+              />
+              <div className={styles.durationUnit}>
+                <Select
+                  aria-label="Duration unit"
+                  invalid={fieldProps.invalid}
+                  defaultValue=""
+                  {...register('durationUnit')}
+                >
+                  <option value="" disabled>
+                    Unit
+                  </option>
+                  <option value="days">Days</option>
+                  <option value="hours">Hours</option>
+                </Select>
+              </div>
+            </div>
+          )}
         </FormField>
 
         <FormField label="Description" error={errors.description?.message} hint="Optional">

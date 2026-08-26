@@ -11,10 +11,16 @@ import { toDatetimeLocalValue } from '@/shared/utils/formatDate';
 import type { CalendarEvent } from '@/shared/types/domain';
 import { useUpdateCalendarEvent } from '../hooks/useCalendar';
 
-const eventSchema = z.object({
-  title: z.string().trim().min(1, 'Title is required').max(200),
-  eventDate: z.string().min(1, 'Date is required'),
-});
+const eventSchema = z
+  .object({
+    title: z.string().trim().min(1, 'Title is required').max(200),
+    eventDate: z.string().min(1, 'Start date is required'),
+    endDate: z.string().min(1, 'End date is required'),
+  })
+  .refine((data) => new Date(data.endDate) > new Date(data.eventDate), {
+    message: 'End date must be after the start date',
+    path: ['endDate'],
+  });
 
 type EventFormValues = z.infer<typeof eventSchema>;
 
@@ -34,7 +40,11 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
   } = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
     values: event
-      ? { title: event.title, eventDate: toDatetimeLocalValue(event.eventDate) }
+      ? {
+          title: event.title,
+          eventDate: toDatetimeLocalValue(event.eventDate),
+          endDate: toDatetimeLocalValue(event.endDate ?? event.eventDate),
+        }
       : undefined,
   });
 
@@ -44,7 +54,11 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
     updateEvent.mutate(
       {
         id: event.id,
-        payload: { title: values.title, eventDate: new Date(values.eventDate).toISOString() },
+        payload: {
+          title: values.title,
+          eventDate: new Date(values.eventDate).toISOString(),
+          endDate: new Date(values.endDate).toISOString(),
+        },
       },
       {
         onSuccess: () => {
@@ -78,8 +92,12 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
           {(fieldProps) => <Input {...fieldProps} {...register('title')} />}
         </FormField>
 
-        <FormField label="Date & time" error={errors.eventDate?.message} required>
+        <FormField label="Start date & time" error={errors.eventDate?.message} required>
           {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('eventDate')} />}
+        </FormField>
+
+        <FormField label="End date & time" error={errors.endDate?.message} required>
+          {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('endDate')} />}
         </FormField>
       </form>
     </Modal>

@@ -3,6 +3,7 @@ import type { CalendarEvent } from '@/shared/types/domain';
 
 export interface UpdateCalendarEventPayload {
   eventDate?: string;
+  endDate?: string;
   title?: string;
 }
 

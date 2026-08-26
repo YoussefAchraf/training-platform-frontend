@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react';
@@ -33,9 +33,8 @@ function panelVariants(placement: 'up' | 'down'): Variants {
 }
 
 export function UserMenu({ placement = 'down', variant = 'full', align = 'right' }: UserMenuProps) {
-  const { user } = useAuth();
+  const { user, isSuperAdmin } = useAuth();
   const logout = useLogout();
-  const navigate = useNavigate();
   const { isOpen, toggle, close } = useDisclosure(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -44,9 +43,7 @@ export function UserMenu({ placement = 'down', variant = 'full', align = 'right'
   if (!user) return null;
 
   const handleLogout = () => {
-    logout.mutate(undefined, {
-      onSettled: () => navigate(paths.login, { replace: true }),
-    });
+    logout.mutate(isSuperAdmin ? paths.superAdminLogin : paths.login);
   };
 
   return (
