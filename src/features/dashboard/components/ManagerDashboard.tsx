@@ -28,9 +28,8 @@ export function ManagerDashboard() {
   }
 
   const sessions = sessionsQuery.data ?? [];
-  const now = Date.now();
   const upcoming = sessions
-    .filter((session) => new Date(session.startDate).getTime() > now)
+    .filter((session) => session.sessionStatus === 'scheduled' || session.sessionStatus === 'ongoing')
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
     .slice(0, 5);
   const unassigned = sessions.filter((session) => session.assignmentStatus === 'unassigned');

@@ -1,0 +1,28 @@
+.durationRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.durationInput {
+  min-width: 0;
+}
+
+.durationUnit {
+  width: 100%;
+}
+
+@media (--sm) {
+  .durationRow {
+    flex-direction: row;
+  }
+
+  .durationInput {
+    flex: 1 1 auto;
+  }
+
+  .durationUnit {
+    flex: 0 0 auto;
+    width: 130px;
+  }
+}

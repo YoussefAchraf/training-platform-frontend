@@ -152,6 +152,7 @@
 }
 
 .dayCell {
+  position: relative;
   min-height: 0;
   border-radius: var(--radius-md);
   padding: var(--space-1) var(--space-2);
@@ -171,8 +172,11 @@
   }
 }
 
-.dayCell:hover {
+.dayCell:hover,
+.dayCell:focus-visible {
   transform: translateY(-2px);
+  
+  z-index: var(--z-popover);
 }
 
 .selected {
@@ -223,4 +227,89 @@
 .heat1 {
   background-color: var(--color-primary);
   color: var(--color-text-on-primary);
+}
+
+
+.hoverPreview {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  z-index: var(--z-popover);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: min(260px, 70vw);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-3);
+  text-align: left;
+  font-weight: var(--font-weight-normal);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.dayCell:hover .hoverPreview,
+.dayCell:focus-visible .hoverPreview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.previewLeft {
+  left: 0;
+  transform: translateY(-4px);
+}
+
+.dayCell:hover .previewLeft,
+.dayCell:focus-visible .previewLeft {
+  transform: translateY(0);
+}
+
+.previewRight {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.dayCell:hover .previewRight,
+.dayCell:focus-visible .previewRight {
+  transform: translateY(0);
+}
+
+.hoverPreviewDate {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.hoverPreviewEvent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.hoverPreviewEvent:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.hoverPreviewTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.hoverPreviewTime {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
 }

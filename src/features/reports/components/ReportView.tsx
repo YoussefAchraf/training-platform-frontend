@@ -85,7 +85,7 @@ export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
           <p className={styles.tileLabel}>NPS average</p>
           <p className={styles.tileValue}>
             {report.npsAverage}
-            <span className={styles.tileMax}>/ 10</span>
+            <span className={styles.tileMax}>%</span>
           </p>
         </div>
       </div>
