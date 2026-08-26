@@ -24,11 +24,16 @@ export function InstructorDashboard() {
   }
 
   const sessions = sessionsQuery.data ?? [];
-  const now = Date.now();
   const needsResponse = sessions.filter((session) => session.assignmentStatus === 'pending');
+  
+  
+  
+  
   const upcoming = sessions
     .filter(
-      (session) => session.assignmentStatus === 'accepted' && new Date(session.startDate).getTime() > now,
+      (session) =>
+        session.assignmentStatus === 'accepted' &&
+        (session.sessionStatus === 'scheduled' || session.sessionStatus === 'ongoing'),
     )
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
     .slice(0, 5);
@@ -54,12 +59,12 @@ export function InstructorDashboard() {
         </Card>
 
         <Card>
-          <h3 className={styles.cardTitle}>Upcoming sessions</h3>
+          <h3 className={styles.cardTitle}>Your sessions</h3>
           <SessionMiniList
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="No upcoming sessions."
+            emptyText="No scheduled or ongoing sessions."
           />
         </Card>
       </div>
