@@ -1,17 +1,19 @@
 import { apiClient } from '@/shared/lib/apiClient';
-import type { Training } from '@/shared/types/domain';
+import type { Training, TrainingDurationUnit } from '@/shared/types/domain';
 
 export interface CreateTrainingPayload {
   name: string;
   providerId: number;
   description?: string;
   duration?: number;
+  durationUnit?: TrainingDurationUnit;
 }
 
 export interface UpdateTrainingPayload {
   name: string;
   description?: string;
   duration?: number;
+  durationUnit?: TrainingDurationUnit;
 }
 
 export const trainingsApi = {

@@ -76,7 +76,11 @@ export function TrainingsPage() {
       {
         key: 'duration',
         header: 'Duration',
-        render: (training) => (training.duration ? `${training.duration}` : '—'),
+        render: (training) => {
+          if (!training.duration || !training.durationUnit) return training.duration ? `${training.duration}` : '—';
+          const unitLabel = training.durationUnit === 'days' ? 'day' : 'hour';
+          return `${training.duration} ${unitLabel}${training.duration === 1 ? '' : 's'}`;
+        },
       },
       {
         key: 'actions',
