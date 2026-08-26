@@ -64,24 +64,38 @@ describe('ReportView', () => {
   })
 
   it('renders real non-zero scores as returned by the API', async () => {
-    mockedReportsApi.get.mockResolvedValue({ ...baseReport, averageScore: '4.50', npsAverage: '8.75' })
+    
+    
+    
+    
+    
+    mockedReportsApi.get.mockResolvedValue({ ...baseReport, averageScore: '4.50', npsAverage: '62.50' })
     renderWithClient(<ReportView sessionId={42} canGenerate={false} />)
 
     expect(await screen.findByText('4.50')).toBeInTheDocument()
-    expect(screen.getByText('8.75')).toBeInTheDocument()
+    expect(screen.getByText('62.50')).toBeInTheDocument()
+    expect(screen.queryByText('/ 10')).not.toBeInTheDocument()
+  })
+
+  it('renders a negative NPS correctly, not mistaken for an error state', async () => {
+    mockedReportsApi.get.mockResolvedValue({ ...baseReport, averageScore: '2.00', npsAverage: '-45.00' })
+    renderWithClient(<ReportView sessionId={42} canGenerate={false} />)
+
+    expect(await screen.findByText('-45.00')).toBeInTheDocument()
+    expect(screen.queryByText('Report not generated yet')).not.toBeInTheDocument()
   })
 
   it('clicking "Generate report now" calls the API and then renders the returned scores', async () => {
     const user = userEvent.setup()
     mockedReportsApi.get.mockResolvedValue(null)
-    mockedReportsApi.generate.mockResolvedValue({ ...baseReport, averageScore: '3.00', npsAverage: '6.00' })
+    mockedReportsApi.generate.mockResolvedValue({ ...baseReport, averageScore: '3.00', npsAverage: '-16.00' })
     renderWithClient(<ReportView sessionId={42} canGenerate />)
 
     await user.click(await screen.findByRole('button', { name: /generate report now/i }))
 
     await waitFor(() => expect(mockedReportsApi.generate).toHaveBeenCalledWith(42))
     expect(await screen.findByText('3.00')).toBeInTheDocument()
-    expect(screen.getByText('6.00')).toBeInTheDocument()
+    expect(screen.getByText('-16.00')).toBeInTheDocument()
   })
 
   it('shows an error banner with retry when the report fails to load', async () => {
