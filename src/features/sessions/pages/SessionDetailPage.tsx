@@ -24,6 +24,8 @@ import { AssignInstructorModal } from '../components/AssignInstructorModal';
 import { EditSessionModal } from '../components/EditSessionModal';
 import { RespondActions } from '../components/RespondActions';
 import { AddAttendeeForm } from '../components/AddAttendeeForm';
+import { AttendeeImportForm } from '../components/AttendeeImportForm';
+import { AttendeeList } from '../components/AttendeeList';
 import styles from './SessionDetailPage.module.css';
 
 export function SessionDetailPage() {
@@ -162,12 +164,23 @@ export function SessionDetailPage() {
       </Card>
 
       <div className={styles.grid}>
-        {canManageCatalog && (
+        {(canManageCatalog || isSuperAdmin || isMySession) && (
           <Card>
             <h3 className={styles.cardTitle}>
               <UserPlus size={16} /> Attendees
             </h3>
-            <AddAttendeeForm sessionId={session.id} />
+            <div className="stack">
+              {canManageCatalog && (
+                <>
+                  <AddAttendeeForm sessionId={session.id} />
+                  <AttendeeImportForm sessionId={session.id} />
+                </>
+              )}
+              <AttendeeList
+                sessionId={session.id}
+                canMarkAttendance={canManageCatalog || isSuperAdmin || isMySession}
+              />
+            </div>
           </Card>
         )}
 

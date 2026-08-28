@@ -83,3 +83,24 @@ export function useSessionAttendees(sessionId: number, options: { enabled?: bool
     enabled: options.enabled ?? true,
   });
 }
+
+export function useImportAttendees() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, file }: { id: number; file: File }) => sessionsApi.importAttendees(id, file),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.attendees(id) });
+    },
+  });
+}
+
+export function useMarkAttendance() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, attendeeId, status }: { sessionId: number; attendeeId: number; status: 'present' | 'absent' }) =>
+      sessionsApi.markAttendance(sessionId, attendeeId, status),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.attendees(sessionId) });
+    },
+  });
+}

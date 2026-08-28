@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/lib/apiClient';
-import type { SessionAttendee, TrainingSession } from '@/shared/types/domain';
+import type { BulkImportResult, SessionAttendee, TrainingSession } from '@/shared/types/domain';
 
 export interface CreateSessionPayload {
   trainingId: number;
@@ -42,4 +42,19 @@ export const sessionsApi = {
 
   listAttendees: (id: number) =>
     apiClient.get<SessionAttendee[]>(`/sessions/${id}/attendees`).then((res) => res.data),
+
+  importAttendees: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return apiClient
+      .post<BulkImportResult>(`/sessions/${id}/attendees/import`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((res) => res.data);
+  },
+
+  markAttendance: (sessionId: number, attendeeId: number, status: 'present' | 'absent') =>
+    apiClient
+      .patch<SessionAttendee>(`/sessions/${sessionId}/attendees/${attendeeId}/attendance`, { status })
+      .then((res) => res.data),
 };

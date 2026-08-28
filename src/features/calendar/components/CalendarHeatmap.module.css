@@ -53,9 +53,23 @@
 }
 
 .eventCard {
+  display: block;
+  width: 100%;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.eventCard:hover,
+.eventCard:focus-visible {
+  border-color: var(--color-accent, var(--color-border-strong));
+  background-color: var(--color-bg-subtle);
 }
 
 .eventTitle {
@@ -175,7 +189,7 @@
 .dayCell:hover,
 .dayCell:focus-visible {
   transform: translateY(-2px);
-  
+  border-color: var(--color-primary);
   z-index: var(--z-popover);
 }
 
@@ -280,6 +294,29 @@
 
 .dayCell:hover .previewRight,
 .dayCell:focus-visible .previewRight {
+  transform: translateY(0);
+}
+
+.previewAbove {
+  top: auto;
+  bottom: calc(100% + var(--space-2));
+  transform: translateX(-50%) translateY(4px);
+}
+
+.previewAbove.previewLeft,
+.previewAbove.previewRight {
+  transform: translateY(4px);
+}
+
+.dayCell:hover .previewAbove,
+.dayCell:focus-visible .previewAbove {
+  transform: translateX(-50%) translateY(0);
+}
+
+.dayCell:hover .previewAbove.previewLeft,
+.dayCell:hover .previewAbove.previewRight,
+.dayCell:focus-visible .previewAbove.previewLeft,
+.dayCell:focus-visible .previewAbove.previewRight {
   transform: translateY(0);
 }
 
