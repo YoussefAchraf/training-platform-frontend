@@ -30,6 +30,8 @@ export type SessionStatus = 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
 
 export type AssignmentStatus = 'unassigned' | 'pending' | 'accepted' | 'refused';
 
+export type AttendanceStatus = 'pending' | 'present' | 'absent';
+
 export type TrainingDurationUnit = 'days' | 'hours';
 
 export interface User {
@@ -93,6 +95,14 @@ export interface SessionAttendee {
   name: string;
   email: string | null;
   surveySubmitted: boolean;
+  attendanceStatus: AttendanceStatus;
+}
+
+export interface BulkImportResult {
+  importedCount: number;
+  skippedCount: number;
+  attendees: SessionAttendee[];
+  skipped: Array<{ row: number; name: string | null; email: string | null; reason: string }>;
 }
 
 export interface InstructorSkill {

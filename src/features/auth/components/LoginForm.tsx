@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
@@ -21,7 +21,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const navigate = useNavigate();
-  const location = useLocation();
   const login = useLogin();
 
   const {
@@ -30,15 +29,11 @@ export function LoginForm() {
     formState: { errors },
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
-  
-  
-  
   const onSubmit = handleSubmit((values) => {
     login.mutate(values, {
       onSuccess: async (data) => {
         await establishSession(data.user);
-        const redirectTo = (location.state as { from?: string } | null)?.from ?? paths.dashboard;
-        navigate(redirectTo, { replace: true });
+        navigate(paths.dashboard, { replace: true });
       },
     });
   });

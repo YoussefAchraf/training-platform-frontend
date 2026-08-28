@@ -1,4 +1,4 @@
-import type { AssignmentStatus, AuditAction, Role, SessionStatus, UserStatus } from '@/shared/types/domain';
+import type { AssignmentStatus, AttendanceStatus, AuditAction, Role, SessionStatus, UserStatus } from '@/shared/types/domain';
 
 export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
 
@@ -28,6 +28,12 @@ export const assignmentStatusMeta: Record<AssignmentStatus, StatusMeta> = {
   pending: { label: 'Pending response', tone: 'warning', pulse: true },
   accepted: { label: 'Accepted', tone: 'success' },
   refused: { label: 'Refused', tone: 'danger' },
+};
+
+export const attendanceStatusMeta: Record<AttendanceStatus, StatusMeta> = {
+  pending: { label: 'Pending', tone: 'warning' },
+  present: { label: 'Present', tone: 'success' },
+  absent: { label: 'Absent', tone: 'danger' },
 };
 
 export const roleMeta: Record<Role, StatusMeta> = {

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
   addMonths,
@@ -23,6 +24,7 @@ import { EmptyState } from '@/shared/components/EmptyState';
 import { formatDate, formatTime } from '@/shared/utils/formatDate';
 import { fadeIn, listItem, staggerContainer } from '@/shared/motion/variants';
 import type { CalendarEvent } from '@/shared/types/domain';
+import { paths } from '@/routes/paths';
 import styles from './CalendarHeatmap.module.css';
 
 interface CalendarHeatmapProps {
@@ -77,6 +79,7 @@ function heatLevel(count: number): 0 | 1 {
 }
 
 export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
+  const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
 
@@ -125,12 +128,18 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
             key={dayKey(selectedDate)}
           >
             {selectedEvents.map((event) => (
-              <motion.div key={event.id} className={styles.eventCard} variants={listItem}>
+              <motion.button
+                key={event.id}
+                type="button"
+                className={styles.eventCard}
+                variants={listItem}
+                onClick={() => navigate(paths.sessionDetail(event.sessionId))}
+              >
                 <p className={styles.eventTitle}>{event.title}</p>
                 <p className={styles.eventTime}>
                   <Clock size={12} /> {formatEventWhen(event)}
                 </p>
-              </motion.div>
+              </motion.button>
             ))}
           </motion.div>
         )}
@@ -193,12 +202,24 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
             // would run past the grid's edge for either column, so anchor
             // it to the inside edge there instead.
             const column = index % 7;
+            const row = Math.floor(index / 7);
             const previewEdge = column === 0 ? styles.previewLeft : column === 6 ? styles.previewRight : '';
+            // The preview normally drops below the cell - in the grid's last
+            // two rows that would run past the bottom of the viewport (this
+            // is a plain absolutely-positioned popup, so nothing scrolls it
+            // into view), so flip it to open upward there instead.
+            const previewVertical = row >= weekRows - 2 ? styles.previewAbove : '';
             return (
               <button
                 key={key}
                 type="button"
-                onClick={() => setSelectedDate(day)}
+                onClick={() => {
+                  // Clicking a greyed-out leading/trailing day (from the
+                  // adjacent month) jumps the calendar to that month instead
+                  // of just selecting a date the visible grid isn't showing.
+                  if (!inMonth) setCurrentMonth(day);
+                  setSelectedDate(day);
+                }}
                 className={[
                   styles.dayCell,
                   styles[`heat${heatLevel(count)}`],
@@ -213,7 +234,10 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
                 {count > 0 && <span className={styles.countPill}>{count}</span>}
 
                 {count > 0 && (
-                  <span className={[styles.hoverPreview, previewEdge].filter(Boolean).join(' ')} role="tooltip">
+                  <span
+                    className={[styles.hoverPreview, previewEdge, previewVertical].filter(Boolean).join(' ')}
+                    role="tooltip"
+                  >
                     <span className={styles.hoverPreviewDate}>{format(day, 'EEEE, MMM d')}</span>
                     {dayEvents.map((event) => (
                       <span key={event.id} className={styles.hoverPreviewEvent}>
