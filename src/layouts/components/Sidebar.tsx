@@ -7,6 +7,7 @@ import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { useIsSidebarCollapsed } from '@/shared/hooks/useMediaQuery';
 import { IconRailNav } from '@/pwa/components/IconRailNav';
+import { TourButton } from '@/features/tour/TourButton';
 import { groupedNavItems } from './navItems';
 import { UserMenu } from './UserMenu';
 import styles from './Sidebar.module.css';
@@ -65,6 +66,9 @@ export function Sidebar() {
       )}
 
       <div className={styles.footer}>
+        <div className={styles.footerActions}>
+          <TourButton />
+        </div>
         <UserMenu placement="up" variant={collapsed ? 'compact' : 'full'} />
       </div>
     </aside>

@@ -1,0 +1,50 @@
+{
+  "guideButton": "Guide",
+  "guideButtonAria": "Ouvrir la visite guidée",
+  "buttons": {
+    "next": "Suivant",
+    "back": "Précédent",
+    "done": "Terminé",
+    "progress": "{{current}} sur {{total}}"
+  },
+  "replay": {
+    "title": "Besoin d'un rappel ?",
+    "text": "Cliquez sur ce bouton Guide à tout moment pour revoir la visite adaptée à votre rôle."
+  },
+  "superAdmin": {
+    "welcome": { "title": "Bienvenue, SuperAdmin", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+    "statTotalUsers": { "title": "Utilisateurs totaux", "text": "Tous les comptes de la plateforme, tous rôles confondus." },
+    "statPendingSignups": { "title": "Inscriptions en attente", "text": "Nouveaux comptes en attente d'approbation par un manager." },
+    "statDeactivated": { "title": "Désactivés", "text": "Comptes désactivés qui ne peuvent plus se connecter." },
+    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées dans l'entreprise." },
+    "quickLinkUsers": { "title": "Gérer les utilisateurs", "text": "Modifiez les rôles, statuts et détails de n'importe quel compte de la plateforme." },
+    "quickLinkSessions": { "title": "Aperçu des sessions", "text": "Toutes les sessions, à l'échelle de l'entreprise, avec leur statut et leur formateur en un coup d'œil." },
+    "quickLinkAudit": { "title": "Journal d'audit", "text": "Un historique complet de chaque création, modification, suppression et annulation, filtrable par date, rôle ou formateur." }
+  },
+  "manager": {
+    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées pour vos clients." },
+    "statNeedsInstructor": { "title": "Sans formateur", "text": "Sessions qui n'ont pas encore de formateur assigné." },
+    "statInstructors": { "title": "Formateurs", "text": "Le nombre de formateurs disponibles pour enseigner." },
+    "statPendingApprovals": { "title": "Demandes en attente", "text": "Nouvelles demandes de compte en attente de votre validation - cliquez pour y accéder directement." },
+    "cardNeedsInstructor": { "title": "En attente d'un formateur", "text": "Les sessions de la statistique ci-dessus, prêtes pour que vous leur assigniez un formateur." },
+    "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+  },
+  "sales": {
+    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation que vous avez réservées pour des clients." },
+    "statProviders": { "title": "Prestataires", "text": "Organismes de certification pour lesquels vous dispensez des formations." },
+    "statTrainings": { "title": "Formations", "text": "Les cours de votre catalogue, tous prestataires confondus." },
+    "statClients": { "title": "Clients", "text": "Entreprises pour lesquelles vous réservez des sessions de formation." },
+    "cardAwaitingAssignment": { "title": "En attente d'affectation d'un formateur", "text": "Sessions qui ont encore besoin d'un formateur avant de pouvoir avoir lieu." },
+    "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+  },
+  "instructor": {
+    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+    "statMySessions": { "title": "Mes sessions", "text": "Toutes les sessions que vous êtes chargé d'enseigner." },
+    "statCompleted": { "title": "Terminées", "text": "Les sessions que vous avez déjà données." },
+    "statUpcomingAccepted": { "title": "À venir, acceptées", "text": "Sessions que vous êtes confirmé pour enseigner, bientôt." },
+    "cardRecentlyCompleted": { "title": "Terminées récemment", "text": "Vos sessions les plus récemment terminées, de la plus récente à la plus ancienne." },
+    "cardYourSessions": { "title": "Vos sessions", "text": "Vos sessions confirmées, planifiées ou en cours, de la plus proche à la plus lointaine." }
+  }
+}

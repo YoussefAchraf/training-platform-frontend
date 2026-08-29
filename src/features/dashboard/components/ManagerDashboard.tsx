@@ -39,16 +39,16 @@ export function ManagerDashboard() {
   return (
     <div>
       <StatTileGrid>
-        <StatTile label={t('ManagerDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
-        <StatTile label={t('ManagerDashboard.needsInstructor')} value={unassigned.length} icon={UserCog} />
-        <StatTile label={t('ManagerDashboard.instructors')} value={instructors.length} icon={Users2} />
-        <Link to={paths.pendingApprovals} className={styles.statLink}>
+        <StatTile id="tour-stat-total-sessions" label={t('ManagerDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
+        <StatTile id="tour-stat-needs-instructor" label={t('ManagerDashboard.needsInstructor')} value={unassigned.length} icon={UserCog} />
+        <StatTile id="tour-stat-instructors" label={t('ManagerDashboard.instructors')} value={instructors.length} icon={Users2} />
+        <Link id="tour-stat-pending-approvals" to={paths.pendingApprovals} className={styles.statLink}>
           <StatTile label={t('ManagerDashboard.pendingApprovals')} value={pendingUsersQuery.data?.length ?? '—'} icon={ClipboardCheck} />
         </Link>
       </StatTileGrid>
 
       <div className={styles.columns}>
-        <Card>
+        <Card id="tour-card-needs-instructor">
           <h3 className={styles.cardTitle}>{t('ManagerDashboard.needsInstructorCardTitle')}</h3>
           <SessionMiniList
             sessions={unassigned}
@@ -59,7 +59,7 @@ export function ManagerDashboard() {
           />
         </Card>
 
-        <Card>
+        <Card id="tour-card-upcoming-sessions">
           <h3 className={styles.cardTitle}>{t('ManagerDashboard.upcomingSessionsCardTitle')}</h3>
           <SessionMiniList
             sessions={upcoming}
