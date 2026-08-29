@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { CalendarCheck2, CalendarClock, ClipboardList } from 'lucide-react';
 import { Card } from '@/shared/components/Card';
 import { StatTile } from '@/shared/components/StatTile';
@@ -11,6 +12,7 @@ import { StatTileGrid } from './StatTileGrid';
 import styles from './Dashboard.module.css';
 
 export function InstructorDashboard() {
+  const { t } = useTranslation('dashboard');
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap } = useSessionLookups();
 
@@ -41,30 +43,30 @@ export function InstructorDashboard() {
   return (
     <div>
       <StatTileGrid>
-        <StatTile label="My sessions" value={sessions.length} icon={CalendarClock} tone="primary" />
-        <StatTile label="Awaiting your response" value={needsResponse.length} icon={ClipboardList} />
-        <StatTile label="Upcoming, accepted" value={upcoming.length} icon={CalendarCheck2} />
+        <StatTile label={t('InstructorDashboard.mySessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
+        <StatTile label={t('InstructorDashboard.awaitingResponse')} value={needsResponse.length} icon={ClipboardList} />
+        <StatTile label={t('InstructorDashboard.upcomingAccepted')} value={upcoming.length} icon={CalendarCheck2} />
       </StatTileGrid>
 
       <div className={styles.columns}>
         <Card>
-          <h3 className={styles.cardTitle}>Awaiting your response</h3>
+          <h3 className={styles.cardTitle}>{t('InstructorDashboard.awaitingResponseCardTitle')}</h3>
           <SessionMiniList
             sessions={needsResponse}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="Nothing waiting on you right now."
+            emptyText={t('InstructorDashboard.nothingWaiting')}
             badge="assignment"
           />
         </Card>
 
         <Card>
-          <h3 className={styles.cardTitle}>Your sessions</h3>
+          <h3 className={styles.cardTitle}>{t('InstructorDashboard.yourSessionsCardTitle')}</h3>
           <SessionMiniList
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="No scheduled or ongoing sessions."
+            emptyText={t('InstructorDashboard.noScheduled')}
           />
         </Card>
       </div>

@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { AlertCircle, Clock } from 'lucide-react';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
@@ -12,24 +14,27 @@ import { useAdminLogin } from '../hooks/useLogin';
 import { establishSession } from '../establishSession';
 import styles from './AuthForm.module.css';
 
-const loginSchema = z.object({
-  email: z.email('Enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-});
+function buildLoginSchema(t: TFunction<'auth'>) {
+  return z.object({
+    email: z.email(t('SuperAdminLoginForm.errors.emailInvalid')),
+    password: z.string().min(1, t('SuperAdminLoginForm.errors.passwordRequired')),
+  });
+}
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<ReturnType<typeof buildLoginSchema>>;
 
-const GENERIC_ERROR = 'Invalid email or password.';
 const COOLDOWN_AFTER_ATTEMPTS = 3;
 const COOLDOWN_SECONDS = 10;
 
 export function SuperAdminLoginForm() {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const login = useAdminLogin();
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);
   const failedAttempts = useRef(0);
   const cooldownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const loginSchema = useMemo(() => buildLoginSchema(t), [t]);
 
   const {
     register,
@@ -70,7 +75,7 @@ export function SuperAdminLoginForm() {
         navigate(paths.dashboard, { replace: true });
       },
       onError: () => {
-        setError(GENERIC_ERROR);
+        setError(t('SuperAdminLoginForm.genericError'));
         failedAttempts.current += 1;
         if (failedAttempts.current >= COOLDOWN_AFTER_ATTEMPTS) startCooldown();
       },
@@ -91,11 +96,11 @@ export function SuperAdminLoginForm() {
       {isLocked && (
         <div className={styles.formError} role="alert">
           <Clock size={16} />
-          <span>Too many attempts. Try again in {cooldown}s.</span>
+          <span>{t('SuperAdminLoginForm.tooManyAttempts', { seconds: cooldown })}</span>
         </div>
       )}
 
-      <FormField label="Email" error={errors.email?.message} required>
+      <FormField label={t('SuperAdminLoginForm.emailLabel')} error={errors.email?.message} required>
         {(fieldProps) => (
           <Input
             type="email"
@@ -107,14 +112,14 @@ export function SuperAdminLoginForm() {
         )}
       </FormField>
 
-      <FormField label="Password" error={errors.password?.message} required>
+      <FormField label={t('SuperAdminLoginForm.passwordLabel')} error={errors.password?.message} required>
         {(fieldProps) => (
           <Input type="password" autoComplete="off" placeholder="••••••••" {...fieldProps} {...register('password')} />
         )}
       </FormField>
 
       <Button type="submit" fullWidth isLoading={login.isPending} disabled={isLocked}>
-        {isLocked ? `Locked (${cooldown}s)` : 'Sign in as administrator'}
+        {isLocked ? t('SuperAdminLoginForm.locked', { seconds: cooldown }) : t('SuperAdminLoginForm.signIn')}
       </Button>
     </form>
   );

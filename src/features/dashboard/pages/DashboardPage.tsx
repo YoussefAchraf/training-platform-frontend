@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ManagerDashboard } from '../components/ManagerDashboard';
@@ -6,20 +7,21 @@ import { InstructorDashboard } from '../components/InstructorDashboard';
 import { SuperAdminDashboard } from '../components/SuperAdminDashboard';
 
 export function DashboardPage() {
+  const { t } = useTranslation('dashboard');
   const { user, isManager, isInstructor, isSuperAdmin } = useAuth();
 
   return (
     <div>
       <PageHeader
-        title={`Welcome back, ${user?.firstname ?? ''}`}
+        title={t('DashboardPage.welcomeBack', { name: user?.firstname ?? '' })}
         description={
           isSuperAdmin
-            ? 'Platform-wide oversight: users, sessions, and the audit trail.'
+            ? t('DashboardPage.descriptionSuperAdmin')
             : isManager
-              ? 'Here is what needs your attention across the company.'
+              ? t('DashboardPage.descriptionManager')
               : isInstructor
-                ? 'Your upcoming sessions and pending responses.'
-                : 'Your training delivery pipeline at a glance.'
+                ? t('DashboardPage.descriptionInstructor')
+                : t('DashboardPage.descriptionSales')
         }
       />
 

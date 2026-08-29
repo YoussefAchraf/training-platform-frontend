@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Card } from '@/shared/components/Card';
 import { Spinner } from '@/shared/components/Spinner';
@@ -9,13 +10,14 @@ import { InstructorProfileForm } from '../components/InstructorProfileForm';
 import styles from './MyInstructorProfilePage.module.css';
 
 export function MyInstructorProfilePage() {
+  const { t } = useTranslation('instructors');
   const profileQuery = useMyInstructorProfile();
   const updateProfile = useUpdateMyInstructorProfile();
   const toast = useToast();
 
   return (
     <div>
-      <PageHeader title="My instructor profile" description="Your bio and the trainings you're qualified to deliver." />
+      <PageHeader title={t('MyInstructorProfilePage.title')} description={t('MyInstructorProfilePage.description')} />
 
       {profileQuery.isPending && <Spinner />}
 
@@ -41,7 +43,7 @@ export function MyInstructorProfilePage() {
             submitError={updateProfile.isError ? updateProfile.error : undefined}
             onSubmit={(payload) =>
               updateProfile.mutate(payload, {
-                onSuccess: () => toast.success('Your profile was updated.'),
+                onSuccess: () => toast.success(t('MyInstructorProfilePage.profileUpdated')),
               })
             }
           />

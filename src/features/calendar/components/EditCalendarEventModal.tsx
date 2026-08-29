@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -11,18 +14,20 @@ import { toDatetimeLocalValue } from '@/shared/utils/formatDate';
 import type { CalendarEvent } from '@/shared/types/domain';
 import { useUpdateCalendarEvent } from '../hooks/useCalendar';
 
-const eventSchema = z
-  .object({
-    title: z.string().trim().min(1, 'Title is required').max(200),
-    eventDate: z.string().min(1, 'Start date is required'),
-    endDate: z.string().min(1, 'End date is required'),
-  })
-  .refine((data) => new Date(data.endDate) > new Date(data.eventDate), {
-    message: 'End date must be after the start date',
-    path: ['endDate'],
-  });
+function buildEventSchema(t: TFunction<'calendar'>) {
+  return z
+    .object({
+      title: z.string().trim().min(1, t('EditCalendarEventModal.errors.titleRequired')).max(200),
+      eventDate: z.string().min(1, t('EditCalendarEventModal.errors.startDateRequired')),
+      endDate: z.string().min(1, t('EditCalendarEventModal.errors.endDateRequired')),
+    })
+    .refine((data) => new Date(data.endDate) > new Date(data.eventDate), {
+      message: t('EditCalendarEventModal.errors.endAfterStart'),
+      path: ['endDate'],
+    });
+}
 
-type EventFormValues = z.infer<typeof eventSchema>;
+type EventFormValues = z.infer<ReturnType<typeof buildEventSchema>>;
 
 interface EditCalendarEventModalProps {
   event: CalendarEvent | null;
@@ -30,8 +35,10 @@ interface EditCalendarEventModalProps {
 }
 
 export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModalProps) {
+  const { t } = useTranslation('calendar');
   const updateEvent = useUpdateCalendarEvent();
   const toast = useToast();
+  const eventSchema = useMemo(() => buildEventSchema(t), [t]);
 
   const {
     register,
@@ -62,7 +69,7 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
       },
       {
         onSuccess: () => {
-          toast.success('Calendar event updated.');
+          toast.success(t('EditCalendarEventModal.eventUpdated'));
           onClose();
         },
       },
@@ -73,14 +80,14 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
     <Modal
       isOpen={Boolean(event)}
       onClose={onClose}
-      title="Edit calendar event"
+      title={t('EditCalendarEventModal.title')}
       footer={
         <>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t('EditCalendarEventModal.cancel')}
           </Button>
           <Button type="submit" form="calendar-event-form" isLoading={updateEvent.isPending}>
-            Save changes
+            {t('EditCalendarEventModal.saveChanges')}
           </Button>
         </>
       }
@@ -88,15 +95,15 @@ export function EditCalendarEventModal({ event, onClose }: EditCalendarEventModa
       <form onSubmit={onSubmit} id="calendar-event-form" className="stack" noValidate>
         {updateEvent.isError && <ErrorBanner error={updateEvent.error} />}
 
-        <FormField label="Title" error={errors.title?.message} required>
+        <FormField label={t('EditCalendarEventModal.titleLabel')} error={errors.title?.message} required>
           {(fieldProps) => <Input {...fieldProps} {...register('title')} />}
         </FormField>
 
-        <FormField label="Start date & time" error={errors.eventDate?.message} required>
+        <FormField label={t('EditCalendarEventModal.startDateTimeLabel')} error={errors.eventDate?.message} required>
           {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('eventDate')} />}
         </FormField>
 
-        <FormField label="End date & time" error={errors.endDate?.message} required>
+        <FormField label={t('EditCalendarEventModal.endDateTimeLabel')} error={errors.endDate?.message} required>
           {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('endDate')} />}
         </FormField>
       </form>

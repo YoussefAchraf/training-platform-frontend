@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
@@ -17,6 +18,7 @@ interface IconRailNavProps {
 
 
 export function IconRailNav({ role, layoutId, className, extraItems }: IconRailNavProps) {
+  const { t } = useTranslation('common');
   const groups = groupedNavItems(role);
   const prefetchRoute = usePrefetchRoute();
 
@@ -24,14 +26,14 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
     extraItems && extraItems.length > 0 ? [...groups, { group: null, items: extraItems }] : groups;
 
   return (
-    <nav className={cn(styles.rail, className)} aria-label="Main navigation">
+    <nav className={cn(styles.rail, className)} aria-label={t('Nav.mainNavigation')}>
       {allGroups.map(({ group, items }, groupIndex) => (
         <div key={group ?? `top-${groupIndex}`} className={styles.group}>
           {items.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
-              title={item.label}
+              title={t(item.labelKey)}
               onMouseEnter={() => prefetchRoute(item.to)}
               onFocus={() => prefetchRoute(item.to)}
               className={({ isActive }) => cn(styles.link, isActive && styles.linkActive)}
@@ -48,7 +50,7 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
                   <span className={styles.iconWrap}>
                     <item.icon size={19} />
                   </span>
-                  <span className={styles.srLabel}>{item.label}</span>
+                  <span className={styles.srLabel}>{t(item.labelKey)}</span>
                 </>
               )}
             </NavLink>

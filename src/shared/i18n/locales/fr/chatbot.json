@@ -1,0 +1,16 @@
+{
+  "ChatConversation": {
+    "assistantTyping": "L'assistant est en train d'écrire",
+    "emptyState": "Posez-moi une question sur vos formations, sessions ou clients.",
+    "placeholder": "Écrivez un message...",
+    "messageLabel": "Message",
+    "sendMessage": "Envoyer le message"
+  },
+  "ChatWidget": {
+    "openAssistant": "Ouvrir l'assistant de discussion",
+    "assistant": "Assistant",
+    "startNewConversation": "Démarrer une nouvelle conversation",
+    "newConversation": "Nouvelle conversation",
+    "closeChat": "Fermer la discussion"
+  }
+}

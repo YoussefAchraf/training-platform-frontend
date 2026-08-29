@@ -1,0 +1,54 @@
+{
+  "SessionMiniList": {
+    "unnamedSession": "Session n° {{id}}",
+    "unknownClient": "Client inconnu"
+  },
+  "DashboardPage": {
+    "welcomeBack": "Content de vous revoir, {{name}}",
+    "descriptionSuperAdmin": "Supervision de la plateforme : utilisateurs, sessions et journal d'audit.",
+    "descriptionManager": "Voici ce qui requiert votre attention dans l'entreprise.",
+    "descriptionInstructor": "Vos prochaines sessions et réponses en attente.",
+    "descriptionSales": "Votre pipeline de formation en un coup d'œil."
+  },
+  "ManagerDashboard": {
+    "totalSessions": "Sessions totales",
+    "needsInstructor": "Sans formateur",
+    "instructors": "Formateurs",
+    "pendingApprovals": "Demandes en attente",
+    "needsInstructorCardTitle": "En attente d'un formateur",
+    "everyAssigned": "Chaque session a un formateur assigné.",
+    "upcomingSessionsCardTitle": "Sessions à venir",
+    "noUpcoming": "Aucune session à venir planifiée."
+  },
+  "SalesDashboard": {
+    "totalSessions": "Sessions totales",
+    "providers": "Prestataires",
+    "trainings": "Formations",
+    "clients": "Clients",
+    "awaitingAssignmentCardTitle": "En attente d'affectation d'un formateur",
+    "everyAssigned": "Chaque session a un formateur assigné.",
+    "upcomingSessionsCardTitle": "Sessions à venir",
+    "noUpcoming": "Aucune session à venir planifiée."
+  },
+  "InstructorDashboard": {
+    "mySessions": "Mes sessions",
+    "awaitingResponse": "En attente de votre réponse",
+    "upcomingAccepted": "À venir, acceptées",
+    "awaitingResponseCardTitle": "En attente de votre réponse",
+    "nothingWaiting": "Rien n'est en attente pour le moment.",
+    "yourSessionsCardTitle": "Vos sessions",
+    "noScheduled": "Aucune session planifiée ou en cours."
+  },
+  "SuperAdminDashboard": {
+    "totalUsers": "Utilisateurs totaux",
+    "pendingSignups": "Inscriptions en attente",
+    "deactivated": "Désactivés",
+    "totalSessions": "Sessions totales",
+    "manageUsers": "Gérer les utilisateurs",
+    "manageUsersDescription": "Modifier les rôles, statuts et détails",
+    "sessionsOverview": "Aperçu des sessions",
+    "sessionsOverviewDescription": "Toutes les sessions, à l'échelle de l'entreprise",
+    "auditLog": "Journal d'audit",
+    "auditLogDescription": "Chaque création, modification, suppression, annulation"
+  }
+}

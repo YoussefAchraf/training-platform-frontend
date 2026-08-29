@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Building2, CalendarClock, GraduationCap, Users } from 'lucide-react';
 import { Card } from '@/shared/components/Card';
 import { StatTile } from '@/shared/components/StatTile';
@@ -13,6 +14,7 @@ import { StatTileGrid } from './StatTileGrid';
 import styles from './Dashboard.module.css';
 
 export function SalesDashboard() {
+  const { t } = useTranslation('dashboard');
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap } = useSessionLookups();
   const providersQuery = useProviders();
@@ -34,31 +36,31 @@ export function SalesDashboard() {
   return (
     <div>
       <StatTileGrid>
-        <StatTile label="Total sessions" value={sessions.length} icon={CalendarClock} tone="primary" />
-        <StatTile label="Providers" value={providersQuery.data?.length ?? '—'} icon={Building2} />
-        <StatTile label="Trainings" value={trainingsQuery.data?.length ?? '—'} icon={GraduationCap} />
-        <StatTile label="Clients" value={clientsQuery.data?.length ?? '—'} icon={Users} />
+        <StatTile label={t('SalesDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
+        <StatTile label={t('SalesDashboard.providers')} value={providersQuery.data?.length ?? '—'} icon={Building2} />
+        <StatTile label={t('SalesDashboard.trainings')} value={trainingsQuery.data?.length ?? '—'} icon={GraduationCap} />
+        <StatTile label={t('SalesDashboard.clients')} value={clientsQuery.data?.length ?? '—'} icon={Users} />
       </StatTileGrid>
 
       <div className={styles.columns}>
         <Card>
-          <h3 className={styles.cardTitle}>Awaiting instructor assignment</h3>
+          <h3 className={styles.cardTitle}>{t('SalesDashboard.awaitingAssignmentCardTitle')}</h3>
           <SessionMiniList
             sessions={unassigned}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="Every session has an instructor assigned."
+            emptyText={t('SalesDashboard.everyAssigned')}
             badge="assignment"
           />
         </Card>
 
         <Card>
-          <h3 className={styles.cardTitle}>Upcoming sessions</h3>
+          <h3 className={styles.cardTitle}>{t('SalesDashboard.upcomingSessionsCardTitle')}</h3>
           <SessionMiniList
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="No upcoming sessions scheduled."
+            emptyText={t('SalesDashboard.noUpcoming')}
           />
         </Card>
       </div>

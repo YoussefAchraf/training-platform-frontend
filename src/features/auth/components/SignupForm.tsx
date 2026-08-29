@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { AlertCircle } from 'lucide-react';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
@@ -12,28 +15,32 @@ import { paths } from '@/routes/paths';
 import { useSignup } from '../hooks/useSignup';
 import styles from './AuthForm.module.css';
 
-const signupSchema = z
-  .object({
-    firstname: z.string().trim().min(1, 'First name is required').max(100),
-    lastname: z.string().trim().min(1, 'Last name is required').max(100),
-    email: z.email('Enter a valid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
-    role: z.enum(['Sales', 'Manager', 'Instructor'], { error: 'Select a role' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
+function buildSignupSchema(t: TFunction<'auth'>) {
+  return z
+    .object({
+      firstname: z.string().trim().min(1, t('SignupForm.errors.firstnameRequired')).max(100),
+      lastname: z.string().trim().min(1, t('SignupForm.errors.lastnameRequired')).max(100),
+      email: z.email(t('SignupForm.errors.emailInvalid')),
+      password: z.string().min(8, t('SignupForm.errors.passwordMin')),
+      confirmPassword: z.string().min(1, t('SignupForm.errors.confirmPasswordRequired')),
+      role: z.enum(['Sales', 'Manager', 'Instructor'], { error: t('SignupForm.errors.roleRequired') }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('SignupForm.errors.passwordsMismatch'),
+      path: ['confirmPassword'],
+    });
+}
 
-type SignupFormValues = z.infer<typeof signupSchema>;
+type SignupFormValues = z.infer<ReturnType<typeof buildSignupSchema>>;
 
 interface SignupFormProps {
   onSuccess: () => void;
 }
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
+  const { t } = useTranslation('auth');
   const signup = useSignup();
+  const signupSchema = useMemo(() => buildSignupSchema(t), [t]);
 
   const {
     register,
@@ -50,30 +57,30 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       {signup.isError && (
         <div className={styles.formError} role="alert">
           <AlertCircle size={16} />
-          <span>{getApiErrorMessage(signup.error, 'Unable to create your account. Please try again.')}</span>
+          <span>{getApiErrorMessage(signup.error, t('SignupForm.genericError'))}</span>
         </div>
       )}
 
       <div className={styles.row}>
-        <FormField label="First name" error={errors.firstname?.message} required>
+        <FormField label={t('SignupForm.firstnameLabel')} error={errors.firstname?.message} required>
           {(fieldProps) => (
-            <Input autoComplete="given-name" placeholder="Jane" {...fieldProps} {...register('firstname')} />
+            <Input autoComplete="given-name" placeholder={t('SignupForm.firstnamePlaceholder')} {...fieldProps} {...register('firstname')} />
           )}
         </FormField>
 
-        <FormField label="Last name" error={errors.lastname?.message} required>
+        <FormField label={t('SignupForm.lastnameLabel')} error={errors.lastname?.message} required>
           {(fieldProps) => (
-            <Input autoComplete="family-name" placeholder="Doe" {...fieldProps} {...register('lastname')} />
+            <Input autoComplete="family-name" placeholder={t('SignupForm.lastnamePlaceholder')} {...fieldProps} {...register('lastname')} />
           )}
         </FormField>
       </div>
 
-      <FormField label="Email" error={errors.email?.message} required>
+      <FormField label={t('SignupForm.emailLabel')} error={errors.email?.message} required>
         {(fieldProps) => (
           <Input
             type="email"
             autoComplete="email"
-            placeholder="you@company.com"
+            placeholder={t('SignupForm.emailPlaceholder')}
             {...fieldProps}
             {...register('email')}
           />
@@ -81,25 +88,25 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       </FormField>
 
       <FormField
-        label="Role"
+        label={t('SignupForm.roleLabel')}
         error={errors.role?.message}
-        hint="A Manager must approve your account before you can sign in."
+        hint={t('SignupForm.roleHint')}
         required
       >
         {(fieldProps) => (
           <Select {...fieldProps} {...register('role')} defaultValue="">
             <option value="" disabled>
-              Select your role
+              {t('SignupForm.selectRole')}
             </option>
-            <option value="Sales">Sales</option>
-            <option value="Manager">Manager</option>
-            <option value="Instructor">Instructor</option>
+            <option value="Sales">{t('common:Status.roleSales')}</option>
+            <option value="Manager">{t('common:Status.roleManager')}</option>
+            <option value="Instructor">{t('common:Status.roleInstructor')}</option>
           </Select>
         )}
       </FormField>
 
       <div className={styles.row}>
-        <FormField label="Password" error={errors.password?.message} required>
+        <FormField label={t('SignupForm.passwordLabel')} error={errors.password?.message} required>
           {(fieldProps) => (
             <Input
               type="password"
@@ -111,7 +118,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           )}
         </FormField>
 
-        <FormField label="Confirm password" error={errors.confirmPassword?.message} required>
+        <FormField label={t('SignupForm.confirmPasswordLabel')} error={errors.confirmPassword?.message} required>
           {(fieldProps) => (
             <Input
               type="password"
@@ -125,11 +132,11 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       </div>
 
       <Button type="submit" fullWidth isLoading={signup.isPending}>
-        Create account
+        {t('SignupForm.createAccount')}
       </Button>
 
       <p className={styles.switchText}>
-        Already have an account? <Link to={paths.login}>Sign in</Link>
+        {t('SignupForm.haveAccount')} <Link to={paths.login}>{t('SignupForm.signIn')}</Link>
       </p>
     </form>
   );

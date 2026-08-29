@@ -1,0 +1,32 @@
+{
+  "QRCodeModal": {
+    "title": "QR code du questionnaire",
+    "description": "Les participants peuvent le scanner pour évaluer la session anonymement.",
+    "qrAlt": "QR code du questionnaire",
+    "copied": "Copié",
+    "copy": "Copier"
+  },
+  "SurveyForm": {
+    "instructorQuestion": "Comment évalueriez-vous le formateur ?",
+    "instructorMin": "Faible",
+    "instructorMax": "Excellent",
+    "npsQuestion": "Quelle est la probabilité que vous recommandiez cette formation ?",
+    "npsMin": "Peu probable",
+    "npsMax": "Très probable",
+    "commentsLabel": "Commentaires",
+    "commentsOptionalHint": "Optionnel",
+    "commentsPlaceholder": "Tout ce que vous souhaitez partager…",
+    "submit": "Envoyer mon avis",
+    "errors": {
+      "instructorScoreRequired": "Évaluez le formateur",
+      "npsScoreRequired": "Évaluez la formation"
+    }
+  },
+  "SurveyFormPage": {
+    "invalidLink": "Ce lien de questionnaire est invalide ou a expiré.",
+    "thankYouTitle": "Merci !",
+    "thankYouDescription": "Votre avis a bien été envoyé.",
+    "unnamedTraining": "Session de formation",
+    "withInstructor": "avec {{name}} · "
+  }
+}

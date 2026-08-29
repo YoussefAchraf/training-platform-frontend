@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, LogOut, Settings } from 'lucide-react';
 import { Avatar } from '@/shared/components/Avatar';
 import { Badge } from '@/shared/components/Badge';
 import { Card } from '@/shared/components/Card';
 import { ThemeToggle } from '@/shared/components/ThemeToggle';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useLogout } from '@/features/auth/hooks/useLogout';
 import { usePrefetchRoute } from '@/routes/routeModules';
@@ -19,6 +21,7 @@ import styles from './PwaProfilePage.module.css';
 
 
 export function PwaProfilePage() {
+  const { t } = useTranslation(['pwa', 'common']);
   const { user, isSuperAdmin } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
@@ -35,7 +38,7 @@ export function PwaProfilePage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <span className={styles.title}>Profile</span>
+        <span className={styles.title}>{t('PwaProfilePage.title')}</span>
       </header>
 
       <Card className={styles.identityCard}>
@@ -48,12 +51,17 @@ export function PwaProfilePage() {
             <p className={styles.email}>{user.email}</p>
           </div>
         </div>
-        <Badge tone={roleMeta[user.role].tone}>{roleMeta[user.role].label}</Badge>
+        <Badge tone={roleMeta[user.role].tone}>{t(roleMeta[user.role].labelKey)}</Badge>
       </Card>
 
       <Card className={styles.themeCard}>
-        <p className={styles.sectionLabel}>Theme</p>
+        <p className={styles.sectionLabel}>{t('PwaProfilePage.theme')}</p>
         <ThemeToggle />
+      </Card>
+
+      <Card className={styles.themeCard}>
+        <p className={styles.sectionLabel}>{t('PwaProfilePage.language')}</p>
+        <LanguageToggle />
       </Card>
 
       <button
@@ -63,13 +71,13 @@ export function PwaProfilePage() {
         onTouchStart={() => prefetchRoute(paths.account)}
       >
         <Settings size={17} />
-        <span>Account settings</span>
+        <span>{t('PwaProfilePage.accountSettings')}</span>
         <ArrowRight size={15} className={styles.chevron} />
       </button>
 
       {overflow.length > 0 && (
         <>
-          <p className={styles.sectionLabel}>More</p>
+          <p className={styles.sectionLabel}>{t('PwaProfilePage.more')}</p>
           <Card className={styles.moreCard}>
             {overflow.map((item) => (
               <button
@@ -80,7 +88,7 @@ export function PwaProfilePage() {
                 onTouchStart={() => prefetchRoute(item.to)}
               >
                 <item.icon size={17} />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
                 <ArrowRight size={15} className={styles.chevron} />
               </button>
             ))}
@@ -95,7 +103,7 @@ export function PwaProfilePage() {
         disabled={logout.isPending}
       >
         <LogOut size={16} />
-        <span>Log out</span>
+        <span>{t('PwaProfilePage.logOut')}</span>
       </button>
     </div>
   );

@@ -1,0 +1,45 @@
+{
+  "CalendarPage": {
+    "title": "Calendar",
+    "descriptionManage": "Every scheduled training session across the company.",
+    "descriptionOther": "Sessions assigned to you.",
+    "heatmap": "Heatmap",
+    "agenda": "Agenda",
+    "editEvent": "Edit {{title}}",
+    "deleteEvent": "Delete {{title}}",
+    "eventDeleted": "Calendar event deleted.",
+    "deleteDialogTitle": "Delete calendar event?",
+    "deleteDialogDescription": "\"{{title}}\" will be removed from the calendar.",
+    "delete": "Delete"
+  },
+  "EditCalendarEventModal": {
+    "title": "Edit calendar event",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "titleLabel": "Title",
+    "startDateTimeLabel": "Start date & time",
+    "endDateTimeLabel": "End date & time",
+    "eventUpdated": "Calendar event updated.",
+    "errors": {
+      "titleRequired": "Title is required",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "endAfterStart": "End date must be after the start date"
+    }
+  },
+  "CalendarAgenda": {
+    "nothingScheduled": "Nothing scheduled",
+    "nothingScheduledDescription": "Calendar events appear here once sessions are booked."
+  },
+  "CalendarHeatmap": {
+    "dow": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "noTrainingsScheduled": "No trainings scheduled",
+    "trainingsScheduled_one": "{{count}} training scheduled",
+    "trainingsScheduled_other": "{{count}} trainings scheduled",
+    "nothingThisDay": "Nothing this day",
+    "pickAnotherDay": "Pick another day on the calendar.",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today"
+  }
+}

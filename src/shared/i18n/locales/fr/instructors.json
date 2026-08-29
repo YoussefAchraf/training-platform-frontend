@@ -1,0 +1,32 @@
+{
+  "EditInstructorModal": {
+    "title": "Modifier {{name}}",
+    "description": "Mettez à jour la bio et les formations qualifiées de ce formateur.",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "profileUpdated": "Profil du formateur mis à jour."
+  },
+  "InstructorsPage": {
+    "title": "Formateurs",
+    "description": "Profils, bios et formations que chaque formateur peut dispenser.",
+    "columnName": "Nom",
+    "columnEmail": "E-mail",
+    "columnTrainings": "Formations",
+    "edit": "Modifier",
+    "emptyTitle": "Aucun formateur pour l'instant",
+    "emptyDescription": "Les formateurs apparaîtront ici une fois inscrits et approuvés."
+  },
+  "InstructorProfileForm": {
+    "saveChanges": "Enregistrer les modifications",
+    "bioLabel": "Bio",
+    "bioHint": "Visible par les managers lors de l'assignation des sessions",
+    "bioPlaceholder": "Parlez-nous de votre expérience d'enseignement…",
+    "trainingsLabel": "Formations que je peux dispenser",
+    "noTrainings": "Aucune formation n'existe encore - un manager doit d'abord en ajouter."
+  },
+  "MyInstructorProfilePage": {
+    "title": "Mon profil de formateur",
+    "description": "Votre bio et les formations que vous êtes qualifié pour dispenser.",
+    "profileUpdated": "Votre profil a été mis à jour."
+  }
+}

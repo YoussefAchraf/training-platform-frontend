@@ -1,0 +1,131 @@
+{
+  "AttendeeList": {
+    "noAttendees": "Aucun participant ajouté pour l'instant.",
+    "surveySubmitted": "Envoyé",
+    "surveyPending": "Questionnaire en attente",
+    "markAbsent": "Absent",
+    "markPresent": "Présent",
+    "markedPresent": "Marqué présent.",
+    "markedAbsent": "Marqué absent."
+  },
+  "SessionsPage": {
+    "title": "Sessions",
+    "descriptionInstructor": "Sessions de formation qui vous sont assignées.",
+    "descriptionOther": "Sessions de formation réservées pour des clients.",
+    "bookSession": "Réserver une session",
+    "columnTraining": "Formation",
+    "columnClient": "Client",
+    "columnInstructor": "Formateur",
+    "unassigned": "Non assigné",
+    "columnStarts": "Début",
+    "columnStatus": "Statut",
+    "columnAssignment": "Affectation",
+    "emptyTitleInstructor": "Aucune session assignée pour l'instant",
+    "emptyTitleOther": "Aucune session réservée pour l'instant",
+    "emptyDescription": "Réservez une session pour commencer."
+  },
+  "SessionDetailPage": {
+    "unnamedSession": "Session n° {{id}}",
+    "bookedFor": "Réservée pour {{client}}",
+    "reassign": "Réaffecter",
+    "assign": "Assigner",
+    "assignDisabledHint": "Ajoutez au moins un participant avant d'assigner un formateur",
+    "surveyQr": "QR code du questionnaire",
+    "editDates": "Modifier les dates",
+    "cancel": "Annuler",
+    "notFoundTitle": "Session introuvable",
+    "notFoundDescription": "Elle a peut-être été supprimée, ou vous n'y avez pas accès.",
+    "sessionCancelled": "Session annulée.",
+    "detailsCardTitle": "Détails",
+    "provider": "Prestataire",
+    "starts": "Début",
+    "ends": "Fin",
+    "instructor": "Formateur",
+    "unassigned": "Non assigné",
+    "attendeesCardTitle": "Participants",
+    "reportCardTitle": "Rapport",
+    "cancelDialogTitle": "Annuler cette session ?",
+    "cancelDialogDescription": "Les participants et le formateur assigné conserveront leurs enregistrements, mais la session sera marquée comme annulée.",
+    "cancelSession": "Annuler la session"
+  },
+  "SessionFormModal": {
+    "title": "Réserver une session",
+    "description": "Planifiez une formation pour un client. Vous pourrez assigner un formateur ensuite.",
+    "cancel": "Annuler",
+    "bookSession": "Réserver la session",
+    "trainingLabel": "Formation",
+    "loadingTrainings": "Chargement des formations…",
+    "selectTraining": "Sélectionnez une formation",
+    "clientLabel": "Client",
+    "loadingClients": "Chargement des clients…",
+    "selectClient": "Sélectionnez un client",
+    "startDateLabel": "Date de début",
+    "startTimeLabel": "Heure de début",
+    "dailyEndTimeLabel": "Heure de fin journalière",
+    "dailyEndTimeHint": "La même chaque jour, ex. 10h20 à 18h20",
+    "includeWeekends": "Inclure les week-ends dans le calcul de la date de fin",
+    "endDateLabel": "Date de fin",
+    "endDateHint": "Prédite à partir de la durée de la formation et des heures quotidiennes - modifiez-la directement pour la remplacer",
+    "sessionBooked": "Session réservée.",
+    "errors": {
+      "trainingRequired": "Sélectionnez une formation",
+      "clientRequired": "Sélectionnez un client",
+      "startDateRequired": "La date de début est requise",
+      "startTimeRequired": "L'heure de début est requise",
+      "dailyEndTimeRequired": "L'heure de fin journalière est requise",
+      "endDateRequired": "La date de fin est requise",
+      "dailyEndTimeAfterStart": "L'heure de fin journalière doit être après l'heure de début",
+      "startNotInPast": "La date et l'heure de début ne peuvent pas être dans le passé",
+      "endOnOrAfterStart": "La date de fin doit être égale ou postérieure à la date de début"
+    }
+  },
+  "EditSessionModal": {
+    "title": "Modifier les dates de la session",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "startDateTimeLabel": "Date et heure de début",
+    "endDateTimeLabel": "Date et heure de fin",
+    "datesUpdated": "Dates de la session mises à jour.",
+    "errors": {
+      "startDateRequired": "La date de début est requise",
+      "endDateRequired": "La date de fin est requise",
+      "endAfterStart": "La date de fin doit être après la date de début"
+    }
+  },
+  "AddAttendeeForm": {
+    "nameLabel": "Nom",
+    "namePlaceholder": "Nom du participant",
+    "emailLabel": "E-mail",
+    "emailOptionalHint": "Optionnel",
+    "emailPlaceholder": "participant@entreprise.com",
+    "addAttendee": "Ajouter un participant",
+    "errors": {
+      "nameRequired": "Le nom est requis",
+      "emailInvalid": "Saisissez une adresse e-mail valide"
+    }
+  },
+  "AttendeeImportForm": {
+    "orImportFromFile": "ou importer depuis un fichier",
+    "changeFile": "Changer de fichier",
+    "chooseFile": "Choisir un fichier",
+    "fileFieldLabel": "Fichier de participants",
+    "removeFile": "Retirer le fichier sélectionné",
+    "pickerHint": "La ligne d'en-tête doit contenir une colonne Nom (E-mail optionnel)",
+    "fileRequired": "Choisissez un fichier .xlsx ou .csv",
+    "importAttendees": "Importer les participants",
+    "importedCount": "{{count}} importé(s)",
+    "skippedCount": ", {{count}} ignoré(s)",
+    "rowSkipped": "Ligne {{row}}{{name}} : {{reason}}"
+  },
+  "AssignInstructorModal": {
+    "title": "Assigner un formateur",
+    "description": "Le formateur sera notifié par e-mail et notification push.",
+    "cancel": "Annuler",
+    "assign": "Assigner",
+    "instructorLabel": "Formateur",
+    "noQualifiedHint": "Aucun formateur n'est actuellement marqué comme qualifié pour cette formation. Un formateur peut l'ajouter depuis son propre profil, ou un manager peut l'ajouter via Formateurs > Modifier.",
+    "selectInstructor": "Sélectionnez un formateur",
+    "noQualifiedAvailable": "Aucun formateur qualifié disponible",
+    "instructorAssigned": "Formateur assigné."
+  }
+}

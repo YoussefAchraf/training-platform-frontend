@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LayoutGrid, List, Pencil, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
@@ -19,6 +20,7 @@ import styles from './CalendarPage.module.css';
 type ViewMode = 'agenda' | 'heatmap';
 
 export function CalendarPage() {
+  const { t } = useTranslation('calendar');
   const { canManageCatalog, isInstructor } = useAuth();
   const toast = useToast();
   const [viewMode, setViewMode] = useState<ViewMode>('heatmap');
@@ -44,24 +46,24 @@ export function CalendarPage() {
     if (!deletingEvent) return;
     deleteEvent.mutate(deletingEvent.id, {
       onSuccess: () => {
-        toast.success('Calendar event deleted.');
+        toast.success(t('CalendarPage.eventDeleted'));
         deleteDialog.close();
         setDeletingEvent(null);
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
-  }, [deletingEvent, deleteEvent, toast, deleteDialog]);
+  }, [deletingEvent, deleteEvent, toast, deleteDialog, t]);
 
   const renderActions = useCallback(
     (event: CalendarEvent) => (
       <>
-        <Button variant="ghost" size="sm" aria-label={`Edit ${event.title}`} onClick={() => setEditingEvent(event)}>
+        <Button variant="ghost" size="sm" aria-label={t('CalendarPage.editEvent', { title: event.title })} onClick={() => setEditingEvent(event)}>
           <Pencil size={15} />
         </Button>
         <Button
           variant="ghost"
           size="sm"
-          aria-label={`Delete ${event.title}`}
+          aria-label={t('CalendarPage.deleteEvent', { title: event.title })}
           onClick={() => {
             setDeletingEvent(event);
             deleteDialog.open();
@@ -71,17 +73,17 @@ export function CalendarPage() {
         </Button>
       </>
     ),
-    [deleteDialog],
+    [deleteDialog, t],
   );
 
   return (
     <div>
       <PageHeader
-        title="Calendar"
+        title={t('CalendarPage.title')}
         description={
           canManageCatalog
-            ? 'Every scheduled training session across the company.'
-            : 'Sessions assigned to you.'
+            ? t('CalendarPage.descriptionManage')
+            : t('CalendarPage.descriptionOther')
         }
         actions={
           <div className={styles.viewToggle}>
@@ -91,7 +93,7 @@ export function CalendarPage() {
               onClick={() => setViewMode('heatmap')}
               aria-pressed={viewMode === 'heatmap'}
             >
-              <LayoutGrid size={14} /> Heatmap
+              <LayoutGrid size={14} /> {t('CalendarPage.heatmap')}
             </button>
             <button
               type="button"
@@ -99,7 +101,7 @@ export function CalendarPage() {
               onClick={() => setViewMode('agenda')}
               aria-pressed={viewMode === 'agenda'}
             >
-              <List size={14} /> Agenda
+              <List size={14} /> {t('CalendarPage.agenda')}
             </button>
           </div>
         }
@@ -118,10 +120,10 @@ export function CalendarPage() {
           <CalendarAgenda
             events={query.data ?? []}
             isLoading={query.isPending}
-            // Editing/canceling sessions from the calendar stays a
-            // Sales/Manager/SuperAdmin action - Instructors get the same
-            // heatmap/agenda UI now, but view-only, matching what they were
-            // already restricted to on the old timeline view.
+            
+            
+            
+            
             renderActions={canManageCatalog ? renderActions : undefined}
           />
         )}
@@ -133,9 +135,9 @@ export function CalendarPage() {
         isOpen={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
-        title="Delete calendar event?"
-        description={deletingEvent ? `"${deletingEvent.title}" will be removed from the calendar.` : undefined}
-        confirmLabel="Delete"
+        title={t('CalendarPage.deleteDialogTitle')}
+        description={deletingEvent ? t('CalendarPage.deleteDialogDescription', { title: deletingEvent.title }) : undefined}
+        confirmLabel={t('CalendarPage.delete')}
         tone="danger"
         isLoading={deleteEvent.isPending}
       />

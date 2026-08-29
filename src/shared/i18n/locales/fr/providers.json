@@ -1,0 +1,38 @@
+{
+  "ProviderFormModal": {
+    "editTitle": "Modifier le prestataire",
+    "addTitle": "Ajouter un prestataire",
+    "description": "Les prestataires sont des organismes de certification comme Red Hat ou CompTIA.",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "addProvider": "Ajouter le prestataire",
+    "nameLabel": "Nom",
+    "nameHint": "Cliquez pour parcourir les prestataires, ou saisissez pour filtrer",
+    "namePlaceholder": "Red Hat",
+    "descriptionLabel": "Description",
+    "descriptionOptionalHint": "Optionnel",
+    "descriptionPlaceholder": "Formation et certification Enterprise Linux",
+    "providerUpdated": "{{name}} a été mis à jour.",
+    "providerAdded": "{{name}} a été ajouté aux prestataires.",
+    "errors": {
+      "nameRequired": "Le nom du prestataire est requis"
+    }
+  },
+  "ProvidersPage": {
+    "title": "Prestataires",
+    "description": "Organismes de certification pour lesquels vous dispensez des formations, ex. Red Hat ou CompTIA.",
+    "addProvider": "Ajouter un prestataire",
+    "columnName": "Nom",
+    "columnDescription": "Description",
+    "columnAdded": "Ajouté le",
+    "createdBy": "Créé par {{name}}",
+    "anotherUser": "un autre utilisateur",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "providerDeleted": "{{name}} a été supprimé.",
+    "emptyTitle": "Aucun prestataire pour l'instant",
+    "emptyDescription": "Ajoutez votre premier prestataire pour commencer à construire un catalogue de formations.",
+    "deleteDialogTitle": "Supprimer ce prestataire ?",
+    "deleteDialogDescription": "« {{name}} » sera retiré du catalogue."
+  }
+}

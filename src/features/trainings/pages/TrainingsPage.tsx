@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
@@ -21,6 +22,7 @@ import styles from './TrainingsPage.module.css';
 const getTrainingId = (training: Training) => training.id;
 
 export function TrainingsPage() {
+  const { t } = useTranslation('trainings');
   const { user, canManageCatalog, isSuperAdmin } = useAuth();
   const [providerFilter, setProviderFilter] = useState<string>('');
   const providersQuery = useProviders();
@@ -57,29 +59,36 @@ export function TrainingsPage() {
     if (!deleting) return;
     deleteTraining.mutate(deleting.id, {
       onSuccess: () => {
-        toast.success(`${deleting.name} was deleted.`);
+        toast.success(t('TrainingsPage.trainingDeleted', { name: deleting.name }));
         deleteDialog.close();
         setDeleting(null);
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
-  }, [deleting, deleteTraining, toast, deleteDialog]);
+  }, [deleting, deleteTraining, toast, deleteDialog, t]);
 
   const columns = useMemo<TableColumn<Training>[]>(
     () => [
-      { key: 'name', header: 'Name', render: (training) => training.name },
+      { key: 'name', header: t('TrainingsPage.columnName'), render: (training) => training.name },
       {
         key: 'providerName',
-        header: 'Provider',
+        header: t('TrainingsPage.columnProvider'),
         render: (training) => <Badge tone="neutral">{training.providerName}</Badge>,
       },
       {
         key: 'duration',
-        header: 'Duration',
+        header: t('TrainingsPage.columnDuration'),
         render: (training) => {
           if (!training.duration || !training.durationUnit) return training.duration ? `${training.duration}` : '—';
-          const unitLabel = training.durationUnit === 'days' ? 'day' : 'hour';
-          return `${training.duration} ${unitLabel}${training.duration === 1 ? '' : 's'}`;
+          const unitLabel =
+            training.durationUnit === 'days'
+              ? training.duration === 1
+                ? t('TrainingsPage.day')
+                : t('TrainingsPage.days')
+              : training.duration === 1
+                ? t('TrainingsPage.hour')
+                : t('TrainingsPage.hours');
+          return `${training.duration} ${unitLabel}`;
         },
       },
       {
@@ -90,34 +99,34 @@ export function TrainingsPage() {
           const canEdit = isSuperAdmin || training.createdBy === user?.id;
           if (!canEdit) {
             return canManageCatalog ? (
-              <span className={styles.notOwned}>Created by {training.creatorName ?? 'another user'}</span>
+              <span className={styles.notOwned}>{t('TrainingsPage.createdBy', { name: training.creatorName ?? t('TrainingsPage.anotherUser') })}</span>
             ) : null;
           }
           return (
             <span className={styles.actions}>
               <Button size="sm" variant="outline" leftIcon={<Pencil size={14} />} onClick={() => openEdit(training)}>
-                Edit
+                {t('TrainingsPage.edit')}
               </Button>
               <Button size="sm" variant="danger" leftIcon={<Trash2 size={14} />} onClick={() => openDelete(training)}>
-                Delete
+                {t('TrainingsPage.delete')}
               </Button>
             </span>
           );
         },
       },
     ],
-    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete],
+    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t],
   );
 
   return (
     <div>
       <PageHeader
-        title="Trainings"
-        description="Certification courses offered under each provider, e.g. RHCSA under Red Hat."
+        title={t('TrainingsPage.title')}
+        description={t('TrainingsPage.description')}
         actions={
           canManageCatalog && (
             <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              Add training
+              {t('TrainingsPage.addTraining')}
             </Button>
           )
         }
@@ -127,9 +136,9 @@ export function TrainingsPage() {
         <Select
           value={providerFilter}
           onChange={(event) => setProviderFilter(event.target.value)}
-          aria-label="Filter by provider"
+          aria-label={t('TrainingsPage.filterByProvider')}
         >
-          <option value="">All providers</option>
+          <option value="">{t('TrainingsPage.allProviders')}</option>
           {providersQuery.data?.map((provider) => (
             <option key={provider.id} value={provider.id}>
               {provider.name}
@@ -146,14 +155,14 @@ export function TrainingsPage() {
           data={trainingsQuery.data ?? []}
           keyExtractor={getTrainingId}
           isLoading={trainingsQuery.isPending}
-          emptyTitle="No trainings yet"
+          emptyTitle={t('TrainingsPage.emptyTitle')}
           emptyDescription={
-            canManageCatalog ? 'Add a training to a provider to start booking sessions.' : undefined
+            canManageCatalog ? t('TrainingsPage.emptyDescription') : undefined
           }
           emptyAction={
             canManageCatalog && (
               <Button size="sm" onClick={openCreate}>
-                Add training
+                {t('TrainingsPage.addTraining')}
               </Button>
             )
           }
@@ -171,9 +180,9 @@ export function TrainingsPage() {
         isOpen={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
-        title="Delete this training?"
-        description={deleting ? `"${deleting.name}" will be removed from the catalog.` : undefined}
-        confirmLabel="Delete"
+        title={t('TrainingsPage.deleteDialogTitle')}
+        description={deleting ? t('TrainingsPage.deleteDialogDescription', { name: deleting.name }) : undefined}
+        confirmLabel={t('TrainingsPage.delete')}
         tone="danger"
         isLoading={deleteTraining.isPending}
       />

@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -27,37 +29,39 @@ function nowFlooredToMinute(): Date {
   return now;
 }
 
-const sessionSchema = z
-  .object({
-    trainingId: z.coerce.number({ error: 'Select a training' }).int().positive('Select a training'),
-    clientId: z.coerce.number({ error: 'Select a client' }).int().positive('Select a client'),
-    startDate: z.string().min(1, 'Start date is required'),
-    startTime: z.string().min(1, 'Start time is required'),
-    dailyEndTime: z.string().min(1, 'Daily end time is required'),
-    endDate: z.string().min(1, 'End date is required'),
-  })
-  .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
-    message: 'Daily end time must be after the start time',
-    path: ['dailyEndTime'],
-  })
-  .refine(
-    (data) => {
-      const combined = combineDateAndTime(data.startDate, data.startTime);
-      return combined ? new Date(combined) >= nowFlooredToMinute() : true;
-    },
-    { message: 'Start date and time cannot be in the past', path: ['startDate'] },
-  )
-  .refine(
-    (data) => {
-      const start = combineDateAndTime(data.startDate, data.startTime);
-      const end = combineDateAndTime(data.endDate, data.dailyEndTime);
-      return start && end ? new Date(end) > new Date(start) : true;
-    },
-    { message: 'End date must be on or after the start date', path: ['endDate'] },
-  );
+function buildSessionSchema(t: TFunction<'sessions'>) {
+  return z
+    .object({
+      trainingId: z.coerce.number({ error: t('SessionFormModal.errors.trainingRequired') }).int().positive(t('SessionFormModal.errors.trainingRequired')),
+      clientId: z.coerce.number({ error: t('SessionFormModal.errors.clientRequired') }).int().positive(t('SessionFormModal.errors.clientRequired')),
+      startDate: z.string().min(1, t('SessionFormModal.errors.startDateRequired')),
+      startTime: z.string().min(1, t('SessionFormModal.errors.startTimeRequired')),
+      dailyEndTime: z.string().min(1, t('SessionFormModal.errors.dailyEndTimeRequired')),
+      endDate: z.string().min(1, t('SessionFormModal.errors.endDateRequired')),
+    })
+    .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
+      message: t('SessionFormModal.errors.dailyEndTimeAfterStart'),
+      path: ['dailyEndTime'],
+    })
+    .refine(
+      (data) => {
+        const combined = combineDateAndTime(data.startDate, data.startTime);
+        return combined ? new Date(combined) >= nowFlooredToMinute() : true;
+      },
+      { message: t('SessionFormModal.errors.startNotInPast'), path: ['startDate'] },
+    )
+    .refine(
+      (data) => {
+        const start = combineDateAndTime(data.startDate, data.startTime);
+        const end = combineDateAndTime(data.endDate, data.dailyEndTime);
+        return start && end ? new Date(end) > new Date(start) : true;
+      },
+      { message: t('SessionFormModal.errors.endOnOrAfterStart'), path: ['endDate'] },
+    );
+}
 
-type SessionFormInput = z.input<typeof sessionSchema>;
-type SessionFormOutput = z.output<typeof sessionSchema>;
+type SessionFormInput = z.input<ReturnType<typeof buildSessionSchema>>;
+type SessionFormOutput = z.output<ReturnType<typeof buildSessionSchema>>;
 
 interface SessionFormModalProps {
   isOpen: boolean;
@@ -65,11 +69,13 @@ interface SessionFormModalProps {
 }
 
 export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
+  const { t } = useTranslation('sessions');
   const trainingsQuery = useTrainings();
   const clientsQuery = useClients();
   const createSession = useCreateSession();
   const toast = useToast();
   const [includeWeekends, setIncludeWeekends] = useState(false);
+  const sessionSchema = useMemo(() => buildSessionSchema(t), [t]);
 
   const {
     register,
@@ -131,7 +137,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
       },
       {
         onSuccess: () => {
-          toast.success('Session booked.');
+          toast.success(t('SessionFormModal.sessionBooked'));
           handleClose();
         },
       },
@@ -142,15 +148,15 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Book a session"
-      description="Schedule a training for a client. You can assign an instructor afterwards."
+      title={t('SessionFormModal.title')}
+      description={t('SessionFormModal.description')}
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('SessionFormModal.cancel')}
           </Button>
           <Button type="submit" form="session-form" isLoading={createSession.isPending}>
-            Book session
+            {t('SessionFormModal.bookSession')}
           </Button>
         </>
       }
@@ -158,11 +164,11 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
       <form onSubmit={onSubmit} id="session-form" className="stack" noValidate>
         {createSession.isError && <ErrorBanner error={createSession.error} />}
 
-        <FormField label="Training" error={errors.trainingId?.message} required>
+        <FormField label={t('SessionFormModal.trainingLabel')} error={errors.trainingId?.message} required>
           {(fieldProps) => (
             <Select {...fieldProps} {...register('trainingId')} defaultValue="">
               <option value="" disabled>
-                {trainingsQuery.isPending ? 'Loading trainings…' : 'Select a training'}
+                {trainingsQuery.isPending ? t('SessionFormModal.loadingTrainings') : t('SessionFormModal.selectTraining')}
               </option>
               {trainingsQuery.data?.map((training) => (
                 <option key={training.id} value={training.id}>
@@ -173,11 +179,11 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
           )}
         </FormField>
 
-        <FormField label="Client" error={errors.clientId?.message} required>
+        <FormField label={t('SessionFormModal.clientLabel')} error={errors.clientId?.message} required>
           {(fieldProps) => (
             <Select {...fieldProps} {...register('clientId')} defaultValue="">
               <option value="" disabled>
-                {clientsQuery.isPending ? 'Loading clients…' : 'Select a client'}
+                {clientsQuery.isPending ? t('SessionFormModal.loadingClients') : t('SessionFormModal.selectClient')}
               </option>
               {clientsQuery.data?.map((client) => (
                 <option key={client.id} value={client.id}>
@@ -189,19 +195,19 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
         </FormField>
 
         <div className="stack">
-          <FormField label="Start date" error={errors.startDate?.message} required>
+          <FormField label={t('SessionFormModal.startDateLabel')} error={errors.startDate?.message} required>
             {(fieldProps) => <Input type="date" min={todayLocal()} {...fieldProps} {...register('startDate')} />}
           </FormField>
 
           <div className={styles.timeRow}>
-            <FormField label="Start time" error={errors.startTime?.message} required>
+            <FormField label={t('SessionFormModal.startTimeLabel')} error={errors.startTime?.message} required>
               {(fieldProps) => <Input type="time" {...fieldProps} {...register('startTime')} />}
             </FormField>
             <FormField
-              label="Daily end time"
+              label={t('SessionFormModal.dailyEndTimeLabel')}
               error={errors.dailyEndTime?.message}
               required
-              hint="Same every day, e.g. 10:20 to 18:20"
+              hint={t('SessionFormModal.dailyEndTimeHint')}
             >
               {(fieldProps) => <Input type="time" {...fieldProps} {...register('dailyEndTime')} />}
             </FormField>
@@ -211,17 +217,17 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
             <Checkbox
               checked={includeWeekends}
               onChange={(event) => setIncludeWeekends(event.target.checked)}
-              label="Include weekends when calculating the end date"
+              label={t('SessionFormModal.includeWeekends')}
             />
           )}
 
           <FormField
-            label="End date"
+            label={t('SessionFormModal.endDateLabel')}
             error={errors.endDate?.message}
             required
             hint={
               !dirtyFields.endDate && selectedTraining?.duration && selectedTraining.durationUnit
-                ? 'Predicted from the training duration and daily hours - edit it directly to override'
+                ? t('SessionFormModal.endDateHint')
                 : undefined
             }
           >

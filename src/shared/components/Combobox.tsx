@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, CSSProperties, InputHTMLAttributes, KeyboardEvent, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import styles from './Combobox.module.css';
 
@@ -41,6 +42,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation('common');
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -156,7 +158,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
                 </li>
               );
             })}
-            {showEmptyState && <li className={styles.empty}>No catalog match — this name will be used as-is</li>}
+            {showEmptyState && <li className={styles.empty}>{t('Combobox.noMatch')}</li>}
           </ul>
         )}
       </div>

@@ -1,0 +1,37 @@
+{
+  "PwaProfilePage": {
+    "title": "Profil",
+    "theme": "Thème",
+    "language": "Langue",
+    "accountSettings": "Paramètres du compte",
+    "more": "Plus",
+    "logOut": "Se déconnecter"
+  },
+  "PwaBottomNav": {
+    "home": "Accueil",
+    "calendar": "Calendrier",
+    "profile": "Profil",
+    "skills": "Compétences"
+  },
+  "PwaDesktopLayout": {
+    "searchOrJumpTo": "Rechercher ou aller à..."
+  },
+  "InstallBanner": {
+    "title": "Installer Training Platform",
+    "subtitle": "Ajoutez-le à votre écran d'accueil pour une expérience plus rapide, comme une application.",
+    "install": "Installer",
+    "notNow": "Pas maintenant"
+  },
+  "IOSInstallBanner": {
+    "title": "Installer Training Platform",
+    "beforeShareIcon": "Appuyez sur",
+    "shareIconLabel": "Partager",
+    "betweenIcons": ", puis",
+    "addIconLabel": "Ajouter",
+    "afterAddIcon": "Sur l'écran d'accueil.",
+    "notNow": "Pas maintenant"
+  },
+  "PwaChatPage": {
+    "back": "Retour"
+  }
+}

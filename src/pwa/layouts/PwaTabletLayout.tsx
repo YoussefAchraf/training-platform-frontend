@@ -12,7 +12,7 @@ import { IconRailNav } from '../components/IconRailNav';
 import { SplashScreen } from '../components/SplashScreen';
 import styles from './PwaTabletLayout.module.css';
 
-const chatExtraItem: NavItem = { label: 'Chat', to: paths.chat, icon: MessageCircle };
+const chatExtraItem: NavItem = { labelKey: 'common:Nav.items.chat', to: paths.chat, icon: MessageCircle };
 
 
 

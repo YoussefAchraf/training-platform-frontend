@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { MessageCircle, Send } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -10,8 +11,9 @@ import { ChatMessageText } from './ChatMessageText';
 import styles from './ChatWidget.module.css';
 
 function TypingIndicator() {
+  const { t } = useTranslation('chatbot');
   return (
-    <div className={styles.typingBubble} aria-live="polite" aria-label="Assistant is typing">
+    <div className={styles.typingBubble} aria-live="polite" aria-label={t('ChatConversation.assistantTyping')}>
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
@@ -21,6 +23,7 @@ function TypingIndicator() {
 
 
 export function ChatConversation() {
+  const { t } = useTranslation('chatbot');
   const messages = useChatStore((state) => state.messages);
   const sendMessage = useSendChatMessage();
   const [draft, setDraft] = useState('');
@@ -45,7 +48,7 @@ export function ChatConversation() {
         {messages.length === 0 && !sendMessage.isPending && (
           <div className={styles.emptyState}>
             <MessageCircle size={28} />
-            <p>Ask me anything about your trainings, sessions or clients.</p>
+            <p>{t('ChatConversation.emptyState')}</p>
           </div>
         )}
         <motion.div variants={staggerContainer(0.04)} initial="hidden" animate="show">
@@ -80,17 +83,17 @@ export function ChatConversation() {
         <input
           type="text"
           className={styles.input}
-          placeholder="Type a message..."
+          placeholder={t('ChatConversation.placeholder')}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           disabled={sendMessage.isPending}
-          aria-label="Message"
+          aria-label={t('ChatConversation.messageLabel')}
         />
         <button
           type="submit"
           className={styles.sendButton}
           disabled={!draft.trim() || sendMessage.isPending}
-          aria-label="Send message"
+          aria-label={t('ChatConversation.sendMessage')}
         >
           <Send size={16} />
         </button>

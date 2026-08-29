@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
 import { Textarea } from '@/shared/components/Textarea';
@@ -35,9 +36,10 @@ export function InstructorProfileForm({
   isSubmitting,
   submitError,
   formId = 'instructor-profile-form',
-  submitLabel = 'Save changes',
+  submitLabel,
   hideSubmitButton = false,
 }: InstructorProfileFormProps) {
+  const { t } = useTranslation('instructors');
   const trainingsQuery = useTrainings();
 
   const { register, handleSubmit } = useForm<ProfileFormInput, unknown, ProfileFormOutput>({
@@ -56,14 +58,14 @@ export function InstructorProfileForm({
     <form onSubmit={submit} id={formId} className="stack" noValidate>
       {Boolean(submitError) && <ErrorBanner error={submitError} />}
 
-      <FormField label="Bio" hint="Shown to Managers when assigning sessions">
+      <FormField label={t('InstructorProfileForm.bioLabel')} hint={t('InstructorProfileForm.bioHint')}>
         {(fieldProps) => (
-          <Textarea placeholder="Tell us about your teaching experience…" {...fieldProps} {...register('bio')} />
+          <Textarea placeholder={t('InstructorProfileForm.bioPlaceholder')} {...fieldProps} {...register('bio')} />
         )}
       </FormField>
 
       <div>
-        <p className={styles.skillsLabel}>Trainings I can deliver</p>
+        <p className={styles.skillsLabel}>{t('InstructorProfileForm.trainingsLabel')}</p>
         {trainingsQuery.isPending ? (
           <Spinner size={20} />
         ) : trainingsQuery.data && trainingsQuery.data.length > 0 ? (
@@ -78,13 +80,13 @@ export function InstructorProfileForm({
             ))}
           </div>
         ) : (
-          <p className={styles.skillsEmpty}>No trainings exist yet - a Manager needs to add some first.</p>
+          <p className={styles.skillsEmpty}>{t('InstructorProfileForm.noTrainings')}</p>
         )}
       </div>
 
       {!hideSubmitButton && (
         <Button type="submit" isLoading={isSubmitting}>
-          {submitLabel}
+          {submitLabel ?? t('InstructorProfileForm.saveChanges')}
         </Button>
       )}
     </form>

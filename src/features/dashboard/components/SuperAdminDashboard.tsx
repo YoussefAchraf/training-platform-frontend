@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CalendarClock, History, ShieldAlert, UserCog, Users2 } from 'lucide-react';
 import { Card } from '@/shared/components/Card';
 import { StatTile } from '@/shared/components/StatTile';
@@ -12,6 +13,7 @@ import { StatTileGrid } from './StatTileGrid';
 import quickLinkStyles from './SuperAdminDashboard.module.css';
 
 export function SuperAdminDashboard() {
+  const { t } = useTranslation('dashboard');
   const usersQuery = useAdminUsers();
   const sessionsQuery = useAdminSessionsOverview();
 
@@ -32,18 +34,18 @@ export function SuperAdminDashboard() {
   const deactivatedCount = users.filter((user) => user.status === 'deactivated').length;
 
   const quickLinks = [
-    { to: paths.superAdminUsers, icon: UserCog, label: 'Manage users', description: 'Edit roles, status, and details' },
-    { to: paths.superAdminSessions, icon: CalendarClock, label: 'Sessions overview', description: 'Every session, company-wide' },
-    { to: paths.auditLog, icon: History, label: 'Audit log', description: 'Every create, update, delete, cancel' },
+    { to: paths.superAdminUsers, icon: UserCog, label: t('SuperAdminDashboard.manageUsers'), description: t('SuperAdminDashboard.manageUsersDescription') },
+    { to: paths.superAdminSessions, icon: CalendarClock, label: t('SuperAdminDashboard.sessionsOverview'), description: t('SuperAdminDashboard.sessionsOverviewDescription') },
+    { to: paths.auditLog, icon: History, label: t('SuperAdminDashboard.auditLog'), description: t('SuperAdminDashboard.auditLogDescription') },
   ];
 
   return (
     <div>
       <StatTileGrid>
-        <StatTile label="Total users" value={users.length} icon={Users2} tone="primary" />
-        <StatTile label="Pending signups" value={pendingCount} icon={ShieldAlert} />
-        <StatTile label="Deactivated" value={deactivatedCount} icon={UserCog} />
-        <StatTile label="Total sessions" value={sessions.length} icon={CalendarClock} />
+        <StatTile label={t('SuperAdminDashboard.totalUsers')} value={users.length} icon={Users2} tone="primary" />
+        <StatTile label={t('SuperAdminDashboard.pendingSignups')} value={pendingCount} icon={ShieldAlert} />
+        <StatTile label={t('SuperAdminDashboard.deactivated')} value={deactivatedCount} icon={UserCog} />
+        <StatTile label={t('SuperAdminDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} />
       </StatTileGrid>
 
       <div className={quickLinkStyles.grid}>

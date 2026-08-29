@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { GraduationCap } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -11,6 +12,7 @@ import { UserMenu } from './UserMenu';
 import styles from './Sidebar.module.css';
 
 export function Sidebar() {
+  const { t } = useTranslation('common');
   const { user, isSuperAdmin } = useAuth();
   const groups = groupedNavItems(user?.role);
   const prefetchRoute = usePrefetchRoute();
@@ -22,16 +24,16 @@ export function Sidebar() {
         <span className={styles.brandMark}>
           <GraduationCap size={20} />
         </span>
-        <span className={cn(styles.brandName, collapsed && styles.hiddenLabel)}>Training Platform</span>
+        <span className={cn(styles.brandName, collapsed && styles.hiddenLabel)}>{t('Nav.brand')}</span>
       </div>
 
       {collapsed ? (
         <IconRailNav role={user?.role} layoutId="sidebar-active-pill" className={styles.nav} />
       ) : (
-        <nav className={styles.nav} aria-label="Main navigation">
+        <nav className={styles.nav} aria-label={t('Nav.mainNavigation')}>
           {groups.map(({ group, items }) => (
             <div key={group ?? 'top'} className={styles.navGroup}>
-              {group && <p className={styles.navCaption}>{group}</p>}
+              {group && <p className={styles.navCaption}>{t(`Nav.groups.${group}`)}</p>}
               {items.map((item) => (
                 <NavLink
                   key={item.to}
@@ -51,7 +53,7 @@ export function Sidebar() {
                       )}
                       <span className={styles.navContent}>
                         <item.icon size={19} />
-                        <span>{item.label}</span>
+                        <span>{t(item.labelKey)}</span>
                       </span>
                     </>
                   )}

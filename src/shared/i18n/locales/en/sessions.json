@@ -1,0 +1,131 @@
+{
+  "AttendeeList": {
+    "noAttendees": "No attendees added yet.",
+    "surveySubmitted": "Submitted",
+    "surveyPending": "Survey pending",
+    "markAbsent": "Absent",
+    "markPresent": "Present",
+    "markedPresent": "Marked present.",
+    "markedAbsent": "Marked absent."
+  },
+  "SessionsPage": {
+    "title": "Sessions",
+    "descriptionInstructor": "Training sessions assigned to you.",
+    "descriptionOther": "Training sessions booked for clients.",
+    "bookSession": "Book session",
+    "columnTraining": "Training",
+    "columnClient": "Client",
+    "columnInstructor": "Instructor",
+    "unassigned": "Unassigned",
+    "columnStarts": "Starts",
+    "columnStatus": "Status",
+    "columnAssignment": "Assignment",
+    "emptyTitleInstructor": "No sessions assigned yet",
+    "emptyTitleOther": "No sessions booked yet",
+    "emptyDescription": "Book a session to get started."
+  },
+  "SessionDetailPage": {
+    "unnamedSession": "Session #{{id}}",
+    "bookedFor": "Booked for {{client}}",
+    "reassign": "Reassign",
+    "assign": "Assign",
+    "assignDisabledHint": "Add at least one attendee before assigning an instructor",
+    "surveyQr": "Survey QR",
+    "editDates": "Edit dates",
+    "cancel": "Cancel",
+    "notFoundTitle": "Session not found",
+    "notFoundDescription": "It may have been removed, or you don't have access to it.",
+    "sessionCancelled": "Session cancelled.",
+    "detailsCardTitle": "Details",
+    "provider": "Provider",
+    "starts": "Starts",
+    "ends": "Ends",
+    "instructor": "Instructor",
+    "unassigned": "Unassigned",
+    "attendeesCardTitle": "Attendees",
+    "reportCardTitle": "Report",
+    "cancelDialogTitle": "Cancel this session?",
+    "cancelDialogDescription": "Attendees and the assigned instructor will keep their records, but the session will be marked cancelled.",
+    "cancelSession": "Cancel session"
+  },
+  "SessionFormModal": {
+    "title": "Book a session",
+    "description": "Schedule a training for a client. You can assign an instructor afterwards.",
+    "cancel": "Cancel",
+    "bookSession": "Book session",
+    "trainingLabel": "Training",
+    "loadingTrainings": "Loading trainings…",
+    "selectTraining": "Select a training",
+    "clientLabel": "Client",
+    "loadingClients": "Loading clients…",
+    "selectClient": "Select a client",
+    "startDateLabel": "Start date",
+    "startTimeLabel": "Start time",
+    "dailyEndTimeLabel": "Daily end time",
+    "dailyEndTimeHint": "Same every day, e.g. 10:20 to 18:20",
+    "includeWeekends": "Include weekends when calculating the end date",
+    "endDateLabel": "End date",
+    "endDateHint": "Predicted from the training duration and daily hours - edit it directly to override",
+    "sessionBooked": "Session booked.",
+    "errors": {
+      "trainingRequired": "Select a training",
+      "clientRequired": "Select a client",
+      "startDateRequired": "Start date is required",
+      "startTimeRequired": "Start time is required",
+      "dailyEndTimeRequired": "Daily end time is required",
+      "endDateRequired": "End date is required",
+      "dailyEndTimeAfterStart": "Daily end time must be after the start time",
+      "startNotInPast": "Start date and time cannot be in the past",
+      "endOnOrAfterStart": "End date must be on or after the start date"
+    }
+  },
+  "EditSessionModal": {
+    "title": "Edit session dates",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "startDateTimeLabel": "Start date & time",
+    "endDateTimeLabel": "End date & time",
+    "datesUpdated": "Session dates updated.",
+    "errors": {
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "endAfterStart": "End date must be after the start date"
+    }
+  },
+  "AddAttendeeForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Attendee name",
+    "emailLabel": "Email",
+    "emailOptionalHint": "Optional",
+    "emailPlaceholder": "attendee@company.com",
+    "addAttendee": "Add attendee",
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailInvalid": "Enter a valid email address"
+    }
+  },
+  "AttendeeImportForm": {
+    "orImportFromFile": "or import from a file",
+    "changeFile": "Change file",
+    "chooseFile": "Choose file",
+    "fileFieldLabel": "Attendee spreadsheet file",
+    "removeFile": "Remove selected file",
+    "pickerHint": "Header row needs a Name column (Email optional)",
+    "fileRequired": "Choose a .xlsx or .csv file",
+    "importAttendees": "Import attendees",
+    "importedCount": "{{count}} imported",
+    "skippedCount": ", {{count}} skipped",
+    "rowSkipped": "Row {{row}}{{name}}: {{reason}}"
+  },
+  "AssignInstructorModal": {
+    "title": "Assign instructor",
+    "description": "The instructor will be notified by email and push notification.",
+    "cancel": "Cancel",
+    "assign": "Assign",
+    "instructorLabel": "Instructor",
+    "noQualifiedHint": "No instructors are currently marked as qualified for this training. An instructor can add it under their own profile, or a Manager can add it via Instructors > Edit.",
+    "selectInstructor": "Select an instructor",
+    "noQualifiedAvailable": "No qualified instructors available",
+    "instructorAssigned": "Instructor assigned."
+  }
+}

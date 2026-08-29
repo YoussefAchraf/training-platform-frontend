@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Ban, Pencil, QrCode, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Card } from '@/shared/components/Card';
@@ -28,6 +29,7 @@ import { AttendeeList } from '../components/AttendeeList';
 import styles from './SessionDetailPage.module.css';
 
 export function SessionDetailPage() {
+  const { t } = useTranslation('sessions');
   const { id } = useParams<{ id: string }>();
   const sessionId = Number(id);
   const { user, isManager, isInstructor, isSuperAdmin, canManageCatalog } = useAuth();
@@ -63,8 +65,8 @@ export function SessionDetailPage() {
   if (!session) {
     return (
       <EmptyState
-        title="Session not found"
-        description="It may have been removed, or you don't have access to it."
+        title={t('SessionDetailPage.notFoundTitle')}
+        description={t('SessionDetailPage.notFoundDescription')}
       />
     );
   }
@@ -80,7 +82,7 @@ export function SessionDetailPage() {
   const handleCancelConfirm = () => {
     cancelSession.mutate(session.id, {
       onSuccess: () => {
-        toast.success('Session cancelled.');
+        toast.success(t('SessionDetailPage.sessionCancelled'));
         cancelDialog.close();
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
@@ -90,21 +92,21 @@ export function SessionDetailPage() {
   return (
     <div>
       <PageHeader
-        title={training?.name ?? `Session #${session.id}`}
-        description={client ? `Booked for ${client.companyName}` : undefined}
+        title={training?.name ?? t('SessionDetailPage.unnamedSession', { id: session.id })}
+        description={client ? t('SessionDetailPage.bookedFor', { client: client.companyName }) : undefined}
         actions={
           <>
             <Badge
               tone={sessionStatusMeta[session.sessionStatus].tone}
               pulse={sessionStatusMeta[session.sessionStatus].pulse}
             >
-              {sessionStatusMeta[session.sessionStatus].label}
+              {t(sessionStatusMeta[session.sessionStatus].labelKey)}
             </Badge>
             <Badge
               tone={assignmentStatusMeta[session.assignmentStatus].tone}
               pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
             >
-              {assignmentStatusMeta[session.assignmentStatus].label}
+              {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
             </Badge>
             {canAssignInstructor && (
               <Button
@@ -113,14 +115,14 @@ export function SessionDetailPage() {
                 leftIcon={<UserCog size={15} />}
                 onClick={assignModal.open}
                 disabled={!hasAttendees}
-                title={hasAttendees ? undefined : 'Add at least one attendee before assigning an instructor'}
+                title={hasAttendees ? undefined : t('SessionDetailPage.assignDisabledHint')}
               >
-                {instructor ? 'Reassign' : 'Assign'}
+                {instructor ? t('SessionDetailPage.reassign') : t('SessionDetailPage.assign')}
               </Button>
             )}
             {isMySession && (
               <Button variant="outline" size="sm" leftIcon={<QrCode size={15} />} onClick={qrModal.open}>
-                Survey QR
+                {t('SessionDetailPage.surveyQr')}
               </Button>
             )}
             {canEditSession && (
@@ -130,12 +132,12 @@ export function SessionDetailPage() {
                 leftIcon={<Pencil size={15} />}
                 onClick={() => setIsEditingDates(true)}
               >
-                Edit dates
+                {t('SessionDetailPage.editDates')}
               </Button>
             )}
             {canEditSession && (
               <Button variant="danger" size="sm" leftIcon={<Ban size={15} />} onClick={cancelDialog.open}>
-                Cancel
+                {t('SessionDetailPage.cancel')}
               </Button>
             )}
           </>
@@ -143,23 +145,23 @@ export function SessionDetailPage() {
       />
 
       <Card className={styles.section}>
-        <h3 className={styles.cardTitle}>Details</h3>
+        <h3 className={styles.cardTitle}>{t('SessionDetailPage.detailsCardTitle')}</h3>
         <dl className={styles.detailList}>
           <div>
-            <dt>Provider</dt>
+            <dt>{t('SessionDetailPage.provider')}</dt>
             <dd>{training?.providerName ?? '—'}</dd>
           </div>
           <div>
-            <dt>Starts</dt>
+            <dt>{t('SessionDetailPage.starts')}</dt>
             <dd>{formatDateTime(session.startDate)}</dd>
           </div>
           <div>
-            <dt>Ends</dt>
+            <dt>{t('SessionDetailPage.ends')}</dt>
             <dd>{formatDateTime(session.endDate)}</dd>
           </div>
           <div>
-            <dt>Instructor</dt>
-            <dd>{instructor ? `${instructor.firstname} ${instructor.lastname}` : 'Unassigned'}</dd>
+            <dt>{t('SessionDetailPage.instructor')}</dt>
+            <dd>{instructor ? `${instructor.firstname} ${instructor.lastname}` : t('SessionDetailPage.unassigned')}</dd>
           </div>
         </dl>
       </Card>
@@ -168,7 +170,7 @@ export function SessionDetailPage() {
         {(canManageCatalog || isSuperAdmin || isMySession) && (
           <Card>
             <h3 className={styles.cardTitle}>
-              <UserPlus size={16} /> Attendees
+              <UserPlus size={16} /> {t('SessionDetailPage.attendeesCardTitle')}
             </h3>
             <div className="stack">
               {canManageCatalog && (
@@ -183,7 +185,7 @@ export function SessionDetailPage() {
         )}
 
         <Card>
-          <h3 className={styles.cardTitle}>Report</h3>
+          <h3 className={styles.cardTitle}>{t('SessionDetailPage.reportCardTitle')}</h3>
           <ReportView sessionId={session.id} canGenerate={canManageCatalog} />
         </Card>
       </div>
@@ -205,9 +207,9 @@ export function SessionDetailPage() {
         isOpen={cancelDialog.isOpen}
         onClose={cancelDialog.close}
         onConfirm={handleCancelConfirm}
-        title="Cancel this session?"
-        description="Attendees and the assigned instructor will keep their records, but the session will be marked cancelled."
-        confirmLabel="Cancel session"
+        title={t('SessionDetailPage.cancelDialogTitle')}
+        description={t('SessionDetailPage.cancelDialogDescription')}
+        confirmLabel={t('SessionDetailPage.cancelSession')}
         tone="danger"
         isLoading={cancelSession.isPending}
       />

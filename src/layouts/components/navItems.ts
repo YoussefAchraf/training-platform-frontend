@@ -15,7 +15,7 @@ import { paths } from '@/routes/paths';
 import type { Role } from '@/shared/types/domain';
 
 export interface NavItem {
-  label: string;
+  labelKey: string;
   to: string;
   icon: ComponentType<{ size?: number }>;
   roles?: Role[];
@@ -26,13 +26,13 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { label: 'Dashboard', to: paths.dashboard, icon: LayoutDashboard, primary: true },
-  { label: 'Calendar', to: paths.calendar, icon: CalendarDays, primary: true },
-  { label: 'Providers', to: paths.providers, icon: Building2, group: 'Catalog' },
-  { label: 'Trainings', to: paths.trainings, icon: GraduationCap, group: 'Catalog' },
-  { label: 'Clients', to: paths.clients, icon: Users, group: 'Catalog' },
+  { labelKey: 'common:Nav.items.dashboard', to: paths.dashboard, icon: LayoutDashboard, primary: true },
+  { labelKey: 'common:Nav.items.calendar', to: paths.calendar, icon: CalendarDays, primary: true },
+  { labelKey: 'common:Nav.items.providers', to: paths.providers, icon: Building2, group: 'Catalog' },
+  { labelKey: 'common:Nav.items.trainings', to: paths.trainings, icon: GraduationCap, group: 'Catalog' },
+  { labelKey: 'common:Nav.items.clients', to: paths.clients, icon: Users, group: 'Catalog' },
   {
-    label: 'Sessions',
+    labelKey: 'common:Nav.items.sessions',
     to: paths.sessions,
     icon: CalendarClock,
     roles: ['Sales', 'Manager', 'SuperAdmin'],
@@ -40,30 +40,30 @@ export const navItems: NavItem[] = [
     group: 'Catalog',
   },
   {
-    label: 'Instructors',
+    labelKey: 'common:Nav.items.instructors',
     to: paths.instructors,
     icon: UserCog,
     roles: ['Sales', 'Manager', 'SuperAdmin'],
     group: 'People',
   },
-  { label: 'My Profile', to: paths.myInstructorProfile, icon: UserCog, roles: ['Instructor'], primary: true },
+  { labelKey: 'common:Nav.items.myProfile', to: paths.myInstructorProfile, icon: UserCog, roles: ['Instructor'], primary: true },
   {
-    label: 'Pending Approvals',
+    labelKey: 'common:Nav.items.pendingApprovals',
     to: paths.pendingApprovals,
     icon: ClipboardCheck,
     roles: ['Manager', 'SuperAdmin'],
     group: 'People',
   },
-  { label: 'Users', to: paths.superAdminUsers, icon: Users2, roles: ['SuperAdmin'], group: 'Administration' },
+  { labelKey: 'common:Nav.items.users', to: paths.superAdminUsers, icon: Users2, roles: ['SuperAdmin'], group: 'Administration' },
   {
-    label: 'Sessions Overview',
+    labelKey: 'common:Nav.items.sessionsOverview',
     to: paths.superAdminSessions,
     icon: CalendarClock,
     roles: ['SuperAdmin'],
     group: 'Administration',
   },
   {
-    label: 'Audit Log',
+    labelKey: 'common:Nav.items.auditLog',
     to: paths.auditLog,
     icon: History,
     roles: ['Manager', 'SuperAdmin'],

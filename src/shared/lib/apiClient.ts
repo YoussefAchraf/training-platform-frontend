@@ -1,6 +1,7 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/features/auth/authStore';
 import { paths } from '@/routes/paths';
+import i18n from '@/shared/i18n';
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -121,7 +122,7 @@ apiClient.interceptors.response.use(
 
 export function getApiErrorMessage(
   error: unknown,
-  fallback = 'Something went wrong. Please try again.',
+  fallback = i18n.t('common:ApiError.fallback'),
 ): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data as { error?: string } | undefined;
