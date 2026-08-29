@@ -1,6 +1,6 @@
 
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
-import { NavigationRoute, registerRoute } from 'workbox-routing';
+import { precacheAndRoute, createHandlerBoundToURL, matchPrecache } from 'workbox-precaching';
+import { NavigationRoute, registerRoute, setCatchHandler } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly, CacheFirst } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
@@ -62,9 +62,25 @@ registerRoute(
   ({ url, request }) => url.origin === self.location.origin && request.destination !== 'document',
   new CacheFirst({
     cacheName: 'static-assets',
-    plugins: [new CacheableResponsePlugin({ statuses: [0, 200] })],
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 }),
+    ],
   }),
 );
+
+// ---- Offline navigation fallback: NavigationRoute above already serves the
+// precached app shell once a prior online visit has cached it, but a
+// genuinely first-ever visit while offline has nothing to fall back to -
+// this catches that case with a small static page instead of a failed
+// navigation, the same way a native app shows *something* rather than a
+// blank/broken screen when there's no connectivity at all. ----
+setCatchHandler(async ({ request }) => {
+  if (request.destination === 'document') {
+    return (await matchPrecache('/offline.html')) ?? Response.error();
+  }
+  return Response.error();
+});
 
 // ---- Push notifications (subscribe/unsubscribe UI lands in Phase 4; the
 // service worker's receiving end is wired here since it's the same file). --

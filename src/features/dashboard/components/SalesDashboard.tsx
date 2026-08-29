@@ -36,14 +36,14 @@ export function SalesDashboard() {
   return (
     <div>
       <StatTileGrid>
-        <StatTile label={t('SalesDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
-        <StatTile label={t('SalesDashboard.providers')} value={providersQuery.data?.length ?? '—'} icon={Building2} />
-        <StatTile label={t('SalesDashboard.trainings')} value={trainingsQuery.data?.length ?? '—'} icon={GraduationCap} />
-        <StatTile label={t('SalesDashboard.clients')} value={clientsQuery.data?.length ?? '—'} icon={Users} />
+        <StatTile id="tour-stat-total-sessions" label={t('SalesDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
+        <StatTile id="tour-stat-providers" label={t('SalesDashboard.providers')} value={providersQuery.data?.length ?? '—'} icon={Building2} />
+        <StatTile id="tour-stat-trainings" label={t('SalesDashboard.trainings')} value={trainingsQuery.data?.length ?? '—'} icon={GraduationCap} />
+        <StatTile id="tour-stat-clients" label={t('SalesDashboard.clients')} value={clientsQuery.data?.length ?? '—'} icon={Users} />
       </StatTileGrid>
 
       <div className={styles.columns}>
-        <Card>
+        <Card id="tour-card-awaiting-assignment">
           <h3 className={styles.cardTitle}>{t('SalesDashboard.awaitingAssignmentCardTitle')}</h3>
           <SessionMiniList
             sessions={unassigned}
@@ -54,7 +54,7 @@ export function SalesDashboard() {
           />
         </Card>
 
-        <Card>
+        <Card id="tour-card-upcoming-sessions">
           <h3 className={styles.cardTitle}>{t('SalesDashboard.upcomingSessionsCardTitle')}</h3>
           <SessionMiniList
             sessions={upcoming}

@@ -25,6 +25,11 @@
   color: var(--color-primary);
 }
 
+
+.text {
+  min-width: 0;
+}
+
 .value {
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-extrabold);
@@ -35,4 +40,5 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
   margin-top: var(--space-1);
+  overflow-wrap: anywhere;
 }

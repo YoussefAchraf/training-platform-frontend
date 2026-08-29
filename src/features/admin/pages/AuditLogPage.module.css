@@ -5,14 +5,14 @@
   margin-bottom: var(--space-4);
 }
 
+
 @media (--sm) {
   .filters {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 
   .filters > * {
-    flex: 1 1 180px;
     min-width: 0;
   }
 }
