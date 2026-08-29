@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pencil, UserX } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Table } from '@/shared/components/Table';
@@ -19,6 +20,7 @@ import styles from './SuperAdminUsersPage.module.css';
 const getUserId = (user: User) => user.id;
 
 export function SuperAdminUsersPage() {
+  const { t } = useTranslation('admin');
   const usersQuery = useAdminUsers();
   const deactivateUser = useDeactivateUser();
   const toast = useToast();
@@ -41,38 +43,38 @@ export function SuperAdminUsersPage() {
     if (!deactivating) return;
     deactivateUser.mutate(deactivating.id, {
       onSuccess: () => {
-        toast.success(`${deactivating.firstname} ${deactivating.lastname} was deactivated.`);
+        toast.success(t('SuperAdminUsersPage.userDeactivated', { name: `${deactivating.firstname} ${deactivating.lastname}` }));
         deactivateDialog.close();
         setDeactivating(null);
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
-  }, [deactivating, deactivateUser, toast, deactivateDialog]);
+  }, [deactivating, deactivateUser, toast, deactivateDialog, t]);
 
   const columns = useMemo<TableColumn<User>[]>(
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('SuperAdminUsersPage.columnName'),
         render: (user) => (
           <span>
             {user.firstname} {user.lastname}
           </span>
         ),
       },
-      { key: 'email', header: 'Email', render: (user) => user.email },
+      { key: 'email', header: t('SuperAdminUsersPage.columnEmail'), render: (user) => user.email },
       {
         key: 'role',
-        header: 'Role',
+        header: t('SuperAdminUsersPage.columnRole'),
         render: (user) => {
           const role = roleNameOf(user)!;
-          return <Badge tone={roleMeta[role].tone}>{roleMeta[role].label}</Badge>;
+          return <Badge tone={roleMeta[role].tone}>{t(roleMeta[role].labelKey)}</Badge>;
         },
       },
       {
         key: 'status',
-        header: 'Status',
-        render: (user) => <Badge tone={userStatusMeta[user.status].tone}>{userStatusMeta[user.status].label}</Badge>,
+        header: t('SuperAdminUsersPage.columnStatus'),
+        render: (user) => <Badge tone={userStatusMeta[user.status].tone}>{t(userStatusMeta[user.status].labelKey)}</Badge>,
       },
       {
         key: 'actions',
@@ -81,7 +83,7 @@ export function SuperAdminUsersPage() {
         render: (user) => (
           <span className={styles.actions}>
             <Button size="sm" variant="outline" leftIcon={<Pencil size={14} />} onClick={() => handleEdit(user)}>
-              Edit
+              {t('SuperAdminUsersPage.edit')}
             </Button>
             {user.status !== 'deactivated' && (
               <Button
@@ -90,19 +92,19 @@ export function SuperAdminUsersPage() {
                 leftIcon={<UserX size={14} />}
                 onClick={() => openDeactivate(user)}
               >
-                Deactivate
+                {t('SuperAdminUsersPage.deactivate')}
               </Button>
             )}
           </span>
         ),
       },
     ],
-    [handleEdit, openDeactivate],
+    [handleEdit, openDeactivate, t],
   );
 
   return (
     <div>
-      <PageHeader title="Users" description="Every account on the platform, across every role." />
+      <PageHeader title={t('SuperAdminUsersPage.title')} description={t('SuperAdminUsersPage.description')} />
 
       {usersQuery.isError ? (
         <ErrorBanner error={usersQuery.error} onRetry={() => usersQuery.refetch()} />
@@ -112,7 +114,7 @@ export function SuperAdminUsersPage() {
           data={usersQuery.data ?? []}
           keyExtractor={getUserId}
           isLoading={usersQuery.isPending}
-          emptyTitle="No users yet"
+          emptyTitle={t('SuperAdminUsersPage.emptyTitle')}
         />
       )}
 
@@ -122,13 +124,13 @@ export function SuperAdminUsersPage() {
         isOpen={deactivateDialog.isOpen}
         onClose={deactivateDialog.close}
         onConfirm={handleDeactivateConfirm}
-        title="Deactivate this account?"
+        title={t('SuperAdminUsersPage.deactivateDialogTitle')}
         description={
           deactivating
-            ? `${deactivating.firstname} ${deactivating.lastname} will no longer be able to sign in.`
+            ? t('SuperAdminUsersPage.deactivateDialogDescription', { name: `${deactivating.firstname} ${deactivating.lastname}` })
             : undefined
         }
-        confirmLabel="Deactivate"
+        confirmLabel={t('SuperAdminUsersPage.deactivate')}
         tone="danger"
         isLoading={deactivateUser.isPending}
       />

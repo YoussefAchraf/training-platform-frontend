@@ -1,9 +1,11 @@
 import { Menu } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useUiStore } from '@/shared/store/uiStore';
 import { UserMenu } from './UserMenu';
 import styles from './Topbar.module.css';
 
 export function Topbar() {
+  const { t } = useTranslation('common');
   const openDrawer = useUiStore((state) => state.openDrawer);
 
   return (
@@ -12,11 +14,11 @@ export function Topbar() {
         type="button"
         className={styles.menuButton}
         onClick={openDrawer}
-        aria-label="Open navigation menu"
+        aria-label={t('Topbar.openMenu')}
       >
         <Menu size={22} />
       </button>
-      <span className={styles.brandName}>Training Platform</span>
+      <span className={styles.brandName}>{t('Nav.brand')}</span>
       <UserMenu placement="down" variant="compact" />
     </header>
   );

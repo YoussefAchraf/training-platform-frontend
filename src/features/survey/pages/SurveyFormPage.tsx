@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2 } from 'lucide-react';
 import { Card } from '@/shared/components/Card';
 import { Spinner } from '@/shared/components/Spinner';
@@ -10,6 +11,7 @@ import { SurveyForm } from '../components/SurveyForm';
 import styles from './SurveyFormPage.module.css';
 
 export function SurveyFormPage() {
+  const { t } = useTranslation('survey');
   const { sessionId } = useParams<{ sessionId: string }>();
   const id = Number(sessionId);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -26,15 +28,15 @@ export function SurveyFormPage() {
   }
 
   if (formQuery.isError || !formQuery.data) {
-    return <ErrorBanner error={formQuery.error} fallback="This survey link is invalid or has expired." />;
+    return <ErrorBanner error={formQuery.error} fallback={t('SurveyFormPage.invalidLink')} />;
   }
 
   if (isSubmitted) {
     return (
       <Card className={styles.thankYou}>
         <CheckCircle2 size={40} className={styles.thankYouIcon} />
-        <h2>Thank you!</h2>
-        <p>Your feedback has been submitted.</p>
+        <h2>{t('SurveyFormPage.thankYouTitle')}</h2>
+        <p>{t('SurveyFormPage.thankYouDescription')}</p>
       </Card>
     );
   }
@@ -44,9 +46,9 @@ export function SurveyFormPage() {
   return (
     <div>
       <Card className={styles.infoCard}>
-        <h1 className={styles.title}>{info.trainingName ?? 'Training session'}</h1>
+        <h1 className={styles.title}>{info.trainingName ?? t('SurveyFormPage.unnamedTraining')}</h1>
         <p className={styles.subtitle}>
-          {info.instructorName ? `with ${info.instructorName} · ` : ''}
+          {info.instructorName ? t('SurveyFormPage.withInstructor', { name: info.instructorName }) : ''}
           {formatDate(info.startDate)} – {formatDate(info.endDate)}
         </p>
       </Card>

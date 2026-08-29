@@ -1,13 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { ShieldAlert } from 'lucide-react';
 import { PageTransition } from '@/shared/components/PageTransition';
 import styles from './SuperAdminAuthLayout.module.css';
 
 export function SuperAdminAuthLayout() {
+  const { t } = useTranslation('common');
   return (
     <div className={styles.wrapper}>
       <div className={styles.badge}>
         <ShieldAlert size={18} />
-        <span>Administrator access</span>
+        <span>{t('SuperAdminAuthLayout.administratorAccess')}</span>
       </div>
 
       <main className={styles.formPanel}>
@@ -17,7 +19,7 @@ export function SuperAdminAuthLayout() {
       </main>
 
       <p className={styles.footnote}>
-        Restricted area. Access attempts may be logged and monitored.
+        {t('SuperAdminAuthLayout.footnote')}
       </p>
     </div>
   );

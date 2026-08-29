@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { CheckCircle2, Info, X, XCircle } from 'lucide-react';
@@ -23,6 +24,7 @@ const toastVariants: Variants = {
 };
 
 function ToastRow({ toast }: { toast: ToastItem }) {
+  const { t } = useTranslation('common');
   const dismissToast = useUiStore((state) => state.dismissToast);
   const shouldReduceMotion = useReducedMotion();
   const Icon = TONE_ICON[toast.tone];
@@ -61,7 +63,7 @@ function ToastRow({ toast }: { toast: ToastItem }) {
         type="button"
         className={styles.dismiss}
         onClick={() => dismissToast(toast.id)}
-        aria-label="Dismiss notification"
+        aria-label={t('ToastViewport.dismiss')}
       >
         <X size={16} />
       </button>

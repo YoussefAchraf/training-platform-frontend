@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Download, FileBarChart } from 'lucide-react';
 import { Spinner } from '@/shared/components/Spinner';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
@@ -15,6 +16,7 @@ interface ReportViewProps {
 }
 
 export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
+  const { t } = useTranslation('reports');
   const reportQuery = useReport(sessionId);
   const generateReport = useGenerateReport();
   const downloadPdf = useDownloadReportPdf();
@@ -32,7 +34,7 @@ export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
         link.remove();
         URL.revokeObjectURL(url);
       },
-      onError: (error) => toast.error(getApiErrorMessage(error, 'Could not download the report PDF.')),
+      onError: (error) => toast.error(getApiErrorMessage(error, t('ReportView.downloadFailed'))),
     });
   };
 
@@ -48,20 +50,20 @@ export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
     return (
       <EmptyState
         icon={FileBarChart}
-        title="Report not generated yet"
-        description="A report is created automatically once every attendee submits feedback, or shortly after the session ends."
+        title={t('ReportView.notGeneratedTitle')}
+        description={t('ReportView.notGeneratedDescription')}
         action={
           canGenerate && (
             <Button
               isLoading={generateReport.isPending}
               onClick={() =>
                 generateReport.mutate(sessionId, {
-                  onSuccess: () => toast.success('Report generated.'),
+                  onSuccess: () => toast.success(t('ReportView.reportGenerated')),
                   onError: (error) => toast.error(getApiErrorMessage(error)),
                 })
               }
             >
-              Generate report now
+              {t('ReportView.generateNow')}
             </Button>
           )
         }
@@ -75,14 +77,14 @@ export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
     <div>
       <div className={styles.grid}>
         <div className={styles.tile}>
-          <p className={styles.tileLabel}>Average instructor score</p>
+          <p className={styles.tileLabel}>{t('ReportView.averageInstructorScore')}</p>
           <p className={styles.tileValue}>
             {report.averageScore}
             <span className={styles.tileMax}>/ 5</span>
           </p>
         </div>
         <div className={styles.tile}>
-          <p className={styles.tileLabel}>NPS average</p>
+          <p className={styles.tileLabel}>{t('ReportView.npsAverage')}</p>
           <p className={styles.tileValue}>
             {report.npsAverage}
             <span className={styles.tileMax}>%</span>
@@ -91,9 +93,9 @@ export function ReportView({ sessionId, canGenerate }: ReportViewProps) {
       </div>
 
       <div className={styles.footer}>
-        <p className={styles.generatedAt}>Generated {formatDateTime(report.generatedAt)}</p>
+        <p className={styles.generatedAt}>{t('ReportView.generatedAt', { date: formatDateTime(report.generatedAt) })}</p>
         <Button variant="outline" size="sm" leftIcon={<Download size={14} />} isLoading={downloadPdf.isPending} onClick={handleDownload}>
-          Download PDF
+          {t('ReportView.downloadPdf')}
         </Button>
       </div>
     </div>

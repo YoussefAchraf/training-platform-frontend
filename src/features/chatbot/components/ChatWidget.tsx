@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Variants } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { MessageCircle, RotateCcw, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIsDesktop } from '@/shared/hooks/useMediaQuery';
@@ -39,6 +40,7 @@ const reducedMotionVariants: Variants = {
 
 
 export function ChatWidget() {
+  const { t } = useTranslation('chatbot');
   const { isAuthenticated } = useAuth();
   const isOpen = useChatStore((state) => state.isOpen);
   const toggle = useChatStore((state) => state.toggle);
@@ -66,7 +68,7 @@ export function ChatWidget() {
             type="button"
             className={styles.bubble}
             onClick={toggle}
-            aria-label="Open chat assistant"
+            aria-label={t('ChatWidget.openAssistant')}
             variants={bubbleVariants}
             initial="hidden"
             animate="show"
@@ -85,7 +87,7 @@ export function ChatWidget() {
             className={styles.panel}
             role="dialog"
             aria-modal="false"
-            aria-label="Chat assistant"
+            aria-label={t('ChatWidget.assistant')}
             variants={panelVariants}
             initial="hidden"
             animate="show"
@@ -94,19 +96,19 @@ export function ChatWidget() {
             <div className={styles.header}>
               <div className={styles.headerTitle}>
                 <MessageCircle size={18} />
-                <span>Assistant</span>
+                <span>{t('ChatWidget.assistant')}</span>
               </div>
               <div className={styles.headerActions}>
                 <button
                   type="button"
                   className={styles.headerButton}
                   onClick={startNewConversation}
-                  aria-label="Start a new conversation"
-                  title="New conversation"
+                  aria-label={t('ChatWidget.startNewConversation')}
+                  title={t('ChatWidget.newConversation')}
                 >
                   <RotateCcw size={16} />
                 </button>
-                <button type="button" className={styles.headerButton} onClick={close} aria-label="Close chat">
+                <button type="button" className={styles.headerButton} onClick={close} aria-label={t('ChatWidget.closeChat')}>
                   <X size={18} />
                 </button>
               </div>

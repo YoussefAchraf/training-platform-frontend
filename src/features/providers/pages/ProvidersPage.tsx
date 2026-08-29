@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
@@ -20,6 +21,7 @@ import styles from './ProvidersPage.module.css';
 const getProviderId = (provider: Provider) => provider.id;
 
 export function ProvidersPage() {
+  const { t } = useTranslation('providers');
   const { user, canManageCatalog, isSuperAdmin } = useAuth();
   const providersQuery = useProviders();
   const deleteProvider = useDeleteProvider();
@@ -54,19 +56,19 @@ export function ProvidersPage() {
     if (!deleting) return;
     deleteProvider.mutate(deleting.id, {
       onSuccess: () => {
-        toast.success(`${deleting.name} was deleted.`);
+        toast.success(t('ProvidersPage.providerDeleted', { name: deleting.name }));
         deleteDialog.close();
         setDeleting(null);
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
-  }, [deleting, deleteProvider, toast, deleteDialog]);
+  }, [deleting, deleteProvider, toast, deleteDialog, t]);
 
   const columns = useMemo<TableColumn<Provider>[]>(
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('ProvidersPage.columnName'),
         render: (provider) => (
           <span className={styles.nameCell}>
             <ProviderLogo name={provider.name} logoUrl={provider.logoUrl} size={32} />
@@ -76,12 +78,12 @@ export function ProvidersPage() {
       },
       {
         key: 'description',
-        header: 'Description',
+        header: t('ProvidersPage.columnDescription'),
         render: (provider) => provider.description || '—',
       },
       {
         key: 'createdAt',
-        header: 'Added',
+        header: t('ProvidersPage.columnAdded'),
         render: (provider) => formatDate(provider.createdAt),
       },
       {
@@ -92,34 +94,34 @@ export function ProvidersPage() {
           const canEdit = isSuperAdmin || provider.createdBy === user?.id;
           if (!canEdit) {
             return canManageCatalog ? (
-              <span className={styles.notOwned}>Created by {provider.creatorName ?? 'another user'}</span>
+              <span className={styles.notOwned}>{t('ProvidersPage.createdBy', { name: provider.creatorName ?? t('ProvidersPage.anotherUser') })}</span>
             ) : null;
           }
           return (
             <span className={styles.actions}>
               <Button size="sm" variant="outline" leftIcon={<Pencil size={14} />} onClick={() => openEdit(provider)}>
-                Edit
+                {t('ProvidersPage.edit')}
               </Button>
               <Button size="sm" variant="danger" leftIcon={<Trash2 size={14} />} onClick={() => openDelete(provider)}>
-                Delete
+                {t('ProvidersPage.delete')}
               </Button>
             </span>
           );
         },
       },
     ],
-    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete],
+    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t],
   );
 
   return (
     <div>
       <PageHeader
-        title="Providers"
-        description="Certification bodies you deliver trainings for, e.g. Red Hat or CompTIA."
+        title={t('ProvidersPage.title')}
+        description={t('ProvidersPage.description')}
         actions={
           canManageCatalog && (
             <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              Add provider
+              {t('ProvidersPage.addProvider')}
             </Button>
           )
         }
@@ -133,14 +135,14 @@ export function ProvidersPage() {
           data={providersQuery.data ?? []}
           keyExtractor={getProviderId}
           isLoading={providersQuery.isPending}
-          emptyTitle="No providers yet"
+          emptyTitle={t('ProvidersPage.emptyTitle')}
           emptyDescription={
-            canManageCatalog ? 'Add your first provider to start building a training catalog.' : undefined
+            canManageCatalog ? t('ProvidersPage.emptyDescription') : undefined
           }
           emptyAction={
             canManageCatalog && (
               <Button size="sm" onClick={openCreate}>
-                Add provider
+                {t('ProvidersPage.addProvider')}
               </Button>
             )
           }
@@ -153,9 +155,9 @@ export function ProvidersPage() {
         isOpen={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
-        title="Delete this provider?"
-        description={deleting ? `"${deleting.name}" will be removed from the catalog.` : undefined}
-        confirmLabel="Delete"
+        title={t('ProvidersPage.deleteDialogTitle')}
+        description={deleting ? t('ProvidersPage.deleteDialogDescription', { name: deleting.name }) : undefined}
+        confirmLabel={t('ProvidersPage.delete')}
         tone="danger"
         isLoading={deleteProvider.isPending}
       />

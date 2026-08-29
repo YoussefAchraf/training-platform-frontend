@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
@@ -20,6 +21,7 @@ import { SessionFormModal } from '../components/SessionFormModal';
 const getSessionId = (session: TrainingSession) => session.id;
 
 export function SessionsPage() {
+  const { t } = useTranslation('sessions');
   const { canManageCatalog, isInstructor } = useAuth();
   const navigate = useNavigate();
   const sessionsQuery = useSessions();
@@ -30,57 +32,57 @@ export function SessionsPage() {
     () => [
       {
         key: 'training',
-        header: 'Training',
+        header: t('SessionsPage.columnTraining'),
         render: (session) => trainingMap.get(session.trainingId)?.name ?? `#${session.trainingId}`,
       },
       {
         key: 'client',
-        header: 'Client',
+        header: t('SessionsPage.columnClient'),
         render: (session) => clientMap.get(session.clientId)?.companyName ?? `#${session.clientId}`,
       },
       ...(!isInstructor
         ? [
             {
               key: 'instructor',
-              header: 'Instructor',
+              header: t('SessionsPage.columnInstructor'),
               render: (session: TrainingSession) => {
                 const instructor = session.instructorId ? instructorMap.get(session.instructorId) : undefined;
-                return instructor ? `${instructor.firstname} ${instructor.lastname}` : 'Unassigned';
+                return instructor ? `${instructor.firstname} ${instructor.lastname}` : t('SessionsPage.unassigned');
               },
             } satisfies TableColumn<TrainingSession>,
           ]
         : []),
       {
         key: 'startDate',
-        header: 'Starts',
+        header: t('SessionsPage.columnStarts'),
         render: (session) => formatDateTime(session.startDate),
       },
       {
         key: 'status',
-        header: 'Status',
+        header: t('SessionsPage.columnStatus'),
         render: (session) => (
           <Badge
             tone={sessionStatusMeta[session.sessionStatus].tone}
             pulse={sessionStatusMeta[session.sessionStatus].pulse}
           >
-            {sessionStatusMeta[session.sessionStatus].label}
+            {t(sessionStatusMeta[session.sessionStatus].labelKey)}
           </Badge>
         ),
       },
       {
         key: 'assignment',
-        header: 'Assignment',
+        header: t('SessionsPage.columnAssignment'),
         render: (session) => (
           <Badge
             tone={assignmentStatusMeta[session.assignmentStatus].tone}
             pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
           >
-            {assignmentStatusMeta[session.assignmentStatus].label}
+            {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
           </Badge>
         ),
       },
     ],
-    [isInstructor, trainingMap, clientMap, instructorMap],
+    [isInstructor, trainingMap, clientMap, instructorMap, t],
   );
 
   const handleRowClick = useCallback(
@@ -91,16 +93,16 @@ export function SessionsPage() {
   return (
     <div>
       <PageHeader
-        title="Sessions"
+        title={t('SessionsPage.title')}
         description={
           isInstructor
-            ? 'Training sessions assigned to you.'
-            : 'Training sessions booked for clients.'
+            ? t('SessionsPage.descriptionInstructor')
+            : t('SessionsPage.descriptionOther')
         }
         actions={
           canManageCatalog && (
             <Button leftIcon={<Plus size={16} />} onClick={modal.open}>
-              Book session
+              {t('SessionsPage.bookSession')}
             </Button>
           )
         }
@@ -115,12 +117,12 @@ export function SessionsPage() {
           keyExtractor={getSessionId}
           isLoading={sessionsQuery.isPending}
           onRowClick={handleRowClick}
-          emptyTitle={isInstructor ? 'No sessions assigned yet' : 'No sessions booked yet'}
-          emptyDescription={canManageCatalog ? 'Book a session to get started.' : undefined}
+          emptyTitle={isInstructor ? t('SessionsPage.emptyTitleInstructor') : t('SessionsPage.emptyTitleOther')}
+          emptyDescription={canManageCatalog ? t('SessionsPage.emptyDescription') : undefined}
           emptyAction={
             canManageCatalog && (
               <Button size="sm" onClick={modal.open}>
-                Book session
+                {t('SessionsPage.bookSession')}
               </Button>
             )
           }

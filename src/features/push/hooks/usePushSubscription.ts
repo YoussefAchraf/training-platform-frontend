@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { pushApi } from '../api/pushApi';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
@@ -16,6 +17,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 export type PushSupportStatus = 'unsupported' | 'checking' | 'subscribed' | 'unsubscribed';
 
 export function usePushSubscription() {
+  const { t } = useTranslation('common');
   const [status, setStatus] = useState<PushSupportStatus>('checking');
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +41,7 @@ export function usePushSubscription() {
     try {
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
-        setError('Notifications permission was not granted.');
+        setError(t('PushNotifications.permissionDenied'));
         return false;
       }
       const registration = await navigator.serviceWorker.ready;
@@ -58,7 +60,7 @@ export function usePushSubscription() {
       setStatus('subscribed');
       return true;
     } catch {
-      setError('Could not enable notifications. Please try again.');
+      setError(t('PushNotifications.enableFailed'));
       return false;
     } finally {
       setIsBusy(false);
@@ -78,7 +80,7 @@ export function usePushSubscription() {
       setStatus('unsubscribed');
       return true;
     } catch {
-      setError('Could not disable notifications. Please try again.');
+      setError(t('PushNotifications.disableFailed'));
       return false;
     } finally {
       setIsBusy(false);

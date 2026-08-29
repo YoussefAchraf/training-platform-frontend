@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -14,27 +17,29 @@ import type { Training } from '@/shared/types/domain';
 import { useCreateTraining, useUpdateTraining } from '../hooks/useTrainings';
 import styles from './TrainingFormModal.module.css';
 
-const trainingSchema = z
-  .object({
-    name: z.string().trim().min(1, 'Training name is required').max(150),
-    providerId: z.coerce.number({ error: 'Select a provider' }).int().positive('Select a provider'),
-    description: z.string().trim().max(2000).optional(),
-    duration: z.preprocess(
-      (value) => (value === '' || value === undefined || value === null ? undefined : value),
-      z.coerce.number().int().positive('Duration must be a positive number').optional(),
-    ),
-    durationUnit: z.preprocess(
-      (value) => (value === '' || value === undefined || value === null ? undefined : value),
-      z.enum(['days', 'hours']).optional(),
-    ),
-  })
-  .refine((data) => (data.duration === undefined) === (data.durationUnit === undefined), {
-    message: 'Pick a unit for the duration',
-    path: ['durationUnit'],
-  });
+function buildTrainingSchema(t: TFunction<'trainings'>) {
+  return z
+    .object({
+      name: z.string().trim().min(1, t('TrainingFormModal.errors.nameRequired')).max(150),
+      providerId: z.coerce.number({ error: t('TrainingFormModal.errors.providerRequired') }).int().positive(t('TrainingFormModal.errors.providerRequired')),
+      description: z.string().trim().max(2000).optional(),
+      duration: z.preprocess(
+        (value) => (value === '' || value === undefined || value === null ? undefined : value),
+        z.coerce.number().int().positive(t('TrainingFormModal.errors.durationPositive')).optional(),
+      ),
+      durationUnit: z.preprocess(
+        (value) => (value === '' || value === undefined || value === null ? undefined : value),
+        z.enum(['days', 'hours']).optional(),
+      ),
+    })
+    .refine((data) => (data.duration === undefined) === (data.durationUnit === undefined), {
+      message: t('TrainingFormModal.errors.durationUnitRequired'),
+      path: ['durationUnit'],
+    });
+}
 
-type TrainingFormInput = z.input<typeof trainingSchema>;
-type TrainingFormOutput = z.output<typeof trainingSchema>;
+type TrainingFormInput = z.input<ReturnType<typeof buildTrainingSchema>>;
+type TrainingFormOutput = z.output<ReturnType<typeof buildTrainingSchema>>;
 
 interface TrainingFormModalProps {
   isOpen: boolean;
@@ -46,11 +51,13 @@ interface TrainingFormModalProps {
 const FORM_ID = 'training-form';
 
 export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing = null }: TrainingFormModalProps) {
+  const { t } = useTranslation('trainings');
   const providersQuery = useProviders();
   const createTraining = useCreateTraining();
   const updateTraining = useUpdateTraining();
   const toast = useToast();
   const mutation = editing ? updateTraining : createTraining;
+  const trainingSchema = useMemo(() => buildTrainingSchema(t), [t]);
 
   const {
     register,
@@ -78,7 +85,11 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
 
   const onSubmit = handleSubmit((values) => {
     const onSuccess = () => {
-      toast.success(editing ? `${values.name} was updated.` : `${values.name} was added to trainings.`);
+      toast.success(
+        editing
+          ? t('TrainingFormModal.trainingUpdated', { name: values.name })
+          : t('TrainingFormModal.trainingAdded', { name: values.name }),
+      );
       handleClose();
     };
 
@@ -104,15 +115,15 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={editing ? 'Edit training' : 'Add training'}
-      description="A specific certification course under a provider, e.g. RHCSA under Red Hat."
+      title={editing ? t('TrainingFormModal.editTitle') : t('TrainingFormModal.addTitle')}
+      description={t('TrainingFormModal.description')}
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('TrainingFormModal.cancel')}
           </Button>
           <Button type="submit" form={FORM_ID} isLoading={mutation.isPending}>
-            {editing ? 'Save changes' : 'Add training'}
+            {editing ? t('TrainingFormModal.saveChanges') : t('TrainingFormModal.addTraining')}
           </Button>
         </>
       }
@@ -120,14 +131,14 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {mutation.isError && <ErrorBanner error={mutation.error} />}
 
-        <FormField label="Name" error={errors.name?.message} required>
-          {(fieldProps) => <Input placeholder="RHCSA" {...fieldProps} {...register('name')} />}
+        <FormField label={t('TrainingFormModal.nameLabel')} error={errors.name?.message} required>
+          {(fieldProps) => <Input placeholder={t('TrainingFormModal.namePlaceholder')} {...fieldProps} {...register('name')} />}
         </FormField>
 
         <FormField
-          label="Provider"
+          label={t('TrainingFormModal.providerLabel')}
           error={errors.providerId?.message}
-          hint={editing ? "Provider can't be changed after a training is created" : undefined}
+          hint={editing ? t('TrainingFormModal.providerLockedHint') : undefined}
           required
         >
           {(fieldProps) => (
@@ -138,7 +149,7 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
               disabled={Boolean(editing)}
             >
               <option value="" disabled>
-                {providersQuery.isPending ? 'Loading providers…' : 'Select a provider'}
+                {providersQuery.isPending ? t('TrainingFormModal.loadingProviders') : t('TrainingFormModal.selectProvider')}
               </option>
               {providersQuery.data?.map((provider) => (
                 <option key={provider.id} value={provider.id}>
@@ -150,9 +161,9 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
         </FormField>
 
         <FormField
-          label="Duration"
+          label={t('TrainingFormModal.durationLabel')}
           error={errors.duration?.message ?? errors.durationUnit?.message}
-          hint="Optional"
+          hint={t('TrainingFormModal.durationOptionalHint')}
         >
           {(fieldProps) => (
             <div className={styles.durationRow}>
@@ -166,25 +177,25 @@ export function TrainingFormModal({ isOpen, onClose, defaultProviderId, editing 
               />
               <div className={styles.durationUnit}>
                 <Select
-                  aria-label="Duration unit"
+                  aria-label={t('TrainingFormModal.durationUnitLabel')}
                   invalid={fieldProps.invalid}
                   defaultValue=""
                   {...register('durationUnit')}
                 >
                   <option value="" disabled>
-                    Unit
+                    {t('TrainingFormModal.unit')}
                   </option>
-                  <option value="days">Days</option>
-                  <option value="hours">Hours</option>
+                  <option value="days">{t('TrainingFormModal.days')}</option>
+                  <option value="hours">{t('TrainingFormModal.hours')}</option>
                 </Select>
               </div>
             </div>
           )}
         </FormField>
 
-        <FormField label="Description" error={errors.description?.message} hint="Optional">
+        <FormField label={t('TrainingFormModal.descriptionLabel')} error={errors.description?.message} hint={t('TrainingFormModal.descriptionOptionalHint')}>
           {(fieldProps) => (
-            <Textarea placeholder="Red Hat Certified System Administrator" {...fieldProps} {...register('description')} />
+            <Textarea placeholder={t('TrainingFormModal.descriptionPlaceholder')} {...fieldProps} {...register('description')} />
           )}
         </FormField>
       </form>

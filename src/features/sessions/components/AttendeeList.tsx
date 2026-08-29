@@ -1,4 +1,5 @@
 import { Check, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/shared/components/Badge';
 import { Button } from '@/shared/components/Button';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
@@ -15,6 +16,7 @@ interface AttendeeListProps {
 }
 
 export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps) {
+  const { t } = useTranslation('sessions');
   const attendeesQuery = useSessionAttendees(sessionId);
   const markAttendance = useMarkAttendance();
   const toast = useToast();
@@ -23,7 +25,7 @@ export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps
     markAttendance.mutate(
       { sessionId, attendeeId, status },
       {
-        onSuccess: () => toast.success(status === 'present' ? 'Marked present.' : 'Marked absent.'),
+        onSuccess: () => toast.success(status === 'present' ? t('AttendeeList.markedPresent') : t('AttendeeList.markedAbsent')),
         onError: (error) => toast.error(getApiErrorMessage(error)),
       },
     );
@@ -36,7 +38,7 @@ export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps
   }
 
   if (attendeesQuery.data.length === 0) {
-    return <p className={styles.note}>No attendees added yet.</p>;
+    return <p className={styles.note}>{t('AttendeeList.noAttendees')}</p>;
   }
 
   return (
@@ -54,7 +56,7 @@ export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps
 
             <span className={styles.statusGroup}>
               <Badge tone={attendee.surveySubmitted ? 'success' : 'neutral'}>
-                {attendee.surveySubmitted ? 'Submitted' : 'Survey pending'}
+                {attendee.surveySubmitted ? t('AttendeeList.surveySubmitted') : t('AttendeeList.surveyPending')}
               </Badge>
 
               {canMarkAttendance ? (
@@ -67,7 +69,7 @@ export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps
                     isLoading={isMarking && markAttendance.variables?.status === 'absent'}
                     disabled={markAttendance.isPending}
                   >
-                    Absent
+                    {t('AttendeeList.markAbsent')}
                   </Button>
                   <Button
                     size="sm"
@@ -77,12 +79,12 @@ export function AttendeeList({ sessionId, canMarkAttendance }: AttendeeListProps
                     isLoading={isMarking && markAttendance.variables?.status === 'present'}
                     disabled={markAttendance.isPending}
                   >
-                    Present
+                    {t('AttendeeList.markPresent')}
                   </Button>
                 </span>
               ) : (
                 <Badge tone={attendanceStatusMeta[attendee.attendanceStatus].tone}>
-                  {attendanceStatusMeta[attendee.attendanceStatus].label}
+                  {t(attendanceStatusMeta[attendee.attendanceStatus].labelKey)}
                 </Badge>
               )}
             </span>

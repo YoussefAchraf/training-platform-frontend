@@ -1,0 +1,38 @@
+{
+  "ProviderFormModal": {
+    "editTitle": "Edit provider",
+    "addTitle": "Add provider",
+    "description": "Providers are certification bodies like Red Hat or CompTIA.",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "addProvider": "Add provider",
+    "nameLabel": "Name",
+    "nameHint": "Click to browse providers, or type to filter",
+    "namePlaceholder": "Red Hat",
+    "descriptionLabel": "Description",
+    "descriptionOptionalHint": "Optional",
+    "descriptionPlaceholder": "Enterprise Linux training and certification",
+    "providerUpdated": "{{name}} was updated.",
+    "providerAdded": "{{name}} was added to providers.",
+    "errors": {
+      "nameRequired": "Provider name is required"
+    }
+  },
+  "ProvidersPage": {
+    "title": "Providers",
+    "description": "Certification bodies you deliver trainings for, e.g. Red Hat or CompTIA.",
+    "addProvider": "Add provider",
+    "columnName": "Name",
+    "columnDescription": "Description",
+    "columnAdded": "Added",
+    "createdBy": "Created by {{name}}",
+    "anotherUser": "another user",
+    "edit": "Edit",
+    "delete": "Delete",
+    "providerDeleted": "{{name}} was deleted.",
+    "emptyTitle": "No providers yet",
+    "emptyDescription": "Add your first provider to start building a training catalog.",
+    "deleteDialogTitle": "Delete this provider?",
+    "deleteDialogDescription": "\"{{name}}\" will be removed from the catalog."
+  }
+}

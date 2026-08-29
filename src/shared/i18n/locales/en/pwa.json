@@ -1,0 +1,37 @@
+{
+  "PwaProfilePage": {
+    "title": "Profile",
+    "theme": "Theme",
+    "language": "Language",
+    "accountSettings": "Account settings",
+    "more": "More",
+    "logOut": "Log out"
+  },
+  "PwaBottomNav": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "profile": "Profile",
+    "skills": "Skills"
+  },
+  "PwaDesktopLayout": {
+    "searchOrJumpTo": "Search or jump to..."
+  },
+  "InstallBanner": {
+    "title": "Install Training Platform",
+    "subtitle": "Add it to your home screen for a faster, app-like experience.",
+    "install": "Install",
+    "notNow": "Not now"
+  },
+  "IOSInstallBanner": {
+    "title": "Install Training Platform",
+    "beforeShareIcon": "Tap",
+    "shareIconLabel": "Share",
+    "betweenIcons": ", then",
+    "addIconLabel": "Add",
+    "afterAddIcon": "Add to Home Screen.",
+    "notNow": "Not now"
+  },
+  "PwaChatPage": {
+    "back": "Back"
+  }
+}

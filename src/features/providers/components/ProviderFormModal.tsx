@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -15,10 +17,12 @@ import type { Provider } from '@/shared/types/domain';
 import { PROVIDER_ICONS, findProviderIcon } from '@/shared/data/providerIcons';
 import { useCreateProvider, useUpdateProvider } from '../hooks/useProviders';
 
-const providerSchema = z.object({
-  name: z.string().trim().min(1, 'Provider name is required').max(150),
-  description: z.string().trim().max(2000).optional(),
-});
+function buildProviderSchema(t: TFunction<'providers'>) {
+  return z.object({
+    name: z.string().trim().min(1, t('ProviderFormModal.errors.nameRequired')).max(150),
+    description: z.string().trim().max(2000).optional(),
+  });
+}
 
 const PROVIDER_NAME_OPTIONS: ComboboxOption[] = PROVIDER_ICONS.map((entry) => ({
   value: entry.name,
@@ -26,7 +30,7 @@ const PROVIDER_NAME_OPTIONS: ComboboxOption[] = PROVIDER_ICONS.map((entry) => ({
   icon: <ProviderLogo name={entry.name} logoUrl={entry.iconUrl} size={20} />,
 }));
 
-type ProviderFormValues = z.infer<typeof providerSchema>;
+type ProviderFormValues = z.infer<ReturnType<typeof buildProviderSchema>>;
 
 interface ProviderFormModalProps {
   isOpen: boolean;
@@ -37,10 +41,12 @@ interface ProviderFormModalProps {
 const FORM_ID = 'provider-form';
 
 export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderFormModalProps) {
+  const { t } = useTranslation('providers');
   const createProvider = useCreateProvider();
   const updateProvider = useUpdateProvider();
   const toast = useToast();
   const mutation = editing ? updateProvider : createProvider;
+  const providerSchema = useMemo(() => buildProviderSchema(t), [t]);
 
   const {
     register,
@@ -71,7 +77,11 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
 
   const onSubmit = handleSubmit((values) => {
     const onSuccess = () => {
-      toast.success(editing ? `${values.name} was updated.` : `${values.name} was added to providers.`);
+      toast.success(
+        editing
+          ? t('ProviderFormModal.providerUpdated', { name: values.name })
+          : t('ProviderFormModal.providerAdded', { name: values.name }),
+      );
       handleClose();
     };
     const payload = { ...values, logoUrl: resolvedLogoUrl };
@@ -87,15 +97,15 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={editing ? 'Edit provider' : 'Add provider'}
-      description="Providers are certification bodies like Red Hat or CompTIA."
+      title={editing ? t('ProviderFormModal.editTitle') : t('ProviderFormModal.addTitle')}
+      description={t('ProviderFormModal.description')}
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('ProviderFormModal.cancel')}
           </Button>
           <Button type="submit" form={FORM_ID} isLoading={mutation.isPending}>
-            {editing ? 'Save changes' : 'Add provider'}
+            {editing ? t('ProviderFormModal.saveChanges') : t('ProviderFormModal.addProvider')}
           </Button>
         </>
       }
@@ -103,10 +113,10 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {mutation.isError && <ErrorBanner error={mutation.error} />}
 
-        <FormField label="Name" error={errors.name?.message} required hint="Click to browse providers, or type to filter">
+        <FormField label={t('ProviderFormModal.nameLabel')} error={errors.name?.message} required hint={t('ProviderFormModal.nameHint')}>
           {(fieldProps) => (
             <Combobox
-              placeholder="Red Hat"
+              placeholder={t('ProviderFormModal.namePlaceholder')}
               options={PROVIDER_NAME_OPTIONS}
               value={nameValue ?? ''}
               onSelect={(value) => setValue('name', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
@@ -116,10 +126,10 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
           )}
         </FormField>
 
-        <FormField label="Description" error={errors.description?.message} hint="Optional">
+        <FormField label={t('ProviderFormModal.descriptionLabel')} error={errors.description?.message} hint={t('ProviderFormModal.descriptionOptionalHint')}>
           {(fieldProps) => (
             <Textarea
-              placeholder="Enterprise Linux training and certification"
+              placeholder={t('ProviderFormModal.descriptionPlaceholder')}
               {...fieldProps}
               {...register('description')}
             />

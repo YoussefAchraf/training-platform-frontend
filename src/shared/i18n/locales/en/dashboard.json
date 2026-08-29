@@ -1,0 +1,54 @@
+{
+  "SessionMiniList": {
+    "unnamedSession": "Session #{{id}}",
+    "unknownClient": "Unknown client"
+  },
+  "DashboardPage": {
+    "welcomeBack": "Welcome back, {{name}}",
+    "descriptionSuperAdmin": "Platform-wide oversight: users, sessions, and the audit trail.",
+    "descriptionManager": "Here is what needs your attention across the company.",
+    "descriptionInstructor": "Your upcoming sessions and pending responses.",
+    "descriptionSales": "Your training delivery pipeline at a glance."
+  },
+  "ManagerDashboard": {
+    "totalSessions": "Total sessions",
+    "needsInstructor": "Needs instructor",
+    "instructors": "Instructors",
+    "pendingApprovals": "Pending approvals",
+    "needsInstructorCardTitle": "Needs an instructor",
+    "everyAssigned": "Every session has an instructor assigned.",
+    "upcomingSessionsCardTitle": "Upcoming sessions",
+    "noUpcoming": "No upcoming sessions scheduled."
+  },
+  "SalesDashboard": {
+    "totalSessions": "Total sessions",
+    "providers": "Providers",
+    "trainings": "Trainings",
+    "clients": "Clients",
+    "awaitingAssignmentCardTitle": "Awaiting instructor assignment",
+    "everyAssigned": "Every session has an instructor assigned.",
+    "upcomingSessionsCardTitle": "Upcoming sessions",
+    "noUpcoming": "No upcoming sessions scheduled."
+  },
+  "InstructorDashboard": {
+    "mySessions": "My sessions",
+    "awaitingResponse": "Awaiting your response",
+    "upcomingAccepted": "Upcoming, accepted",
+    "awaitingResponseCardTitle": "Awaiting your response",
+    "nothingWaiting": "Nothing waiting on you right now.",
+    "yourSessionsCardTitle": "Your sessions",
+    "noScheduled": "No scheduled or ongoing sessions."
+  },
+  "SuperAdminDashboard": {
+    "totalUsers": "Total users",
+    "pendingSignups": "Pending signups",
+    "deactivated": "Deactivated",
+    "totalSessions": "Total sessions",
+    "manageUsers": "Manage users",
+    "manageUsersDescription": "Edit roles, status, and details",
+    "sessionsOverview": "Sessions overview",
+    "sessionsOverviewDescription": "Every session, company-wide",
+    "auditLog": "Audit log",
+    "auditLogDescription": "Every create, update, delete, cancel"
+  }
+}

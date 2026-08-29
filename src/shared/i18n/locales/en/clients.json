@@ -1,0 +1,41 @@
+{
+  "ClientFormModal": {
+    "editTitle": "Edit client",
+    "addTitle": "Add client",
+    "description": "The company you're delivering a training session for.",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "addClient": "Add client",
+    "companyNameLabel": "Company name",
+    "companyNamePlaceholder": "Acme Corp",
+    "emailLabel": "Email",
+    "emailOptionalHint": "Optional",
+    "emailPlaceholder": "contact@acme.com",
+    "phoneLabel": "Phone",
+    "phoneOptionalHint": "Optional",
+    "phonePlaceholder": "+1 555 000 1234",
+    "clientUpdated": "{{name}} was updated.",
+    "clientAdded": "{{name}} was added to clients.",
+    "errors": {
+      "companyNameRequired": "Company name is required",
+      "emailInvalid": "Enter a valid email address"
+    }
+  },
+  "ClientsPage": {
+    "title": "Clients",
+    "description": "Companies you deliver training sessions for.",
+    "addClient": "Add client",
+    "columnCompany": "Company",
+    "columnEmail": "Email",
+    "columnPhone": "Phone",
+    "createdBy": "Created by {{name}}",
+    "anotherUser": "another user",
+    "edit": "Edit",
+    "delete": "Delete",
+    "clientDeleted": "{{name}} was deleted.",
+    "emptyTitle": "No clients yet",
+    "emptyDescription": "Add a client before booking a training session.",
+    "deleteDialogTitle": "Delete this client?",
+    "deleteDialogDescription": "\"{{name}}\" will be removed."
+  }
+}

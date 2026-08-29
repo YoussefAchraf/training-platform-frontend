@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -11,17 +14,19 @@ import { toDatetimeLocalValue } from '@/shared/utils/formatDate';
 import type { TrainingSession } from '@/shared/types/domain';
 import { useUpdateSession } from '../hooks/useSessions';
 
-const editSessionSchema = z
-  .object({
-    startDate: z.string().min(1, 'Start date is required'),
-    endDate: z.string().min(1, 'End date is required'),
-  })
-  .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
-    message: 'End date must be after the start date',
-    path: ['endDate'],
-  });
+function buildEditSessionSchema(t: TFunction<'sessions'>) {
+  return z
+    .object({
+      startDate: z.string().min(1, t('EditSessionModal.errors.startDateRequired')),
+      endDate: z.string().min(1, t('EditSessionModal.errors.endDateRequired')),
+    })
+    .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
+      message: t('EditSessionModal.errors.endAfterStart'),
+      path: ['endDate'],
+    });
+}
 
-type EditSessionFormValues = z.infer<typeof editSessionSchema>;
+type EditSessionFormValues = z.infer<ReturnType<typeof buildEditSessionSchema>>;
 
 interface EditSessionModalProps {
   session: TrainingSession | null;
@@ -31,8 +36,10 @@ interface EditSessionModalProps {
 const FORM_ID = 'edit-session-form';
 
 export function EditSessionModal({ session, onClose }: EditSessionModalProps) {
+  const { t } = useTranslation('sessions');
   const updateSession = useUpdateSession();
   const toast = useToast();
+  const editSessionSchema = useMemo(() => buildEditSessionSchema(t), [t]);
 
   const {
     register,
@@ -58,7 +65,7 @@ export function EditSessionModal({ session, onClose }: EditSessionModalProps) {
       },
       {
         onSuccess: () => {
-          toast.success('Session dates updated.');
+          toast.success(t('EditSessionModal.datesUpdated'));
           onClose();
         },
       },
@@ -69,14 +76,14 @@ export function EditSessionModal({ session, onClose }: EditSessionModalProps) {
     <Modal
       isOpen={Boolean(session)}
       onClose={onClose}
-      title="Edit session dates"
+      title={t('EditSessionModal.title')}
       footer={
         <>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t('EditSessionModal.cancel')}
           </Button>
           <Button type="submit" form={FORM_ID} isLoading={updateSession.isPending}>
-            Save changes
+            {t('EditSessionModal.saveChanges')}
           </Button>
         </>
       }
@@ -84,11 +91,11 @@ export function EditSessionModal({ session, onClose }: EditSessionModalProps) {
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {updateSession.isError && <ErrorBanner error={updateSession.error} />}
 
-        <FormField label="Start date & time" error={errors.startDate?.message} required>
+        <FormField label={t('EditSessionModal.startDateTimeLabel')} error={errors.startDate?.message} required>
           {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('startDate')} />}
         </FormField>
 
-        <FormField label="End date & time" error={errors.endDate?.message} required>
+        <FormField label={t('EditSessionModal.endDateTimeLabel')} error={errors.endDate?.message} required>
           {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('endDate')} />}
         </FormField>
       </form>

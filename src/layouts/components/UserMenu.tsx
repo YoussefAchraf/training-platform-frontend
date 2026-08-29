@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react';
@@ -9,6 +10,7 @@ import { useLogout } from '@/features/auth/hooks/useLogout';
 import { Avatar } from '@/shared/components/Avatar';
 import { Badge } from '@/shared/components/Badge';
 import { ThemeToggle } from '@/shared/components/ThemeToggle';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import { useDisclosure } from '@/shared/hooks/useDisclosure';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { roleMeta } from '@/shared/utils/statusMeta';
@@ -33,6 +35,7 @@ function panelVariants(placement: 'up' | 'down'): Variants {
 }
 
 export function UserMenu({ placement = 'down', variant = 'full', align = 'right' }: UserMenuProps) {
+  const { t } = useTranslation('common');
   const { user, isSuperAdmin } = useAuth();
   const logout = useLogout();
   const { isOpen, toggle, close } = useDisclosure(false);
@@ -71,13 +74,14 @@ export function UserMenu({ placement = 'down', variant = 'full', align = 'right'
                 <p className={styles.panelEmail}>{user.email}</p>
               </div>
             </div>
-            <Badge tone={roleMeta[user.role].tone}>{roleMeta[user.role].label}</Badge>
+            <Badge tone={roleMeta[user.role].tone}>{t(roleMeta[user.role].labelKey)}</Badge>
 
             <ThemeToggle />
+            <LanguageToggle />
 
             <Link to={paths.account} className={styles.menuLink} onClick={close}>
               <Settings size={16} />
-              <span>Account settings</span>
+              <span>{t('UserMenu.accountSettings')}</span>
             </Link>
             <button
               type="button"
@@ -86,14 +90,14 @@ export function UserMenu({ placement = 'down', variant = 'full', align = 'right'
               disabled={logout.isPending}
             >
               <LogOut size={16} />
-              <span>Log out</span>
+              <span>{t('UserMenu.logOut')}</span>
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {variant === 'compact' ? (
-        <button type="button" className={styles.compactTrigger} onClick={toggle} aria-expanded={isOpen} aria-label="Account menu">
+        <button type="button" className={styles.compactTrigger} onClick={toggle} aria-expanded={isOpen} aria-label={t('UserMenu.accountMenu')}>
           <Avatar firstname={user.firstname} lastname={user.lastname} size={36} />
         </button>
       ) : (
@@ -103,7 +107,7 @@ export function UserMenu({ placement = 'down', variant = 'full', align = 'right'
             <span className={styles.triggerName}>
               {user.firstname} {user.lastname}
             </span>
-            <span className={styles.triggerRole}>{user.role}</span>
+            <span className={styles.triggerRole}>{t(roleMeta[user.role].labelKey)}</span>
           </span>
           <ChevronsUpDown size={16} className={styles.chevron} />
         </button>

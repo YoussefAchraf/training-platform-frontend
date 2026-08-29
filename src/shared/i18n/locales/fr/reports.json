@@ -1,0 +1,17 @@
+{
+  "ReportView": {
+    "downloadFailed": "Impossible de télécharger le rapport PDF.",
+    "notGeneratedTitle": "Rapport pas encore généré",
+    "notGeneratedDescription": "Un rapport est créé automatiquement une fois que chaque participant a soumis son avis, ou peu après la fin de la session.",
+    "reportGenerated": "Rapport généré.",
+    "generateNow": "Générer le rapport maintenant",
+    "averageInstructorScore": "Note moyenne du formateur",
+    "npsAverage": "NPS moyen",
+    "generatedAt": "Généré le {{date}}",
+    "downloadPdf": "Télécharger le PDF"
+  },
+  "ReportPage": {
+    "title": "Rapport de la session n° {{id}}",
+    "description": "Synthèse des retours post-formation."
+  }
+}

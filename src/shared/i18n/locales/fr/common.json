@@ -1,0 +1,136 @@
+{
+  "SuperAdminAuthLayout": {
+    "administratorAccess": "Accès administrateur",
+    "footnote": "Zone restreinte. Les tentatives d'accès peuvent être enregistrées et surveillées."
+  },
+  "AuthLayout": {
+    "brandTagline": "Planifiez prestataires et formations, réservez des sessions pour vos clients, assignez des formateurs et suivez les retours - le tout au même endroit."
+  },
+  "Nav": {
+    "brand": "Training Platform",
+    "mainNavigation": "Navigation principale",
+    "items": {
+      "dashboard": "Tableau de bord",
+      "calendar": "Calendrier",
+      "providers": "Prestataires",
+      "trainings": "Formations",
+      "clients": "Clients",
+      "sessions": "Sessions",
+      "instructors": "Formateurs",
+      "myProfile": "Mon profil",
+      "pendingApprovals": "Demandes en attente",
+      "users": "Utilisateurs",
+      "sessionsOverview": "Aperçu des sessions",
+      "auditLog": "Journal d'audit",
+      "chat": "Discussion"
+    },
+    "groups": {
+      "Catalog": "Catalogue",
+      "People": "Personnes",
+      "Administration": "Administration"
+    }
+  },
+  "Topbar": {
+    "openMenu": "Ouvrir le menu de navigation"
+  },
+  "UserMenu": {
+    "accountSettings": "Paramètres du compte",
+    "logOut": "Se déconnecter",
+    "accountMenu": "Menu du compte"
+  },
+  "ThemeToggle": {
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "LanguageToggle": {
+    "label": "Langue",
+    "english": "Anglais",
+    "french": "Français"
+  },
+  "MobileDrawer": {
+    "closeMenu": "Fermer le menu"
+  },
+  "CommandPalette": {
+    "quickNavigation": "Navigation rapide",
+    "placeholder": "Aller à...",
+    "searchPages": "Rechercher des pages",
+    "noMatches": "Aucun résultat"
+  },
+  "Modal": {
+    "closeDialog": "Fermer la boîte de dialogue"
+  },
+  "OfflineBanner": {
+    "message": "Vous êtes hors ligne — affichage des dernières données enregistrées, si disponibles."
+  },
+  "Spinner": {
+    "loading": "Chargement"
+  },
+  "ConfirmDialog": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
+  },
+  "ErrorBanner": {
+    "fallback": "Une erreur s'est produite.",
+    "retry": "Réessayer"
+  },
+  "ApiError": {
+    "fallback": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "Table": {
+    "emptyTitle": "Rien à afficher pour l'instant"
+  },
+  "ToastViewport": {
+    "dismiss": "Fermer la notification"
+  },
+  "Combobox": {
+    "noMatch": "Aucune correspondance dans le catalogue — ce nom sera utilisé tel quel"
+  },
+  "NotFoundPage": {
+    "message": "Cette page n'existe pas.",
+    "goHome": "Retour à l'accueil"
+  },
+  "Forbidden": {
+    "title": "Vous n'avez pas accès à cette page",
+    "description": "Votre rôle actuel ne permet pas d'accéder à cette section.",
+    "backToDashboard": "Retour au tableau de bord"
+  },
+  "ErrorBoundary": {
+    "title": "Une erreur s'est produite",
+    "description": "Essayez de recharger la page. Si le problème persiste, contactez votre administrateur.",
+    "reload": "Recharger"
+  },
+  "PushNotifications": {
+    "permissionDenied": "L'autorisation d'envoyer des notifications n'a pas été accordée.",
+    "enableFailed": "Impossible d'activer les notifications. Veuillez réessayer.",
+    "disableFailed": "Impossible de désactiver les notifications. Veuillez réessayer."
+  },
+  "Status": {
+    "userPending": "En attente",
+    "userApproved": "Approuvé",
+    "userRejected": "Rejeté",
+    "userDeactivated": "Désactivé",
+    "sessionScheduled": "Planifiée",
+    "sessionOngoing": "En cours",
+    "sessionCompleted": "Terminée",
+    "sessionCancelled": "Annulée",
+    "assignmentUnassigned": "Non assignée",
+    "assignmentPending": "Réponse en attente",
+    "assignmentAccepted": "Acceptée",
+    "assignmentRefused": "Refusée",
+    "attendancePending": "En attente",
+    "attendancePresent": "Présent",
+    "attendanceAbsent": "Absent",
+    "roleSuperAdmin": "SuperAdmin",
+    "roleManager": "Manager",
+    "roleSales": "Ventes",
+    "roleInstructor": "Formateur",
+    "auditCreate": "Créé",
+    "auditUpdate": "Modifié",
+    "auditDelete": "Supprimé",
+    "auditCancel": "Annulé",
+    "auditApprove": "Approuvé",
+    "auditReject": "Rejeté"
+  }
+}

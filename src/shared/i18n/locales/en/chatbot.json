@@ -1,0 +1,16 @@
+{
+  "ChatConversation": {
+    "assistantTyping": "Assistant is typing",
+    "emptyState": "Ask me anything about your trainings, sessions or clients.",
+    "placeholder": "Type a message...",
+    "messageLabel": "Message",
+    "sendMessage": "Send message"
+  },
+  "ChatWidget": {
+    "openAssistant": "Open chat assistant",
+    "assistant": "Assistant",
+    "startNewConversation": "Start a new conversation",
+    "newConversation": "New conversation",
+    "closeChat": "Close chat"
+  }
+}

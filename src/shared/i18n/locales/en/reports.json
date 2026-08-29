@@ -1,0 +1,17 @@
+{
+  "ReportView": {
+    "downloadFailed": "Could not download the report PDF.",
+    "notGeneratedTitle": "Report not generated yet",
+    "notGeneratedDescription": "A report is created automatically once every attendee submits feedback, or shortly after the session ends.",
+    "reportGenerated": "Report generated.",
+    "generateNow": "Generate report now",
+    "averageInstructorScore": "Average instructor score",
+    "npsAverage": "NPS average",
+    "generatedAt": "Generated {{date}}",
+    "downloadPdf": "Download PDF"
+  },
+  "ReportPage": {
+    "title": "Session #{{id}} report",
+    "description": "Post-training feedback summary."
+  }
+}

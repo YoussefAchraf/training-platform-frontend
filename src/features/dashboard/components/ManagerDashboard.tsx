@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CalendarClock, ClipboardCheck, UserCog, Users2 } from 'lucide-react';
 import { Card } from '@/shared/components/Card';
 import { StatTile } from '@/shared/components/StatTile';
@@ -14,6 +15,7 @@ import { StatTileGrid } from './StatTileGrid';
 import styles from './Dashboard.module.css';
 
 export function ManagerDashboard() {
+  const { t } = useTranslation('dashboard');
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap, instructors } = useSessionLookups();
   const pendingUsersQuery = usePendingUsers();
@@ -37,33 +39,33 @@ export function ManagerDashboard() {
   return (
     <div>
       <StatTileGrid>
-        <StatTile label="Total sessions" value={sessions.length} icon={CalendarClock} tone="primary" />
-        <StatTile label="Needs instructor" value={unassigned.length} icon={UserCog} />
-        <StatTile label="Instructors" value={instructors.length} icon={Users2} />
+        <StatTile label={t('ManagerDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} tone="primary" />
+        <StatTile label={t('ManagerDashboard.needsInstructor')} value={unassigned.length} icon={UserCog} />
+        <StatTile label={t('ManagerDashboard.instructors')} value={instructors.length} icon={Users2} />
         <Link to={paths.pendingApprovals} className={styles.statLink}>
-          <StatTile label="Pending approvals" value={pendingUsersQuery.data?.length ?? '—'} icon={ClipboardCheck} />
+          <StatTile label={t('ManagerDashboard.pendingApprovals')} value={pendingUsersQuery.data?.length ?? '—'} icon={ClipboardCheck} />
         </Link>
       </StatTileGrid>
 
       <div className={styles.columns}>
         <Card>
-          <h3 className={styles.cardTitle}>Needs an instructor</h3>
+          <h3 className={styles.cardTitle}>{t('ManagerDashboard.needsInstructorCardTitle')}</h3>
           <SessionMiniList
             sessions={unassigned}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="Every session has an instructor assigned."
+            emptyText={t('ManagerDashboard.everyAssigned')}
             badge="assignment"
           />
         </Card>
 
         <Card>
-          <h3 className={styles.cardTitle}>Upcoming sessions</h3>
+          <h3 className={styles.cardTitle}>{t('ManagerDashboard.upcomingSessionsCardTitle')}</h3>
           <SessionMiniList
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
-            emptyText="No upcoming sessions scheduled."
+            emptyText={t('ManagerDashboard.noUpcoming')}
           />
         </Card>
       </div>
