@@ -19,10 +19,9 @@ import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import { assignmentStatusMeta, sessionStatusMeta } from '@/shared/utils/statusMeta';
 import { useSessionLookups } from '../hooks/useSessionLookups';
-import { useCancelSession, useSessions } from '../hooks/useSessions';
+import { useCancelSession, useSessionAttendees, useSessions } from '../hooks/useSessions';
 import { AssignInstructorModal } from '../components/AssignInstructorModal';
 import { EditSessionModal } from '../components/EditSessionModal';
-import { RespondActions } from '../components/RespondActions';
 import { AddAttendeeForm } from '../components/AddAttendeeForm';
 import { AttendeeImportForm } from '../components/AttendeeImportForm';
 import { AttendeeList } from '../components/AttendeeList';
@@ -41,7 +40,7 @@ export function SessionDetailPage() {
   
   
   
-  
+  const attendeesQuery = useSessionAttendees(sessionId, { enabled: canAssignInstructor });
   const myProfileQuery = useMyInstructorProfile({ enabled: isInstructor });
   const cancelSession = useCancelSession();
   const toast = useToast();
@@ -73,6 +72,7 @@ export function SessionDetailPage() {
   const training = trainingMap.get(session.trainingId);
   const client = clientMap.get(session.clientId);
   const instructor = session.instructorId ? instructorMap.get(session.instructorId) : undefined;
+  const hasAttendees = (attendeesQuery.data?.length ?? 0) > 0;
   const isMySession = isInstructor && myProfileQuery.data?.id === session.instructorId;
   const isOwner = session.createdBy === user?.id && canManageCatalog;
   const canEditSession = (isOwner || isSuperAdmin) && session.sessionStatus !== 'cancelled';
@@ -107,7 +107,14 @@ export function SessionDetailPage() {
               {assignmentStatusMeta[session.assignmentStatus].label}
             </Badge>
             {canAssignInstructor && (
-              <Button variant="outline" size="sm" leftIcon={<UserCog size={15} />} onClick={assignModal.open}>
+              <Button
+                variant="outline"
+                size="sm"
+                leftIcon={<UserCog size={15} />}
+                onClick={assignModal.open}
+                disabled={!hasAttendees}
+                title={hasAttendees ? undefined : 'Add at least one attendee before assigning an instructor'}
+              >
                 {instructor ? 'Reassign' : 'Assign'}
               </Button>
             )}
@@ -134,12 +141,6 @@ export function SessionDetailPage() {
           </>
         }
       />
-
-      {isMySession && session.assignmentStatus === 'pending' && (
-        <div className={styles.section}>
-          <RespondActions sessionId={session.id} />
-        </div>
-      )}
 
       <Card className={styles.section}>
         <h3 className={styles.cardTitle}>Details</h3>
@@ -176,10 +177,7 @@ export function SessionDetailPage() {
                   <AttendeeImportForm sessionId={session.id} />
                 </>
               )}
-              <AttendeeList
-                sessionId={session.id}
-                canMarkAttendance={canManageCatalog || isSuperAdmin || isMySession}
-              />
+              <AttendeeList sessionId={session.id} canMarkAttendance={isMySession} />
             </div>
           </Card>
         )}

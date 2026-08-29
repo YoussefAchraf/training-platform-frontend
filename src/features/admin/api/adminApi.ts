@@ -12,6 +12,9 @@ export interface UpdateUserByAdminPayload {
 export interface AuditLogFilters {
   entityType?: AuditEntityType;
   entityId?: number;
+  startDate?: string;
+  endDate?: string;
+  roleName?: Role;
 }
 
 export const adminApi = {
@@ -28,7 +31,13 @@ export const adminApi = {
   auditLog: (filters: AuditLogFilters) =>
     apiClient
       .get<AuditLogEntry[]>('/admin/audit-log', {
-        params: { entityType: filters.entityType, entityId: filters.entityId },
+        params: {
+          entityType: filters.entityType,
+          entityId: filters.entityId,
+          startDate: filters.startDate,
+          endDate: filters.endDate,
+          roleName: filters.roleName,
+        },
       })
       .then((res) => res.data),
 };

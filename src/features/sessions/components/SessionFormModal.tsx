@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { format } from 'date-fns';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -13,19 +14,47 @@ import { useToast } from '@/shared/hooks/useToast';
 import { useTrainings } from '@/features/trainings/hooks/useTrainings';
 import { useClients } from '@/features/clients/hooks/useClients';
 import { useCreateSession } from '../hooks/useSessions';
-import { computeSessionEndDate } from '../utils/sessionDuration';
+import { combineDateAndTime, computeSessionEndDay, hoursBetweenTimes } from '../utils/sessionDuration';
+import styles from './SessionFormModal.module.css';
+
+function todayLocal(): string {
+  return format(new Date(), 'yyyy-MM-dd');
+}
+
+function nowFlooredToMinute(): Date {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  return now;
+}
 
 const sessionSchema = z
   .object({
     trainingId: z.coerce.number({ error: 'Select a training' }).int().positive('Select a training'),
     clientId: z.coerce.number({ error: 'Select a client' }).int().positive('Select a client'),
     startDate: z.string().min(1, 'Start date is required'),
+    startTime: z.string().min(1, 'Start time is required'),
+    dailyEndTime: z.string().min(1, 'Daily end time is required'),
     endDate: z.string().min(1, 'End date is required'),
   })
-  .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
-    message: 'End date must be after the start date',
-    path: ['endDate'],
-  });
+  .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
+    message: 'Daily end time must be after the start time',
+    path: ['dailyEndTime'],
+  })
+  .refine(
+    (data) => {
+      const combined = combineDateAndTime(data.startDate, data.startTime);
+      return combined ? new Date(combined) >= nowFlooredToMinute() : true;
+    },
+    { message: 'Start date and time cannot be in the past', path: ['startDate'] },
+  )
+  .refine(
+    (data) => {
+      const start = combineDateAndTime(data.startDate, data.startTime);
+      const end = combineDateAndTime(data.endDate, data.dailyEndTime);
+      return start && end ? new Date(end) > new Date(start) : true;
+    },
+    { message: 'End date must be on or after the start date', path: ['endDate'] },
+  );
 
 type SessionFormInput = z.input<typeof sessionSchema>;
 type SessionFormOutput = z.output<typeof sessionSchema>;
@@ -49,26 +78,37 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
     watch,
     setValue,
     formState: { errors, dirtyFields },
-  } = useForm<SessionFormInput, unknown, SessionFormOutput>({ resolver: zodResolver(sessionSchema) });
+  } = useForm<SessionFormInput, unknown, SessionFormOutput>({
+    resolver: zodResolver(sessionSchema),
+    defaultValues: { startTime: '09:00', dailyEndTime: '17:00' },
+  });
 
   const trainingId = watch('trainingId');
   const startDate = watch('startDate');
+  const startTime = watch('startTime');
+  const dailyEndTime = watch('dailyEndTime');
   const selectedTraining = trainingsQuery.data?.find((training) => String(training.id) === String(trainingId));
 
+  
+  
+  
   
   
   
   useEffect(() => {
     if (dirtyFields.endDate) return;
     if (!startDate || !selectedTraining?.duration || !selectedTraining.durationUnit) return;
-    const computed = computeSessionEndDate(
+    const hoursPerDay = hoursBetweenTimes(startTime, dailyEndTime);
+    if (!hoursPerDay) return;
+    const endDay = computeSessionEndDay(
       startDate,
       selectedTraining.duration,
       selectedTraining.durationUnit,
+      hoursPerDay,
       !includeWeekends,
     );
-    if (computed) setValue('endDate', computed, { shouldValidate: true });
-  }, [startDate, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
+    if (endDay) setValue('endDate', format(endDay, 'yyyy-MM-dd'), { shouldValidate: true });
+  }, [startDate, startTime, dailyEndTime, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
 
   const handleClose = () => {
     reset();
@@ -78,12 +118,16 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
   };
 
   const onSubmit = handleSubmit((values) => {
+    const startIso = combineDateAndTime(values.startDate, values.startTime);
+    const endIso = combineDateAndTime(values.endDate, values.dailyEndTime);
+    if (!startIso || !endIso) return;
+
     createSession.mutate(
       {
         trainingId: values.trainingId,
         clientId: values.clientId,
-        startDate: new Date(values.startDate).toISOString(),
-        endDate: new Date(values.endDate).toISOString(),
+        startDate: new Date(startIso).toISOString(),
+        endDate: new Date(endIso).toISOString(),
       },
       {
         onSuccess: () => {
@@ -145,22 +189,23 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
         </FormField>
 
         <div className="stack">
-          <FormField label="Start date & time" error={errors.startDate?.message} required>
-            {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('startDate')} />}
+          <FormField label="Start date" error={errors.startDate?.message} required>
+            {(fieldProps) => <Input type="date" min={todayLocal()} {...fieldProps} {...register('startDate')} />}
           </FormField>
 
-          <FormField
-            label="End date & time"
-            error={errors.endDate?.message}
-            required
-            hint={
-              !dirtyFields.endDate && selectedTraining?.duration && selectedTraining.durationUnit
-                ? 'Filled in from the training duration - edit it directly to override'
-                : undefined
-            }
-          >
-            {(fieldProps) => <Input type="datetime-local" {...fieldProps} {...register('endDate')} />}
-          </FormField>
+          <div className={styles.timeRow}>
+            <FormField label="Start time" error={errors.startTime?.message} required>
+              {(fieldProps) => <Input type="time" {...fieldProps} {...register('startTime')} />}
+            </FormField>
+            <FormField
+              label="Daily end time"
+              error={errors.dailyEndTime?.message}
+              required
+              hint="Same every day, e.g. 10:20 to 18:20"
+            >
+              {(fieldProps) => <Input type="time" {...fieldProps} {...register('dailyEndTime')} />}
+            </FormField>
+          </div>
 
           {selectedTraining?.durationUnit === 'days' && (
             <Checkbox
@@ -169,6 +214,19 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
               label="Include weekends when calculating the end date"
             />
           )}
+
+          <FormField
+            label="End date"
+            error={errors.endDate?.message}
+            required
+            hint={
+              !dirtyFields.endDate && selectedTraining?.duration && selectedTraining.durationUnit
+                ? 'Predicted from the training duration and daily hours - edit it directly to override'
+                : undefined
+            }
+          >
+            {(fieldProps) => <Input type="date" min={startDate || todayLocal()} {...fieldProps} {...register('endDate')} />}
+          </FormField>
         </div>
       </form>
     </Modal>

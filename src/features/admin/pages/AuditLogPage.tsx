@@ -14,10 +14,11 @@ import { formatDateTime } from '@/shared/utils/formatDate';
 import { getAuditActionMeta } from '@/shared/utils/statusMeta';
 import { staggerContainer, listItem } from '@/shared/motion/variants';
 import { roleNameOf } from '@/shared/types/domain';
-import type { AuditEntityType, AuditLogEntry } from '@/shared/types/domain';
+import type { AuditEntityType, AuditLogEntry, Role } from '@/shared/types/domain';
 import styles from './AuditLogPage.module.css';
 
 const ENTITY_TYPES: AuditEntityType[] = ['Provider', 'Training', 'Client', 'Session', 'User'];
+const FILTERABLE_ROLES: Role[] = ['Sales', 'Manager', 'Instructor', 'SuperAdmin'];
 
 
 
@@ -186,11 +187,17 @@ export function AuditLogPage() {
   const { isSuperAdmin } = useAuth();
   const [entityType, setEntityType] = useState<string>('');
   const [entityId, setEntityId] = useState<string>('');
+  const [roleName, setRoleName] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
   const entityTypeOptions = entityTypeOptionsFor(isSuperAdmin);
 
   const auditQuery = useAuditLog({
     entityType: entityType ? (entityType as AuditEntityType) : undefined,
     entityId: entityId ? Number(entityId) : undefined,
+    roleName: roleName ? (roleName as Role) : undefined,
+    startDate: startDate ? new Date(startDate).toISOString() : undefined,
+    endDate: endDate ? new Date(endDate).toISOString() : undefined,
   });
 
   return (
@@ -212,6 +219,26 @@ export function AuditLogPage() {
           value={entityId}
           onChange={(event) => setEntityId(event.target.value)}
           aria-label="Filter by entity ID"
+        />
+        <Select value={roleName} onChange={(event) => setRoleName(event.target.value)} aria-label="Filter by actor role">
+          <option value="">All roles</option>
+          {FILTERABLE_ROLES.map((role) => (
+            <option key={role} value={role}>
+              {role}
+            </option>
+          ))}
+        </Select>
+        <Input
+          type="datetime-local"
+          value={startDate}
+          onChange={(event) => setStartDate(event.target.value)}
+          aria-label="From date and time"
+        />
+        <Input
+          type="datetime-local"
+          value={endDate}
+          onChange={(event) => setEndDate(event.target.value)}
+          aria-label="To date and time"
         />
       </div>
 

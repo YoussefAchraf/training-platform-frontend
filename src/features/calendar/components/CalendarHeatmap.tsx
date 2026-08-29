@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
@@ -30,6 +30,7 @@ import styles from './CalendarHeatmap.module.css';
 interface CalendarHeatmapProps {
   events: CalendarEvent[];
   isLoading: boolean;
+  renderActions?: (event: CalendarEvent) => ReactNode;
 }
 
 const DOW_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -78,7 +79,7 @@ function heatLevel(count: number): 0 | 1 {
   return count > 0 ? 1 : 0;
 }
 
-export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
+export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHeatmapProps) {
   const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
@@ -128,18 +129,19 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
             key={dayKey(selectedDate)}
           >
             {selectedEvents.map((event) => (
-              <motion.button
-                key={event.id}
-                type="button"
-                className={styles.eventCard}
-                variants={listItem}
-                onClick={() => navigate(paths.sessionDetail(event.sessionId))}
-              >
-                <p className={styles.eventTitle}>{event.title}</p>
-                <p className={styles.eventTime}>
-                  <Clock size={12} /> {formatEventWhen(event)}
-                </p>
-              </motion.button>
+              <motion.div key={event.id} className={styles.eventCard} variants={listItem}>
+                <button
+                  type="button"
+                  className={styles.eventCardMain}
+                  onClick={() => navigate(paths.sessionDetail(event.sessionId))}
+                >
+                  <p className={styles.eventTitle}>{event.title}</p>
+                  <p className={styles.eventTime}>
+                    <Clock size={12} /> {formatEventWhen(event)}
+                  </p>
+                </button>
+                {renderActions && <div className={styles.eventCardActions}>{renderActions(event)}</div>}
+              </motion.div>
             ))}
           </motion.div>
         )}
@@ -233,7 +235,7 @@ export function CalendarHeatmap({ events, isLoading }: CalendarHeatmapProps) {
                 <span className={styles.dateNum}>{format(day, 'd')}</span>
                 {count > 0 && <span className={styles.countPill}>{count}</span>}
 
-                {count > 0 && (
+                {count > 0 && inMonth && (
                   <span
                     className={[styles.hoverPreview, previewEdge, previewVertical].filter(Boolean).join(' ')}
                     role="tooltip"

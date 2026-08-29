@@ -1,54 +1,102 @@
+import { format } from 'date-fns';
 import { describe, expect, it } from 'vitest';
-import { computeSessionEndDate } from './sessionDuration';
+import { combineDateAndTime, computeSessionEndDay, hoursBetweenTimes } from './sessionDuration';
 
-describe('computeSessionEndDate', () => {
-  it('returns null for an unparseable start value', () => {
-    expect(computeSessionEndDate('not-a-date', 3, 'days', false)).toBeNull();
+
+
+
+function isoDate(date: Date | null): string | null {
+  return date ? format(date, 'yyyy-MM-dd') : null;
+}
+
+describe('computeSessionEndDay', () => {
+  it('returns null for an unparseable start date', () => {
+    expect(computeSessionEndDay('not-a-date', 3, 'days', 8, false)).toBeNull();
   });
 
-  describe('hours unit', () => {
-    it('adds hours within the same day', () => {
-      expect(computeSessionEndDate('2026-08-17T09:00', 8, 'hours', false)).toBe('2026-08-17T17:00');
+  it('returns null when hoursPerDay is missing or not positive', () => {
+    expect(computeSessionEndDay('2026-08-17', 3, 'days', 0, false)).toBeNull();
+    expect(computeSessionEndDay('2026-08-17', 3, 'days', -1, false)).toBeNull();
+  });
+
+  it('returns null when duration is missing or not positive', () => {
+    expect(computeSessionEndDay('2026-08-17', 0, 'days', 8, false)).toBeNull();
+  });
+
+  describe('hours unit - fixed daily window, same every day including the last', () => {
+    it('fits in a single day when total hours is within one day', () => {
+      
+      expect(isoDate(computeSessionEndDay('2026-08-17', 6, 'hours', 8, false))).toBe('2026-08-17');
     });
 
-    it('rolls over into the next day when it crosses midnight', () => {
-      expect(computeSessionEndDate('2026-08-20T23:00', 3, 'hours', false)).toBe('2026-08-21T02:00');
+    it('divides evenly across days', () => {
+      expect(isoDate(computeSessionEndDay('2026-08-17', 16, 'hours', 8, false))).toBe('2026-08-18');
     });
 
-    it('ignores skipWeekends entirely - an hours-long training is same-day', () => {
-      const withSkip = computeSessionEndDate('2026-08-21T09:00', 6, 'hours', true);
-      const withoutSkip = computeSessionEndDate('2026-08-21T09:00', 6, 'hours', false);
-      expect(withSkip).toBe(withoutSkip);
+    it('rounds up to a full extra day for a partial remainder - the last day still runs the full window', () => {
+      
+      
+      expect(isoDate(computeSessionEndDay('2026-08-17', 10, 'hours', 8, false))).toBe('2026-08-18');
+    });
+
+    it('skips weekends when spreading a multi-day hours training across days', () => {
+      
+      
+      expect(isoDate(computeSessionEndDay('2026-08-20', 24, 'hours', 8, true))).toBe('2026-08-24');
     });
   });
 
-  describe('days unit, weekends included in the count', () => {
-    it('counts the start day itself as day 1 (a 1-day training ends the same day)', () => {
-      expect(computeSessionEndDate('2026-08-20T09:00', 1, 'days', false)).toBe('2026-08-20T09:00');
+  describe('days unit', () => {
+    it('counts the start day itself as day 1', () => {
+      expect(isoDate(computeSessionEndDay('2026-08-20', 1, 'days', 8, false))).toBe('2026-08-20');
     });
 
     it('a 5-day training starting Thursday lands on Monday when weekends count', () => {
-      
-      expect(computeSessionEndDate('2026-08-20T09:00', 5, 'days', false)).toBe('2026-08-24T09:00');
+      expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, false))).toBe('2026-08-24');
+    });
+
+    it('a 5-day training starting Thursday lands on Wednesday when weekends are skipped', () => {
+      expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, true))).toBe('2026-08-26');
+    });
+
+    it('is unaffected by hoursPerDay - the day count is already given directly', () => {
+      const withEight = computeSessionEndDay('2026-08-20', 3, 'days', 8, false);
+      const withFour = computeSessionEndDay('2026-08-20', 3, 'days', 4, false);
+      expect(isoDate(withEight)).toBe(isoDate(withFour));
     });
   });
+});
 
-  describe('days unit, weekends skipped', () => {
-    it('a 5-day training starting Thursday lands on Wednesday when weekends are skipped', () => {
-      
-      expect(computeSessionEndDate('2026-08-20T09:00', 5, 'days', true)).toBe('2026-08-26T09:00');
-    });
+describe('hoursBetweenTimes', () => {
+  it('computes the span between two times', () => {
+    expect(hoursBetweenTimes('10:20', '18:20')).toBe(8);
+  });
 
-    it('gives the same result as not skipping when no weekend falls within the span', () => {
-      
-      const withSkip = computeSessionEndDate('2026-08-17T09:00', 3, 'days', true);
-      const withoutSkip = computeSessionEndDate('2026-08-17T09:00', 3, 'days', false);
-      expect(withSkip).toBe(withoutSkip);
-      expect(withSkip).toBe('2026-08-19T09:00');
-    });
+  it('handles a fractional span', () => {
+    expect(hoursBetweenTimes('09:00', '13:30')).toBe(4.5);
+  });
 
-    it('preserves the time-of-day across the computed range', () => {
-      expect(computeSessionEndDate('2026-08-20T14:30', 5, 'days', true)).toBe('2026-08-26T14:30');
-    });
+  it('returns null when the end time is before the start time', () => {
+    expect(hoursBetweenTimes('18:00', '09:00')).toBeNull();
+  });
+
+  it('returns null when the end time equals the start time', () => {
+    expect(hoursBetweenTimes('09:00', '09:00')).toBeNull();
+  });
+
+  it('returns null for an unparseable time', () => {
+    expect(hoursBetweenTimes('', '18:00')).toBeNull();
+    expect(hoursBetweenTimes('9am', '18:00')).toBeNull();
+  });
+});
+
+describe('combineDateAndTime', () => {
+  it('combines a date and a time into a datetime-local value', () => {
+    expect(combineDateAndTime('2026-08-20', '10:20')).toBe('2026-08-20T10:20');
+  });
+
+  it('returns null when either part is missing', () => {
+    expect(combineDateAndTime('', '10:20')).toBeNull();
+    expect(combineDateAndTime('2026-08-20', '')).toBeNull();
   });
 });
