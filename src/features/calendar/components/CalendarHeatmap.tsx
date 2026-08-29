@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import {
   addMonths,
@@ -21,7 +22,7 @@ import { CalendarDays, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { Skeleton } from '@/shared/components/Skeleton';
 import { EmptyState } from '@/shared/components/EmptyState';
-import { formatDate, formatTime } from '@/shared/utils/formatDate';
+import { currentLocale, formatDate, formatTime } from '@/shared/utils/formatDate';
 import { fadeIn, listItem, staggerContainer } from '@/shared/motion/variants';
 import type { CalendarEvent } from '@/shared/types/domain';
 import { paths } from '@/routes/paths';
@@ -32,8 +33,6 @@ interface CalendarHeatmapProps {
   isLoading: boolean;
   renderActions?: (event: CalendarEvent) => ReactNode;
 }
-
-const DOW_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 function dayKey(date: Date): string {
   return format(date, 'yyyy-MM-dd');
@@ -80,6 +79,8 @@ function heatLevel(count: number): 0 | 1 {
 }
 
 export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHeatmapProps) {
+  const { t } = useTranslation('calendar');
+  const dowLabels = t('CalendarHeatmap.dow', { returnObjects: true }) as string[];
   const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
@@ -110,16 +111,16 @@ export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHe
     <div className={styles.layout}>
       <div className={styles.detail}>
         <div>
-          <p className={styles.detailDate}>{format(selectedDate, 'EEEE, MMM d')}</p>
+          <p className={styles.detailDate}>{format(selectedDate, 'EEEE, MMM d', { locale: currentLocale() })}</p>
           <p className={styles.detailSub}>
             {selectedEvents.length === 0
-              ? 'No trainings scheduled'
-              : `${selectedEvents.length} training${selectedEvents.length === 1 ? '' : 's'} scheduled`}
+              ? t('CalendarHeatmap.noTrainingsScheduled')
+              : t('CalendarHeatmap.trainingsScheduled', { count: selectedEvents.length })}
           </p>
         </div>
 
         {selectedEvents.length === 0 ? (
-          <EmptyState icon={CalendarDays} title="Nothing this day" description="Pick another day on the calendar." />
+          <EmptyState icon={CalendarDays} title={t('CalendarHeatmap.nothingThisDay')} description={t('CalendarHeatmap.pickAnotherDay')} />
         ) : (
           <motion.div
             className={styles.eventList}
@@ -154,16 +155,16 @@ export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHe
               type="button"
               className={styles.navButton}
               onClick={() => setCurrentMonth((month) => subMonths(month, 1))}
-              aria-label="Previous month"
+              aria-label={t('CalendarHeatmap.previousMonth')}
             >
               <ChevronLeft size={18} />
             </button>
-            <span className={styles.monthLabel}>{format(currentMonth, 'MMMM yyyy')}</span>
+            <span className={styles.monthLabel}>{format(currentMonth, 'MMMM yyyy', { locale: currentLocale() })}</span>
             <button
               type="button"
               className={styles.navButton}
               onClick={() => setCurrentMonth((month) => addMonths(month, 1))}
-              aria-label="Next month"
+              aria-label={t('CalendarHeatmap.nextMonth')}
             >
               <ChevronRight size={18} />
             </button>
@@ -177,7 +178,7 @@ export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHe
               setSelectedDate(today);
             }}
           >
-            Today
+            {t('CalendarHeatmap.today')}
           </Button>
         </div>
 
@@ -189,7 +190,7 @@ export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHe
           animate="show"
           key={format(currentMonth, 'yyyy-MM')}
         >
-          {DOW_LABELS.map((label) => (
+          {dowLabels.map((label) => (
             <div key={label} className={styles.dow}>
               {label}
             </div>
@@ -240,7 +241,7 @@ export function CalendarHeatmap({ events, isLoading, renderActions }: CalendarHe
                     className={[styles.hoverPreview, previewEdge, previewVertical].filter(Boolean).join(' ')}
                     role="tooltip"
                   >
-                    <span className={styles.hoverPreviewDate}>{format(day, 'EEEE, MMM d')}</span>
+                    <span className={styles.hoverPreviewDate}>{format(day, 'EEEE, MMM d', { locale: currentLocale() })}</span>
                     {dayEvents.map((event) => (
                       <span key={event.id} className={styles.hoverPreviewEvent}>
                         <span className={styles.hoverPreviewTitle}>{event.title}</span>

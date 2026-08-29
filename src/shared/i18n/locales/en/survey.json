@@ -1,0 +1,32 @@
+{
+  "QRCodeModal": {
+    "title": "Survey QR code",
+    "description": "Attendees can scan this to rate the session anonymously.",
+    "qrAlt": "Survey QR code",
+    "copied": "Copied",
+    "copy": "Copy"
+  },
+  "SurveyForm": {
+    "instructorQuestion": "How would you rate the instructor?",
+    "instructorMin": "Poor",
+    "instructorMax": "Excellent",
+    "npsQuestion": "How likely are you to recommend this training?",
+    "npsMin": "Not likely",
+    "npsMax": "Very likely",
+    "commentsLabel": "Comments",
+    "commentsOptionalHint": "Optional",
+    "commentsPlaceholder": "Anything you'd like to share…",
+    "submit": "Submit feedback",
+    "errors": {
+      "instructorScoreRequired": "Rate the instructor",
+      "npsScoreRequired": "Rate the training"
+    }
+  },
+  "SurveyFormPage": {
+    "invalidLink": "This survey link is invalid or has expired.",
+    "thankYouTitle": "Thank you!",
+    "thankYouDescription": "Your feedback has been submitted.",
+    "unnamedTraining": "Training session",
+    "withInstructor": "with {{name}} · "
+  }
+}

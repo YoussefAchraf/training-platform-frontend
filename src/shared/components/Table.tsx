@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { Skeleton } from './Skeleton';
 import { EmptyState } from './EmptyState';
@@ -30,11 +31,12 @@ function TableInner<T>({
   data,
   keyExtractor,
   isLoading = false,
-  emptyTitle = 'Nothing here yet',
+  emptyTitle,
   emptyDescription,
   emptyAction,
   onRowClick,
 }: TableProps<T>) {
+  const { t } = useTranslation('common');
   if (isLoading) {
     return (
       <div className={styles.skeletonList}>
@@ -46,7 +48,7 @@ function TableInner<T>({
   }
 
   if (data.length === 0) {
-    return <EmptyState title={emptyTitle} description={emptyDescription} action={emptyAction} />;
+    return <EmptyState title={emptyTitle ?? t('Table.emptyTitle')} description={emptyDescription} action={emptyAction} />;
   }
 
   const titleColumn = columns[0];

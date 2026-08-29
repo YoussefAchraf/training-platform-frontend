@@ -1,6 +1,9 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
 import { Textarea } from '@/shared/components/Textarea';
@@ -8,13 +11,15 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { ScoreScale } from './ScoreScale';
 import styles from './SurveyForm.module.css';
 
-const surveyFormSchema = z.object({
-  instructorScore: z.number({ error: 'Rate the instructor' }).min(0).max(5),
-  npsScore: z.number({ error: 'Rate the training' }).min(0).max(10),
-  comments: z.string().trim().max(2000).optional(),
-});
+function buildSurveyFormSchema(t: TFunction<'survey'>) {
+  return z.object({
+    instructorScore: z.number({ error: t('SurveyForm.errors.instructorScoreRequired') }).min(0).max(5),
+    npsScore: z.number({ error: t('SurveyForm.errors.npsScoreRequired') }).min(0).max(10),
+    comments: z.string().trim().max(2000).optional(),
+  });
+}
 
-export type SurveyFormValues = z.infer<typeof surveyFormSchema>;
+export type SurveyFormValues = z.infer<ReturnType<typeof buildSurveyFormSchema>>;
 
 interface SurveyFormProps {
   onSubmit: (values: SurveyFormValues) => void;
@@ -23,6 +28,8 @@ interface SurveyFormProps {
 }
 
 export function SurveyForm({ onSubmit, isSubmitting, submitError }: SurveyFormProps) {
+  const { t } = useTranslation('survey');
+  const surveyFormSchema = useMemo(() => buildSurveyFormSchema(t), [t]);
   const {
     control,
     register,
@@ -37,19 +44,19 @@ export function SurveyForm({ onSubmit, isSubmitting, submitError }: SurveyFormPr
       {Boolean(submitError) && <ErrorBanner error={submitError} />}
 
       <div>
-        <p className={styles.question}>How would you rate the instructor?</p>
+        <p className={styles.question}>{t('SurveyForm.instructorQuestion')}</p>
         <Controller
           control={control}
           name="instructorScore"
           render={({ field }) => (
-            <ScoreScale max={5} value={field.value} onChange={field.onChange} minLabel="Poor" maxLabel="Excellent" />
+            <ScoreScale max={5} value={field.value} onChange={field.onChange} minLabel={t('SurveyForm.instructorMin')} maxLabel={t('SurveyForm.instructorMax')} />
           )}
         />
         {errors.instructorScore && <p className={styles.error}>{errors.instructorScore.message}</p>}
       </div>
 
       <div>
-        <p className={styles.question}>How likely are you to recommend this training?</p>
+        <p className={styles.question}>{t('SurveyForm.npsQuestion')}</p>
         <Controller
           control={control}
           name="npsScore"
@@ -58,22 +65,22 @@ export function SurveyForm({ onSubmit, isSubmitting, submitError }: SurveyFormPr
               max={10}
               value={field.value}
               onChange={field.onChange}
-              minLabel="Not likely"
-              maxLabel="Very likely"
+              minLabel={t('SurveyForm.npsMin')}
+              maxLabel={t('SurveyForm.npsMax')}
             />
           )}
         />
         {errors.npsScore && <p className={styles.error}>{errors.npsScore.message}</p>}
       </div>
 
-      <FormField label="Comments" error={errors.comments?.message} hint="Optional">
+      <FormField label={t('SurveyForm.commentsLabel')} error={errors.comments?.message} hint={t('SurveyForm.commentsOptionalHint')}>
         {(fieldProps) => (
-          <Textarea placeholder="Anything you'd like to share…" {...fieldProps} {...register('comments')} />
+          <Textarea placeholder={t('SurveyForm.commentsPlaceholder')} {...fieldProps} {...register('comments')} />
         )}
       </FormField>
 
       <Button type="submit" fullWidth isLoading={isSubmitting}>
-        Submit feedback
+        {t('SurveyForm.submit')}
       </Button>
     </form>
   );

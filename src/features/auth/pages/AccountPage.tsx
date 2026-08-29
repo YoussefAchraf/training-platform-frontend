@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { ArrowRight, Bell, BellOff } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Card } from '@/shared/components/Card';
@@ -18,18 +21,22 @@ import { useUpdateOwnProfile } from '../hooks/useUpdateOwnProfile';
 import { usePushSubscription } from '@/features/push/hooks/usePushSubscription';
 import styles from './AccountPage.module.css';
 
-const profileSchema = z.object({
-  firstname: z.string().trim().min(1, 'First name is required').max(100),
-  lastname: z.string().trim().min(1, 'Last name is required').max(100),
-});
+function buildProfileSchema(t: TFunction<'auth'>) {
+  return z.object({
+    firstname: z.string().trim().min(1, t('AccountPage.errors.firstnameRequired')).max(100),
+    lastname: z.string().trim().min(1, t('AccountPage.errors.lastnameRequired')).max(100),
+  });
+}
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
+type ProfileFormValues = z.infer<ReturnType<typeof buildProfileSchema>>;
 
 export function AccountPage() {
+  const { t } = useTranslation('auth');
   const { user, isInstructor } = useAuth();
   const updateProfile = useUpdateOwnProfile();
   const push = usePushSubscription();
   const toast = useToast();
+  const profileSchema = useMemo(() => buildProfileSchema(t), [t]);
 
   const {
     register,
@@ -44,69 +51,69 @@ export function AccountPage() {
 
   const onSubmit = handleSubmit((values) => {
     updateProfile.mutate(values, {
-      onSuccess: () => toast.success('Your profile was updated.'),
+      onSuccess: () => toast.success(t('AccountPage.profileUpdated')),
     });
   });
 
   const handleTogglePush = async () => {
     if (push.status === 'subscribed') {
       const ok = await push.unsubscribe();
-      if (ok) toast.info('Notifications disabled on this device.');
+      if (ok) toast.info(t('AccountPage.pushDisabledOnDevice'));
     } else {
       const ok = await push.subscribe();
-      if (ok) toast.success('Notifications enabled on this device.');
+      if (ok) toast.success(t('AccountPage.pushEnabledOnDevice'));
     }
   };
 
   return (
     <div>
-      <PageHeader title="Account settings" description="Your personal details." />
+      <PageHeader title={t('AccountPage.title')} description={t('AccountPage.description')} />
 
       <div className={styles.grid}>
         <Card>
-          <h3 className={styles.cardTitle}>Profile</h3>
+          <h3 className={styles.cardTitle}>{t('AccountPage.profileCardTitle')}</h3>
           <form onSubmit={onSubmit} className="stack" noValidate>
             {updateProfile.isError && <ErrorBanner error={updateProfile.error} />}
 
             <div className={styles.row}>
-              <FormField label="First name" error={errors.firstname?.message} required>
+              <FormField label={t('AccountPage.firstnameLabel')} error={errors.firstname?.message} required>
                 {(fieldProps) => <Input {...fieldProps} {...register('firstname')} />}
               </FormField>
-              <FormField label="Last name" error={errors.lastname?.message} required>
+              <FormField label={t('AccountPage.lastnameLabel')} error={errors.lastname?.message} required>
                 {(fieldProps) => <Input {...fieldProps} {...register('lastname')} />}
               </FormField>
             </div>
 
             <Button type="submit" isLoading={updateProfile.isPending}>
-              Save changes
+              {t('AccountPage.saveChanges')}
             </Button>
           </form>
         </Card>
 
         <Card>
-          <h3 className={styles.cardTitle}>Account</h3>
+          <h3 className={styles.cardTitle}>{t('AccountPage.accountCardTitle')}</h3>
           <dl className={styles.detailList}>
             <div>
-              <dt>Email</dt>
+              <dt>{t('AccountPage.emailLabel')}</dt>
               <dd>{user.email}</dd>
             </div>
             <div>
-              <dt>Role</dt>
+              <dt>{t('AccountPage.roleLabel')}</dt>
               <dd>
-                <Badge tone={roleMeta[user.role].tone}>{roleMeta[user.role].label}</Badge>
+                <Badge tone={roleMeta[user.role].tone}>{t(roleMeta[user.role].labelKey)}</Badge>
               </dd>
             </div>
             <div>
-              <dt>Status</dt>
+              <dt>{t('AccountPage.statusLabel')}</dt>
               <dd>
-                <Badge tone={userStatusMeta[user.status].tone}>{userStatusMeta[user.status].label}</Badge>
+                <Badge tone={userStatusMeta[user.status].tone}>{t(userStatusMeta[user.status].labelKey)}</Badge>
               </dd>
             </div>
           </dl>
 
           {isInstructor && (
             <Link to={paths.myInstructorProfile} className={styles.instructorLink}>
-              Manage your bio and skills
+              {t('AccountPage.manageBioAndSkills')}
               <ArrowRight size={15} />
             </Link>
           )}
@@ -114,17 +121,17 @@ export function AccountPage() {
 
         {push.status !== 'unsupported' && (
           <Card>
-            <h3 className={styles.cardTitle}>Notifications</h3>
+            <h3 className={styles.cardTitle}>{t('AccountPage.notificationsCardTitle')}</h3>
             {push.error && <ErrorBanner error={new Error(push.error)} />}
             <div className={styles.notificationRow}>
               <div className={styles.notificationText}>
                 {push.status === 'subscribed' ? <Bell size={18} /> : <BellOff size={18} />}
                 <div>
-                  <p className={styles.notificationTitle}>Push notifications</p>
+                  <p className={styles.notificationTitle}>{t('AccountPage.pushNotifications')}</p>
                   <p className={styles.notificationSubtitle}>
                     {push.status === 'subscribed'
-                      ? 'Enabled on this device.'
-                      : 'Get notified about assignments and approvals on this device.'}
+                      ? t('AccountPage.pushEnabled')
+                      : t('AccountPage.pushDisabledHint')}
                   </p>
                 </div>
               </div>
@@ -135,7 +142,7 @@ export function AccountPage() {
                 isLoading={push.isBusy || push.status === 'checking'}
                 onClick={handleTogglePush}
               >
-                {push.status === 'subscribed' ? 'Disable' : 'Enable'}
+                {push.status === 'subscribed' ? t('AccountPage.disable') : t('AccountPage.enable')}
               </Button>
             </div>
           </Card>

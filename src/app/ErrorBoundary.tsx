@@ -2,6 +2,7 @@ import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { AlertOctagon } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
+import i18n from '@/shared/i18n';
 import styles from './ErrorBoundary.module.css';
 
 interface ErrorBoundaryProps {
@@ -28,9 +29,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <div className={styles.wrapper}>
           <AlertOctagon size={40} className={styles.icon} />
-          <h1>Something went wrong</h1>
-          <p>Try reloading the page. If the problem continues, contact your administrator.</p>
-          <Button onClick={() => window.location.reload()}>Reload</Button>
+          <h1>{i18n.t('common:ErrorBoundary.title')}</h1>
+          <p>{i18n.t('common:ErrorBoundary.description')}</p>
+          <Button onClick={() => window.location.reload()}>{i18n.t('common:ErrorBoundary.reload')}</Button>
         </div>
       );
     }

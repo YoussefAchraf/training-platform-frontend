@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -10,13 +13,15 @@ import { useToast } from '@/shared/hooks/useToast';
 import type { Client } from '@/shared/types/domain';
 import { useCreateClient, useUpdateClient } from '../hooks/useClients';
 
-const clientSchema = z.object({
-  companyName: z.string().trim().min(1, 'Company name is required').max(150),
-  email: z.union([z.email('Enter a valid email address'), z.literal('')]).optional(),
-  phone: z.string().trim().max(30).optional(),
-});
+function buildClientSchema(t: TFunction<'clients'>) {
+  return z.object({
+    companyName: z.string().trim().min(1, t('ClientFormModal.errors.companyNameRequired')).max(150),
+    email: z.union([z.email(t('ClientFormModal.errors.emailInvalid')), z.literal('')]).optional(),
+    phone: z.string().trim().max(30).optional(),
+  });
+}
 
-type ClientFormValues = z.infer<typeof clientSchema>;
+type ClientFormValues = z.infer<ReturnType<typeof buildClientSchema>>;
 
 interface ClientFormModalProps {
   isOpen: boolean;
@@ -27,10 +32,12 @@ interface ClientFormModalProps {
 const FORM_ID = 'client-form';
 
 export function ClientFormModal({ isOpen, onClose, editing = null }: ClientFormModalProps) {
+  const { t } = useTranslation('clients');
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
   const toast = useToast();
   const mutation = editing ? updateClient : createClient;
+  const clientSchema = useMemo(() => buildClientSchema(t), [t]);
 
   const {
     register,
@@ -52,7 +59,11 @@ export function ClientFormModal({ isOpen, onClose, editing = null }: ClientFormM
 
   const onSubmit = handleSubmit((values) => {
     const onSuccess = () => {
-      toast.success(editing ? `${values.companyName} was updated.` : `${values.companyName} was added to clients.`);
+      toast.success(
+        editing
+          ? t('ClientFormModal.clientUpdated', { name: values.companyName })
+          : t('ClientFormModal.clientAdded', { name: values.companyName }),
+      );
       handleClose();
     };
 
@@ -67,15 +78,15 @@ export function ClientFormModal({ isOpen, onClose, editing = null }: ClientFormM
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={editing ? 'Edit client' : 'Add client'}
-      description="The company you're delivering a training session for."
+      title={editing ? t('ClientFormModal.editTitle') : t('ClientFormModal.addTitle')}
+      description={t('ClientFormModal.description')}
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('ClientFormModal.cancel')}
           </Button>
           <Button type="submit" form={FORM_ID} isLoading={mutation.isPending}>
-            {editing ? 'Save changes' : 'Add client'}
+            {editing ? t('ClientFormModal.saveChanges') : t('ClientFormModal.addClient')}
           </Button>
         </>
       }
@@ -83,18 +94,18 @@ export function ClientFormModal({ isOpen, onClose, editing = null }: ClientFormM
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {mutation.isError && <ErrorBanner error={mutation.error} />}
 
-        <FormField label="Company name" error={errors.companyName?.message} required>
-          {(fieldProps) => <Input placeholder="Acme Corp" {...fieldProps} {...register('companyName')} />}
+        <FormField label={t('ClientFormModal.companyNameLabel')} error={errors.companyName?.message} required>
+          {(fieldProps) => <Input placeholder={t('ClientFormModal.companyNamePlaceholder')} {...fieldProps} {...register('companyName')} />}
         </FormField>
 
-        <FormField label="Email" error={errors.email?.message} hint="Optional">
+        <FormField label={t('ClientFormModal.emailLabel')} error={errors.email?.message} hint={t('ClientFormModal.emailOptionalHint')}>
           {(fieldProps) => (
-            <Input type="email" placeholder="contact@acme.com" {...fieldProps} {...register('email')} />
+            <Input type="email" placeholder={t('ClientFormModal.emailPlaceholder')} {...fieldProps} {...register('email')} />
           )}
         </FormField>
 
-        <FormField label="Phone" error={errors.phone?.message} hint="Optional">
-          {(fieldProps) => <Input type="tel" placeholder="+1 555 000 1234" {...fieldProps} {...register('phone')} />}
+        <FormField label={t('ClientFormModal.phoneLabel')} error={errors.phone?.message} hint={t('ClientFormModal.phoneOptionalHint')}>
+          {(fieldProps) => <Input type="tel" placeholder={t('ClientFormModal.phonePlaceholder')} {...fieldProps} {...register('phone')} />}
         </FormField>
       </form>
     </Modal>

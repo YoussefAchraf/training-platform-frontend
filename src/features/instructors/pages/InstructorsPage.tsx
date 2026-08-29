@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Table } from '@/shared/components/Table';
 import type { TableColumn } from '@/shared/components/Table';
@@ -14,6 +15,7 @@ import styles from './InstructorsPage.module.css';
 const getInstructorId = (instructor: Instructor) => instructor.id;
 
 export function InstructorsPage() {
+  const { t } = useTranslation('instructors');
   const { isManager, isSuperAdmin } = useAuth();
   const canEdit = isManager || isSuperAdmin;
   const instructorsQuery = useInstructors();
@@ -26,17 +28,17 @@ export function InstructorsPage() {
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('InstructorsPage.columnName'),
         render: (instructor) => (
           <span>
             {instructor.firstname} {instructor.lastname}
           </span>
         ),
       },
-      { key: 'email', header: 'Email', render: (instructor) => instructor.email },
+      { key: 'email', header: t('InstructorsPage.columnEmail'), render: (instructor) => instructor.email },
       {
         key: 'skills',
-        header: 'Trainings',
+        header: t('InstructorsPage.columnTrainings'),
         render: (instructor) =>
           instructor.skills.length > 0 ? (
             <span className={styles.skillsList}>
@@ -58,19 +60,19 @@ export function InstructorsPage() {
               align: 'right' as const,
               render: (instructor: Instructor) => (
                 <Button size="sm" variant="outline" onClick={() => handleEdit(instructor)}>
-                  Edit
+                  {t('InstructorsPage.edit')}
                 </Button>
               ),
             },
           ]
         : []),
     ],
-    [canEdit, handleEdit],
+    [canEdit, handleEdit, t],
   );
 
   return (
     <div>
-      <PageHeader title="Instructors" description="Instructor profiles, bios, and the trainings they can deliver." />
+      <PageHeader title={t('InstructorsPage.title')} description={t('InstructorsPage.description')} />
 
       {instructorsQuery.isError ? (
         <ErrorBanner error={instructorsQuery.error} onRetry={() => instructorsQuery.refetch()} />
@@ -80,8 +82,8 @@ export function InstructorsPage() {
           data={instructorsQuery.data ?? []}
           keyExtractor={getInstructorId}
           isLoading={instructorsQuery.isPending}
-          emptyTitle="No instructors yet"
-          emptyDescription="Instructors appear here once they sign up and are approved."
+          emptyTitle={t('InstructorsPage.emptyTitle')}
+          emptyDescription={t('InstructorsPage.emptyDescription')}
         />
       )}
 

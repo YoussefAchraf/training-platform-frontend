@@ -1,0 +1,45 @@
+{
+  "CalendarPage": {
+    "title": "Calendrier",
+    "descriptionManage": "Toutes les sessions de formation planifiées dans l'entreprise.",
+    "descriptionOther": "Sessions qui vous sont assignées.",
+    "heatmap": "Carte de chaleur",
+    "agenda": "Agenda",
+    "editEvent": "Modifier {{title}}",
+    "deleteEvent": "Supprimer {{title}}",
+    "eventDeleted": "Événement du calendrier supprimé.",
+    "deleteDialogTitle": "Supprimer cet événement du calendrier ?",
+    "deleteDialogDescription": "« {{title}} » sera retiré du calendrier.",
+    "delete": "Supprimer"
+  },
+  "EditCalendarEventModal": {
+    "title": "Modifier l'événement",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "titleLabel": "Titre",
+    "startDateTimeLabel": "Date et heure de début",
+    "endDateTimeLabel": "Date et heure de fin",
+    "eventUpdated": "Événement du calendrier mis à jour.",
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "startDateRequired": "La date de début est requise",
+      "endDateRequired": "La date de fin est requise",
+      "endAfterStart": "La date de fin doit être après la date de début"
+    }
+  },
+  "CalendarAgenda": {
+    "nothingScheduled": "Rien de planifié",
+    "nothingScheduledDescription": "Les événements du calendrier apparaissent ici une fois les sessions réservées."
+  },
+  "CalendarHeatmap": {
+    "dow": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+    "noTrainingsScheduled": "Aucune formation planifiée",
+    "trainingsScheduled_one": "{{count}} formation planifiée",
+    "trainingsScheduled_other": "{{count}} formations planifiées",
+    "nothingThisDay": "Rien ce jour-là",
+    "pickAnotherDay": "Choisissez un autre jour sur le calendrier.",
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "today": "Aujourd'hui"
+  }
+}

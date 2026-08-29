@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -16,6 +17,7 @@ interface AssignInstructorModalProps {
 }
 
 export function AssignInstructorModal({ isOpen, onClose, session, instructors }: AssignInstructorModalProps) {
+  const { t } = useTranslation('sessions');
   const [instructorId, setInstructorId] = useState('');
   const assignInstructor = useAssignInstructor();
   const toast = useToast();
@@ -40,7 +42,7 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
       { id: session.id, instructorId: Number(instructorId) },
       {
         onSuccess: () => {
-          toast.success('Instructor assigned.');
+          toast.success(t('AssignInstructorModal.instructorAssigned'));
           handleClose();
         },
       },
@@ -51,15 +53,15 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Assign instructor"
-      description="The instructor will be notified by email and push notification."
+      title={t('AssignInstructorModal.title')}
+      description={t('AssignInstructorModal.description')}
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t('AssignInstructorModal.cancel')}
           </Button>
           <Button onClick={handleSubmit} isLoading={assignInstructor.isPending} disabled={!instructorId}>
-            Assign
+            {t('AssignInstructorModal.assign')}
           </Button>
         </>
       }
@@ -68,11 +70,11 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
         {assignInstructor.isError && <ErrorBanner error={assignInstructor.error} />}
 
         <FormField
-          label="Instructor"
+          label={t('AssignInstructorModal.instructorLabel')}
           required
           hint={
             qualified.length === 0
-              ? "No instructors are currently marked as qualified for this training. An instructor can add it under their own profile, or a Manager can add it via Instructors > Edit."
+              ? t('AssignInstructorModal.noQualifiedHint')
               : undefined
           }
         >
@@ -84,7 +86,7 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
               disabled={qualified.length === 0}
             >
               <option value="" disabled>
-                {qualified.length > 0 ? 'Select an instructor' : 'No qualified instructors available'}
+                {qualified.length > 0 ? t('AssignInstructorModal.selectInstructor') : t('AssignInstructorModal.noQualifiedAvailable')}
               </option>
               {qualified.map((instructor) => (
                 <option key={instructor.id} value={instructor.id}>

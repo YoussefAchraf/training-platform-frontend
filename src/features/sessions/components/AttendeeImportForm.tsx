@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2, Paperclip, Upload, X } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { Badge } from '@/shared/components/Badge';
@@ -16,6 +17,7 @@ interface AttendeeImportFormProps {
 }
 
 export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
+  const { t } = useTranslation('sessions');
   const importAttendees = useImportAttendees();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -28,7 +30,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
   } = useForm<ImportFormValues>();
 
   const { ref: registerRef, ...fileField } = register('file', {
-    required: 'Choose a .xlsx or .csv file',
+    required: t('AttendeeImportForm.fileRequired'),
   });
 
   const selectedFile = watch('file')?.[0] ?? null;
@@ -50,7 +52,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
   return (
     <div className={styles.section}>
       <div className={styles.divider}>
-        <span>or import from a file</span>
+        <span>{t('AttendeeImportForm.orImportFromFile')}</span>
       </div>
 
       <form onSubmit={onSubmit} className={styles.form} noValidate>
@@ -60,7 +62,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
           type="file"
           accept=".csv,.xlsx"
           className={styles.hiddenInput}
-          aria-label="Attendee spreadsheet file"
+          aria-label={t('AttendeeImportForm.fileFieldLabel')}
           {...fileField}
           ref={(el) => {
             registerRef(el);
@@ -76,7 +78,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
             leftIcon={<Paperclip size={15} />}
             onClick={() => inputRef.current?.click()}
           >
-            {selectedFile ? 'Change file' : 'Choose file'}
+            {selectedFile ? t('AttendeeImportForm.changeFile') : t('AttendeeImportForm.chooseFile')}
           </Button>
 
           {selectedFile ? (
@@ -85,14 +87,14 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
               <button
                 type="button"
                 onClick={clearFile}
-                aria-label="Remove selected file"
+                aria-label={t('AttendeeImportForm.removeFile')}
                 className={styles.chipClear}
               >
                 <X size={12} />
               </button>
             </Badge>
           ) : (
-            <span className={styles.pickerHint}>Header row needs a Name column (Email optional)</span>
+            <span className={styles.pickerHint}>{t('AttendeeImportForm.pickerHint')}</span>
           )}
         </div>
 
@@ -104,7 +106,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
           isLoading={importAttendees.isPending}
           disabled={!selectedFile}
         >
-          Import attendees
+          {t('AttendeeImportForm.importAttendees')}
         </Button>
       </form>
 
@@ -112,14 +114,14 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
         <div className={[styles.summary, importAttendees.data.skippedCount > 0 ? styles.summaryWarning : styles.summarySuccess].join(' ')}>
           <p className={styles.summaryHeadline}>
             <CheckCircle2 size={16} />
-            {importAttendees.data.importedCount} imported
-            {importAttendees.data.skippedCount > 0 ? `, ${importAttendees.data.skippedCount} skipped` : ''}
+            {t('AttendeeImportForm.importedCount', { count: importAttendees.data.importedCount })}
+            {importAttendees.data.skippedCount > 0 ? t('AttendeeImportForm.skippedCount', { count: importAttendees.data.skippedCount }) : ''}
           </p>
           {importAttendees.data.skipped.length > 0 && (
             <ul className={styles.skippedList}>
               {importAttendees.data.skipped.map((row) => (
                 <li key={row.row}>
-                  Row {row.row}{row.name ? ` (${row.name})` : ''}: {row.reason}
+                  {t('AttendeeImportForm.rowSkipped', { row: row.row, name: row.name ? ` (${row.name})` : '', reason: row.reason })}
                 </li>
               ))}
             </ul>

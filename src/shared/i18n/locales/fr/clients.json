@@ -1,0 +1,41 @@
+{
+  "ClientFormModal": {
+    "editTitle": "Modifier le client",
+    "addTitle": "Ajouter un client",
+    "description": "L'entreprise pour laquelle vous dispensez une session de formation.",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "addClient": "Ajouter le client",
+    "companyNameLabel": "Nom de l'entreprise",
+    "companyNamePlaceholder": "Acme Corp",
+    "emailLabel": "E-mail",
+    "emailOptionalHint": "Optionnel",
+    "emailPlaceholder": "contact@acme.com",
+    "phoneLabel": "Téléphone",
+    "phoneOptionalHint": "Optionnel",
+    "phonePlaceholder": "+33 1 23 45 67 89",
+    "clientUpdated": "{{name}} a été mis à jour.",
+    "clientAdded": "{{name}} a été ajouté aux clients.",
+    "errors": {
+      "companyNameRequired": "Le nom de l'entreprise est requis",
+      "emailInvalid": "Saisissez une adresse e-mail valide"
+    }
+  },
+  "ClientsPage": {
+    "title": "Clients",
+    "description": "Entreprises pour lesquelles vous dispensez des sessions de formation.",
+    "addClient": "Ajouter un client",
+    "columnCompany": "Entreprise",
+    "columnEmail": "E-mail",
+    "columnPhone": "Téléphone",
+    "createdBy": "Créé par {{name}}",
+    "anotherUser": "un autre utilisateur",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "clientDeleted": "{{name}} a été supprimé.",
+    "emptyTitle": "Aucun client pour l'instant",
+    "emptyDescription": "Ajoutez un client avant de réserver une session de formation.",
+    "deleteDialogTitle": "Supprimer ce client ?",
+    "deleteDialogDescription": "« {{name}} » sera supprimé."
+  }
+}

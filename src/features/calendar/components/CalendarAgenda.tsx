@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { CalendarDays } from 'lucide-react';
 import { Skeleton } from '@/shared/components/Skeleton';
@@ -30,6 +31,7 @@ function groupByDay(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
 }
 
 function CalendarAgendaInner({ events, isLoading, renderActions }: CalendarAgendaProps) {
+  const { t } = useTranslation('calendar');
   if (isLoading) {
     return (
       <div className={styles.skeletonList}>
@@ -44,8 +46,8 @@ function CalendarAgendaInner({ events, isLoading, renderActions }: CalendarAgend
     return (
       <EmptyState
         icon={CalendarDays}
-        title="Nothing scheduled"
-        description="Calendar events appear here once sessions are booked."
+        title={t('CalendarAgenda.nothingScheduled')}
+        description={t('CalendarAgenda.nothingScheduledDescription')}
       />
     );
   }

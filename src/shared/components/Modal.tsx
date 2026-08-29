@@ -1,6 +1,7 @@
 import { useEffect, useId } from 'react';
 import type { ReactNode, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { X } from 'lucide-react';
@@ -44,6 +45,7 @@ const reducedMotionVariants: Variants = {
 };
 
 export function Modal({ isOpen, onClose, title, description, children, footer, size = 'md' }: ModalProps) {
+  const { t } = useTranslation('common');
   const titleId = useId();
   const isDesktop = useIsDesktop();
   const shouldReduceMotion = useReducedMotion();
@@ -103,7 +105,7 @@ export function Modal({ isOpen, onClose, title, description, children, footer, s
                 </h2>
                 {description && <p className={styles.description}>{description}</p>}
               </div>
-              <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close dialog">
+              <button type="button" className={styles.closeButton} onClick={onClose} aria-label={t('Modal.closeDialog')}>
                 <X size={20} />
               </button>
             </div>

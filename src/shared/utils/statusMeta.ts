@@ -3,56 +3,55 @@ import type { AssignmentStatus, AttendanceStatus, AuditAction, Role, SessionStat
 export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
 
 interface StatusMeta {
-  label: string;
+  labelKey: string;
   tone: Tone;
-  
+
   pulse?: boolean;
 }
 
 export const userStatusMeta: Record<UserStatus, StatusMeta> = {
-  pending: { label: 'Pending', tone: 'warning' },
-  approved: { label: 'Approved', tone: 'success' },
-  rejected: { label: 'Rejected', tone: 'danger' },
-  deactivated: { label: 'Deactivated', tone: 'neutral' },
+  pending: { labelKey: 'common:Status.userPending', tone: 'warning' },
+  approved: { labelKey: 'common:Status.userApproved', tone: 'success' },
+  rejected: { labelKey: 'common:Status.userRejected', tone: 'danger' },
+  deactivated: { labelKey: 'common:Status.userDeactivated', tone: 'neutral' },
 };
 
 export const sessionStatusMeta: Record<SessionStatus, StatusMeta> = {
-  scheduled: { label: 'Scheduled', tone: 'info' },
-  ongoing: { label: 'Ongoing', tone: 'danger', pulse: true },
-  completed: { label: 'Completed', tone: 'success' },
-  cancelled: { label: 'Cancelled', tone: 'neutral' },
+  scheduled: { labelKey: 'common:Status.sessionScheduled', tone: 'info' },
+  ongoing: { labelKey: 'common:Status.sessionOngoing', tone: 'danger', pulse: true },
+  completed: { labelKey: 'common:Status.sessionCompleted', tone: 'success' },
+  cancelled: { labelKey: 'common:Status.sessionCancelled', tone: 'neutral' },
 };
 
 export const assignmentStatusMeta: Record<AssignmentStatus, StatusMeta> = {
-  unassigned: { label: 'Unassigned', tone: 'neutral' },
-  pending: { label: 'Pending response', tone: 'warning', pulse: true },
-  accepted: { label: 'Accepted', tone: 'success' },
-  refused: { label: 'Refused', tone: 'danger' },
+  unassigned: { labelKey: 'common:Status.assignmentUnassigned', tone: 'neutral' },
+  pending: { labelKey: 'common:Status.assignmentPending', tone: 'warning', pulse: true },
+  accepted: { labelKey: 'common:Status.assignmentAccepted', tone: 'success' },
+  refused: { labelKey: 'common:Status.assignmentRefused', tone: 'danger' },
 };
 
 export const attendanceStatusMeta: Record<AttendanceStatus, StatusMeta> = {
-  pending: { label: 'Pending', tone: 'warning' },
-  present: { label: 'Present', tone: 'success' },
-  absent: { label: 'Absent', tone: 'danger' },
+  pending: { labelKey: 'common:Status.attendancePending', tone: 'warning' },
+  present: { labelKey: 'common:Status.attendancePresent', tone: 'success' },
+  absent: { labelKey: 'common:Status.attendanceAbsent', tone: 'danger' },
 };
 
 export const roleMeta: Record<Role, StatusMeta> = {
-  SuperAdmin: { label: 'SuperAdmin', tone: 'danger' },
-  Manager: { label: 'Manager', tone: 'info' },
-  Sales: { label: 'Sales', tone: 'neutral' },
-  Instructor: { label: 'Instructor', tone: 'neutral' },
+  SuperAdmin: { labelKey: 'common:Status.roleSuperAdmin', tone: 'danger' },
+  Manager: { labelKey: 'common:Status.roleManager', tone: 'info' },
+  Sales: { labelKey: 'common:Status.roleSales', tone: 'neutral' },
+  Instructor: { labelKey: 'common:Status.roleInstructor', tone: 'neutral' },
 };
 
 export const auditActionMeta: Record<AuditAction, StatusMeta> = {
-  create: { label: 'Created', tone: 'success' },
-  update: { label: 'Updated', tone: 'info' },
-  delete: { label: 'Deleted', tone: 'danger' },
-  cancel: { label: 'Cancelled', tone: 'danger' },
-  approve: { label: 'Approved', tone: 'success' },
-  reject: { label: 'Rejected', tone: 'danger' },
+  create: { labelKey: 'common:Status.auditCreate', tone: 'success' },
+  update: { labelKey: 'common:Status.auditUpdate', tone: 'info' },
+  delete: { labelKey: 'common:Status.auditDelete', tone: 'danger' },
+  cancel: { labelKey: 'common:Status.auditCancel', tone: 'danger' },
+  approve: { labelKey: 'common:Status.auditApprove', tone: 'success' },
+  reject: { labelKey: 'common:Status.auditReject', tone: 'danger' },
 };
 
-
 export function getAuditActionMeta(action: string): StatusMeta {
-  return (auditActionMeta as Record<string, StatusMeta>)[action] ?? { label: action, tone: 'neutral' };
+  return (auditActionMeta as Record<string, StatusMeta>)[action] ?? { labelKey: action, tone: 'neutral' };
 }

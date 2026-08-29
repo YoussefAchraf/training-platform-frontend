@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { AlertCircle } from 'lucide-react';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
@@ -12,16 +15,20 @@ import { useLogin } from '../hooks/useLogin';
 import { establishSession } from '../establishSession';
 import styles from './AuthForm.module.css';
 
-const loginSchema = z.object({
-  email: z.email('Enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-});
+function buildLoginSchema(t: TFunction<'auth'>) {
+  return z.object({
+    email: z.email(t('LoginForm.errors.emailInvalid')),
+    password: z.string().min(1, t('LoginForm.errors.passwordRequired')),
+  });
+}
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<ReturnType<typeof buildLoginSchema>>;
 
 export function LoginForm() {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const login = useLogin();
+  const loginSchema = useMemo(() => buildLoginSchema(t), [t]);
 
   const {
     register,
@@ -39,7 +46,7 @@ export function LoginForm() {
   });
 
   const errorMessage = login.isError
-    ? getApiErrorMessage(login.error, 'Unable to sign in. Please try again.')
+    ? getApiErrorMessage(login.error, t('LoginForm.genericError'))
     : null;
 
   return (
@@ -51,19 +58,19 @@ export function LoginForm() {
         </div>
       )}
 
-      <FormField label="Email" error={errors.email?.message} required>
+      <FormField label={t('LoginForm.emailLabel')} error={errors.email?.message} required>
         {(fieldProps) => (
           <Input
             type="email"
             autoComplete="email"
-            placeholder="you@company.com"
+            placeholder={t('LoginForm.emailPlaceholder')}
             {...fieldProps}
             {...register('email')}
           />
         )}
       </FormField>
 
-      <FormField label="Password" error={errors.password?.message} required>
+      <FormField label={t('LoginForm.passwordLabel')} error={errors.password?.message} required>
         {(fieldProps) => (
           <Input
             type="password"
@@ -76,11 +83,11 @@ export function LoginForm() {
       </FormField>
 
       <Button type="submit" fullWidth isLoading={login.isPending}>
-        Sign in
+        {t('LoginForm.signIn')}
       </Button>
 
       <p className={styles.switchText}>
-        Don&apos;t have an account? <Link to={paths.signup}>Create one</Link>
+        {t('LoginForm.noAccount')} <Link to={paths.signup}>{t('LoginForm.createOne')}</Link>
       </p>
     </form>
   );

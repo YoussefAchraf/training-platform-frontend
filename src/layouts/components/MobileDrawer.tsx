@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { GraduationCap, X } from 'lucide-react';
@@ -25,6 +26,7 @@ const drawerVariants: Variants = {
 };
 
 export function MobileDrawer() {
+  const { t } = useTranslation('common');
   const { user } = useAuth();
   const isOpen = useUiStore((state) => state.isDrawerOpen);
   const closeDrawer = useUiStore((state) => state.closeDrawer);
@@ -65,14 +67,14 @@ export function MobileDrawer() {
                 <span className={styles.brandMark}>
                   <GraduationCap size={18} />
                 </span>
-                <span>Training Platform</span>
+                <span>{t('Nav.brand')}</span>
               </div>
-              <button type="button" className={styles.closeButton} onClick={closeDrawer} aria-label="Close menu">
+              <button type="button" className={styles.closeButton} onClick={closeDrawer} aria-label={t('MobileDrawer.closeMenu')}>
                 <X size={20} />
               </button>
             </div>
 
-            <nav className={styles.nav} aria-label="Main navigation">
+            <nav className={styles.nav} aria-label={t('Nav.mainNavigation')}>
               {items.map((item) => (
                 <NavLink
                   key={item.to}
@@ -92,7 +94,7 @@ export function MobileDrawer() {
                       )}
                       <span className={styles.navContent}>
                         <item.icon size={19} />
-                        <span>{item.label}</span>
+                        <span>{t(item.labelKey)}</span>
                       </span>
                     </>
                   )}

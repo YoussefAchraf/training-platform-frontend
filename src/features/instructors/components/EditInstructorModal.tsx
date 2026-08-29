@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { useToast } from '@/shared/hooks/useToast';
@@ -13,6 +14,7 @@ interface EditInstructorModalProps {
 const FORM_ID = 'edit-instructor-form';
 
 export function EditInstructorModal({ instructor, onClose }: EditInstructorModalProps) {
+  const { t } = useTranslation('instructors');
   const updateInstructor = useUpdateInstructor();
   const toast = useToast();
 
@@ -22,16 +24,16 @@ export function EditInstructorModal({ instructor, onClose }: EditInstructorModal
     <Modal
       isOpen={Boolean(instructor)}
       onClose={onClose}
-      title={`Edit ${instructor.firstname} ${instructor.lastname}`}
-      description="Update this instructor's bio and qualified trainings."
+      title={t('EditInstructorModal.title', { name: `${instructor.firstname} ${instructor.lastname}` })}
+      description={t('EditInstructorModal.description')}
       size="lg"
       footer={
         <>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t('EditInstructorModal.cancel')}
           </Button>
           <Button type="submit" form={FORM_ID} isLoading={updateInstructor.isPending}>
-            Save changes
+            {t('EditInstructorModal.saveChanges')}
           </Button>
         </>
       }
@@ -48,7 +50,7 @@ export function EditInstructorModal({ instructor, onClose }: EditInstructorModal
             { id: instructor.id, payload },
             {
               onSuccess: () => {
-                toast.success('Instructor profile updated.');
+                toast.success(t('EditInstructorModal.profileUpdated'));
                 onClose();
               },
             },

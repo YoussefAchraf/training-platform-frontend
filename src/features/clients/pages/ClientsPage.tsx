@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
@@ -18,6 +19,7 @@ import styles from './ClientsPage.module.css';
 const getClientId = (client: Client) => client.id;
 
 export function ClientsPage() {
+  const { t } = useTranslation('clients');
   const { user, canManageCatalog, isSuperAdmin } = useAuth();
   const clientsQuery = useClients();
   const deleteClient = useDeleteClient();
@@ -52,19 +54,19 @@ export function ClientsPage() {
     if (!deleting) return;
     deleteClient.mutate(deleting.id, {
       onSuccess: () => {
-        toast.success(`${deleting.companyName} was deleted.`);
+        toast.success(t('ClientsPage.clientDeleted', { name: deleting.companyName }));
         deleteDialog.close();
         setDeleting(null);
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
-  }, [deleting, deleteClient, toast, deleteDialog]);
+  }, [deleting, deleteClient, toast, deleteDialog, t]);
 
   const columns = useMemo<TableColumn<Client>[]>(
     () => [
-      { key: 'companyName', header: 'Company', render: (client) => client.companyName },
-      { key: 'email', header: 'Email', render: (client) => client.email || '—' },
-      { key: 'phone', header: 'Phone', render: (client) => client.phone || '—' },
+      { key: 'companyName', header: t('ClientsPage.columnCompany'), render: (client) => client.companyName },
+      { key: 'email', header: t('ClientsPage.columnEmail'), render: (client) => client.email || '—' },
+      { key: 'phone', header: t('ClientsPage.columnPhone'), render: (client) => client.phone || '—' },
       {
         key: 'actions',
         header: '',
@@ -73,34 +75,34 @@ export function ClientsPage() {
           const canEdit = isSuperAdmin || client.createdBy === user?.id;
           if (!canEdit) {
             return canManageCatalog ? (
-              <span className={styles.notOwned}>Created by {client.creatorName ?? 'another user'}</span>
+              <span className={styles.notOwned}>{t('ClientsPage.createdBy', { name: client.creatorName ?? t('ClientsPage.anotherUser') })}</span>
             ) : null;
           }
           return (
             <span className={styles.actions}>
               <Button size="sm" variant="outline" leftIcon={<Pencil size={14} />} onClick={() => openEdit(client)}>
-                Edit
+                {t('ClientsPage.edit')}
               </Button>
               <Button size="sm" variant="danger" leftIcon={<Trash2 size={14} />} onClick={() => openDelete(client)}>
-                Delete
+                {t('ClientsPage.delete')}
               </Button>
             </span>
           );
         },
       },
     ],
-    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete],
+    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t],
   );
 
   return (
     <div>
       <PageHeader
-        title="Clients"
-        description="Companies you deliver training sessions for."
+        title={t('ClientsPage.title')}
+        description={t('ClientsPage.description')}
         actions={
           canManageCatalog && (
             <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              Add client
+              {t('ClientsPage.addClient')}
             </Button>
           )
         }
@@ -114,12 +116,12 @@ export function ClientsPage() {
           data={clientsQuery.data ?? []}
           keyExtractor={getClientId}
           isLoading={clientsQuery.isPending}
-          emptyTitle="No clients yet"
-          emptyDescription={canManageCatalog ? 'Add a client before booking a training session.' : undefined}
+          emptyTitle={t('ClientsPage.emptyTitle')}
+          emptyDescription={canManageCatalog ? t('ClientsPage.emptyDescription') : undefined}
           emptyAction={
             canManageCatalog && (
               <Button size="sm" onClick={openCreate}>
-                Add client
+                {t('ClientsPage.addClient')}
               </Button>
             )
           }
@@ -132,9 +134,9 @@ export function ClientsPage() {
         isOpen={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
-        title="Delete this client?"
-        description={deleting ? `"${deleting.companyName}" will be removed.` : undefined}
-        confirmLabel="Delete"
+        title={t('ClientsPage.deleteDialogTitle')}
+        description={deleting ? t('ClientsPage.deleteDialogDescription', { name: deleting.companyName }) : undefined}
+        confirmLabel={t('ClientsPage.delete')}
         tone="danger"
         isLoading={deleteClient.isPending}
       />

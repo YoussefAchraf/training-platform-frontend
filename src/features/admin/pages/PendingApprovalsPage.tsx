@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Check, X } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Table } from '@/shared/components/Table';
@@ -18,6 +19,7 @@ import styles from './PendingApprovalsPage.module.css';
 const getUserId = (user: User) => user.id;
 
 export function PendingApprovalsPage() {
+  const { t } = useTranslation('admin');
   const pendingUsersQuery = usePendingUsers();
   const approveUser = useApproveUser();
   const rejectUser = useRejectUser();
@@ -28,11 +30,11 @@ export function PendingApprovalsPage() {
   const handleApprove = useCallback(
     (user: User) => {
       approveUser.mutate(user.id, {
-        onSuccess: () => toast.success(`${user.firstname} ${user.lastname} was approved.`),
+        onSuccess: () => toast.success(t('PendingApprovalsPage.userApproved', { name: `${user.firstname} ${user.lastname}` })),
         onError: (error) => toast.error(getApiErrorMessage(error)),
       });
     },
-    [approveUser, toast],
+    [approveUser, toast, t],
   );
 
   const openReject = useCallback(
@@ -47,7 +49,7 @@ export function PendingApprovalsPage() {
     if (!target) return;
     rejectUser.mutate(target.id, {
       onSuccess: () => {
-        toast.success(`${target.firstname} ${target.lastname} was rejected.`);
+        toast.success(t('PendingApprovalsPage.userRejected', { name: `${target.firstname} ${target.lastname}` }));
         rejectDialog.close();
         setTarget(null);
       },
@@ -59,20 +61,20 @@ export function PendingApprovalsPage() {
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('PendingApprovalsPage.columnName'),
         render: (user) => (
           <span>
             {user.firstname} {user.lastname}
           </span>
         ),
       },
-      { key: 'email', header: 'Email', render: (user) => user.email },
+      { key: 'email', header: t('PendingApprovalsPage.columnEmail'), render: (user) => user.email },
       {
         key: 'role',
-        header: 'Requested role',
+        header: t('PendingApprovalsPage.columnRequestedRole'),
         render: (user) => {
           const role = roleNameOf(user)!;
-          return <Badge tone={roleMeta[role].tone}>{roleMeta[role].label}</Badge>;
+          return <Badge tone={roleMeta[role].tone}>{t(roleMeta[role].labelKey)}</Badge>;
         },
       },
       {
@@ -88,7 +90,7 @@ export function PendingApprovalsPage() {
               onClick={() => openReject(user)}
               disabled={approveUser.isPending}
             >
-              Reject
+              {t('PendingApprovalsPage.reject')}
             </Button>
             <Button
               size="sm"
@@ -97,18 +99,18 @@ export function PendingApprovalsPage() {
               isLoading={approveUser.isPending && approveUser.variables === user.id}
               disabled={approveUser.isPending}
             >
-              Approve
+              {t('PendingApprovalsPage.approve')}
             </Button>
           </span>
         ),
       },
     ],
-    [approveUser.isPending, approveUser.variables, handleApprove, openReject],
+    [approveUser.isPending, approveUser.variables, handleApprove, openReject, t],
   );
 
   return (
     <div>
-      <PageHeader title="Pending approvals" description="New accounts waiting for review before they can sign in." />
+      <PageHeader title={t('PendingApprovalsPage.title')} description={t('PendingApprovalsPage.description')} />
 
       {pendingUsersQuery.isError ? (
         <ErrorBanner error={pendingUsersQuery.error} onRetry={() => pendingUsersQuery.refetch()} />
@@ -118,8 +120,8 @@ export function PendingApprovalsPage() {
           data={pendingUsersQuery.data ?? []}
           keyExtractor={getUserId}
           isLoading={pendingUsersQuery.isPending}
-          emptyTitle="No pending accounts"
-          emptyDescription="New signups will show up here for review."
+          emptyTitle={t('PendingApprovalsPage.emptyTitle')}
+          emptyDescription={t('PendingApprovalsPage.emptyDescription')}
         />
       )}
 
@@ -127,9 +129,9 @@ export function PendingApprovalsPage() {
         isOpen={rejectDialog.isOpen}
         onClose={rejectDialog.close}
         onConfirm={handleRejectConfirm}
-        title="Reject this account?"
-        description={target ? `${target.firstname} ${target.lastname} won't be able to sign in.` : undefined}
-        confirmLabel="Reject"
+        title={t('PendingApprovalsPage.rejectDialogTitle')}
+        description={target ? t('PendingApprovalsPage.rejectDialogDescription', { name: `${target.firstname} ${target.lastname}` }) : undefined}
+        confirmLabel={t('PendingApprovalsPage.reject')}
         tone="danger"
         isLoading={rejectUser.isPending}
       />

@@ -1,0 +1,32 @@
+{
+  "EditInstructorModal": {
+    "title": "Edit {{name}}",
+    "description": "Update this instructor's bio and qualified trainings.",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "profileUpdated": "Instructor profile updated."
+  },
+  "InstructorsPage": {
+    "title": "Instructors",
+    "description": "Instructor profiles, bios, and the trainings they can deliver.",
+    "columnName": "Name",
+    "columnEmail": "Email",
+    "columnTrainings": "Trainings",
+    "edit": "Edit",
+    "emptyTitle": "No instructors yet",
+    "emptyDescription": "Instructors appear here once they sign up and are approved."
+  },
+  "InstructorProfileForm": {
+    "saveChanges": "Save changes",
+    "bioLabel": "Bio",
+    "bioHint": "Shown to Managers when assigning sessions",
+    "bioPlaceholder": "Tell us about your teaching experience…",
+    "trainingsLabel": "Trainings I can deliver",
+    "noTrainings": "No trainings exist yet - a Manager needs to add some first."
+  },
+  "MyInstructorProfilePage": {
+    "title": "My instructor profile",
+    "description": "Your bio and the trainings you're qualified to deliver.",
+    "profileUpdated": "Your profile was updated."
+  }
+}

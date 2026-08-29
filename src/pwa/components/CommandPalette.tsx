@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'motion/react';
 import { Search } from 'lucide-react';
 import { easeOut } from '@/shared/motion/variants';
@@ -13,6 +14,7 @@ import styles from './CommandPalette.module.css';
 
 
 export function CommandPalette() {
+  const { t } = useTranslation('common');
   const isOpen = useUiStore((state) => state.isCommandPaletteOpen);
   const closePalette = useUiStore((state) => state.closeCommandPalette);
   const togglePalette = useUiStore((state) => state.toggleCommandPalette);
@@ -28,8 +30,8 @@ export function CommandPalette() {
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
-    return items.filter((item) => item.label.toLowerCase().includes(q));
-  }, [items, query]);
+    return items.filter((item) => t(item.labelKey).toLowerCase().includes(q));
+  }, [items, query, t]);
 
   const close = useCallback(() => {
     closePalette();
@@ -92,7 +94,7 @@ export function CommandPalette() {
             ref={panelRef}
             className={styles.panel}
             role="dialog"
-            aria-label="Quick navigation"
+            aria-label={t('CommandPalette.quickNavigation')}
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -103,17 +105,17 @@ export function CommandPalette() {
               <input
                 ref={inputRef}
                 className={styles.input}
-                placeholder="Jump to..."
+                placeholder={t('CommandPalette.placeholder')}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={handleInputKeyDown}
-                aria-label="Search pages"
+                aria-label={t('CommandPalette.searchPages')}
               />
               <kbd className={styles.kbd}>Esc</kbd>
             </div>
 
             <ul className={styles.list} role="listbox">
-              {results.length === 0 && <li className={styles.empty}>No matches</li>}
+              {results.length === 0 && <li className={styles.empty}>{t('CommandPalette.noMatches')}</li>}
               {results.map((item, index) => (
                 <li key={item.to}>
                   <button
@@ -131,7 +133,7 @@ export function CommandPalette() {
                     }}
                   >
                     <item.icon size={16} />
-                    <span>{item.label}</span>
+                    <span>{t(item.labelKey)}</span>
                   </button>
                 </li>
               ))}
