@@ -110,20 +110,24 @@ export function PendingApprovalsPage() {
 
   return (
     <div>
-      <PageHeader title={t('PendingApprovalsPage.title')} description={t('PendingApprovalsPage.description')} />
+      <div id="tour-pending-header">
+        <PageHeader title={t('PendingApprovalsPage.title')} description={t('PendingApprovalsPage.description')} />
+      </div>
 
-      {pendingUsersQuery.isError ? (
-        <ErrorBanner error={pendingUsersQuery.error} onRetry={() => pendingUsersQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={pendingUsersQuery.data ?? []}
-          keyExtractor={getUserId}
-          isLoading={pendingUsersQuery.isPending}
-          emptyTitle={t('PendingApprovalsPage.emptyTitle')}
-          emptyDescription={t('PendingApprovalsPage.emptyDescription')}
-        />
-      )}
+      <div id="tour-pending-table">
+        {pendingUsersQuery.isError ? (
+          <ErrorBanner error={pendingUsersQuery.error} onRetry={() => pendingUsersQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={pendingUsersQuery.data ?? []}
+            keyExtractor={getUserId}
+            isLoading={pendingUsersQuery.isPending}
+            emptyTitle={t('PendingApprovalsPage.emptyTitle')}
+            emptyDescription={t('PendingApprovalsPage.emptyDescription')}
+          />
+        )}
+      </div>
 
       <ConfirmDialog
         isOpen={rejectDialog.isOpen}

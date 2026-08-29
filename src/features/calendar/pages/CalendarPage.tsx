@@ -78,36 +78,38 @@ export function CalendarPage() {
 
   return (
     <div>
-      <PageHeader
-        title={t('CalendarPage.title')}
-        description={
-          canManageCatalog
-            ? t('CalendarPage.descriptionManage')
-            : t('CalendarPage.descriptionOther')
-        }
-        actions={
-          <div className={styles.viewToggle}>
-            <button
-              type="button"
-              className={viewMode === 'heatmap' ? styles.viewToggleActive : styles.viewToggleButton}
-              onClick={() => setViewMode('heatmap')}
-              aria-pressed={viewMode === 'heatmap'}
-            >
-              <LayoutGrid size={14} /> {t('CalendarPage.heatmap')}
-            </button>
-            <button
-              type="button"
-              className={viewMode === 'agenda' ? styles.viewToggleActive : styles.viewToggleButton}
-              onClick={() => setViewMode('agenda')}
-              aria-pressed={viewMode === 'agenda'}
-            >
-              <List size={14} /> {t('CalendarPage.agenda')}
-            </button>
-          </div>
-        }
-      />
+      <div id="tour-calendar-header">
+        <PageHeader
+          title={t('CalendarPage.title')}
+          description={
+            canManageCatalog
+              ? t('CalendarPage.descriptionManage')
+              : t('CalendarPage.descriptionOther')
+          }
+          actions={
+            <div className={styles.viewToggle} id="tour-calendar-toggle">
+              <button
+                type="button"
+                className={viewMode === 'heatmap' ? styles.viewToggleActive : styles.viewToggleButton}
+                onClick={() => setViewMode('heatmap')}
+                aria-pressed={viewMode === 'heatmap'}
+              >
+                <LayoutGrid size={14} /> {t('CalendarPage.heatmap')}
+              </button>
+              <button
+                type="button"
+                className={viewMode === 'agenda' ? styles.viewToggleActive : styles.viewToggleButton}
+                onClick={() => setViewMode('agenda')}
+                aria-pressed={viewMode === 'agenda'}
+              >
+                <List size={14} /> {t('CalendarPage.agenda')}
+              </button>
+            </div>
+          }
+        />
+      </div>
 
-      <div ref={bodyRef} className={styles.body} style={{ height: bodyHeight }}>
+      <div ref={bodyRef} id="tour-calendar-body" className={styles.body} style={{ height: bodyHeight }}>
         {query.isError ? (
           <ErrorBanner error={query.error} onRetry={() => query.refetch()} />
         ) : viewMode === 'heatmap' ? (

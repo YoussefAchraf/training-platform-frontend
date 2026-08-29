@@ -120,19 +120,21 @@ export function TrainingsPage() {
 
   return (
     <div>
-      <PageHeader
-        title={t('TrainingsPage.title')}
-        description={t('TrainingsPage.description')}
-        actions={
-          canManageCatalog && (
-            <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              {t('TrainingsPage.addTraining')}
-            </Button>
-          )
-        }
-      />
+      <div id="tour-trainings-header">
+        <PageHeader
+          title={t('TrainingsPage.title')}
+          description={t('TrainingsPage.description')}
+          actions={
+            canManageCatalog && (
+              <Button id="tour-trainings-add" leftIcon={<Plus size={16} />} onClick={openCreate}>
+                {t('TrainingsPage.addTraining')}
+              </Button>
+            )
+          }
+        />
+      </div>
 
-      <div className={styles.filterRow}>
+      <div className={styles.filterRow} id="tour-trainings-filter">
         <Select
           value={providerFilter}
           onChange={(event) => setProviderFilter(event.target.value)}
@@ -147,27 +149,29 @@ export function TrainingsPage() {
         </Select>
       </div>
 
-      {trainingsQuery.isError ? (
-        <ErrorBanner error={trainingsQuery.error} onRetry={() => trainingsQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={trainingsQuery.data ?? []}
-          keyExtractor={getTrainingId}
-          isLoading={trainingsQuery.isPending}
-          emptyTitle={t('TrainingsPage.emptyTitle')}
-          emptyDescription={
-            canManageCatalog ? t('TrainingsPage.emptyDescription') : undefined
-          }
-          emptyAction={
-            canManageCatalog && (
-              <Button size="sm" onClick={openCreate}>
-                {t('TrainingsPage.addTraining')}
-              </Button>
-            )
-          }
-        />
-      )}
+      <div id="tour-trainings-table">
+        {trainingsQuery.isError ? (
+          <ErrorBanner error={trainingsQuery.error} onRetry={() => trainingsQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={trainingsQuery.data ?? []}
+            keyExtractor={getTrainingId}
+            isLoading={trainingsQuery.isPending}
+            emptyTitle={t('TrainingsPage.emptyTitle')}
+            emptyDescription={
+              canManageCatalog ? t('TrainingsPage.emptyDescription') : undefined
+            }
+            emptyAction={
+              canManageCatalog && (
+                <Button size="sm" onClick={openCreate}>
+                  {t('TrainingsPage.addTraining')}
+                </Button>
+              )
+            }
+          />
+        )}
+      </div>
 
       <TrainingFormModal
         isOpen={modal.isOpen}

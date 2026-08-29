@@ -41,6 +41,7 @@ export interface User {
   email: string;
   roleId: number;
   status: UserStatus;
+  hasSeenTour: boolean;
 }
 
 export interface Provider {

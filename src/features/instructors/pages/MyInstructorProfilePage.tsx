@@ -17,7 +17,9 @@ export function MyInstructorProfilePage() {
 
   return (
     <div>
-      <PageHeader title={t('MyInstructorProfilePage.title')} description={t('MyInstructorProfilePage.description')} />
+      <div id="tour-myprofile-header">
+        <PageHeader title={t('MyInstructorProfilePage.title')} description={t('MyInstructorProfilePage.description')} />
+      </div>
 
       {profileQuery.isPending && <Spinner />}
 
@@ -26,7 +28,7 @@ export function MyInstructorProfilePage() {
       )}
 
       {profileQuery.data && (
-        <Card>
+        <Card id="tour-myprofile-card">
           <div className={styles.header}>
             <Avatar firstname={profileQuery.data.firstname} lastname={profileQuery.data.lastname} size={48} />
             <div className={styles.headerText}>

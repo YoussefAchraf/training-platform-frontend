@@ -190,9 +190,11 @@ export function AuditLogPage() {
 
   return (
     <div>
-      <PageHeader title={t('AuditLogPage.title')} description={t('AuditLogPage.description')} />
+      <div id="tour-audit-header">
+        <PageHeader title={t('AuditLogPage.title')} description={t('AuditLogPage.description')} />
+      </div>
 
-      <div className={styles.filters}>
+      <div className={styles.filters} id="tour-audit-filters">
         <Select value={entityType} onChange={(event) => setEntityType(event.target.value)} aria-label={t('AuditLogPage.filterEntityType')}>
           <option value="">{t('AuditLogPage.allEntityTypes')}</option>
           {entityTypeOptions.map((type) => (
@@ -230,23 +232,25 @@ export function AuditLogPage() {
         />
       </div>
 
-      {auditQuery.isError ? (
-        <ErrorBanner error={auditQuery.error} onRetry={() => auditQuery.refetch()} />
-      ) : auditQuery.isPending ? (
-        <div className={styles.skeletonList}>
-          {Array.from({ length: 5 }, (_, index) => (
-            <Skeleton key={index} height={56} radius="var(--radius-md)" />
-          ))}
-        </div>
-      ) : (auditQuery.data ?? []).length === 0 ? (
-        <EmptyState icon={History} title={t('AuditLogPage.noEntries')} description={t('AuditLogPage.noEntriesDescription')} />
-      ) : (
-        <motion.ul className={styles.list} variants={staggerContainer(0.03)} initial="hidden" animate="show">
-          {(auditQuery.data ?? []).map((entry) => (
-            <AuditLogRow key={entry.id} entry={entry} />
-          ))}
-        </motion.ul>
-      )}
+      <div id="tour-audit-list">
+        {auditQuery.isError ? (
+          <ErrorBanner error={auditQuery.error} onRetry={() => auditQuery.refetch()} />
+        ) : auditQuery.isPending ? (
+          <div className={styles.skeletonList}>
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton key={index} height={56} radius="var(--radius-md)" />
+            ))}
+          </div>
+        ) : (auditQuery.data ?? []).length === 0 ? (
+          <EmptyState icon={History} title={t('AuditLogPage.noEntries')} description={t('AuditLogPage.noEntriesDescription')} />
+        ) : (
+          <motion.ul className={styles.list} variants={staggerContainer(0.03)} initial="hidden" animate="show">
+            {(auditQuery.data ?? []).map((entry) => (
+              <AuditLogRow key={entry.id} entry={entry} />
+            ))}
+          </motion.ul>
+        )}
+      </div>
     </div>
   );
 }

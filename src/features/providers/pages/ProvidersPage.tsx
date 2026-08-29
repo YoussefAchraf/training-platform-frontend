@@ -115,39 +115,43 @@ export function ProvidersPage() {
 
   return (
     <div>
-      <PageHeader
-        title={t('ProvidersPage.title')}
-        description={t('ProvidersPage.description')}
-        actions={
-          canManageCatalog && (
-            <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              {t('ProvidersPage.addProvider')}
-            </Button>
-          )
-        }
-      />
-
-      {providersQuery.isError ? (
-        <ErrorBanner error={providersQuery.error} onRetry={() => providersQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={providersQuery.data ?? []}
-          keyExtractor={getProviderId}
-          isLoading={providersQuery.isPending}
-          emptyTitle={t('ProvidersPage.emptyTitle')}
-          emptyDescription={
-            canManageCatalog ? t('ProvidersPage.emptyDescription') : undefined
-          }
-          emptyAction={
+      <div id="tour-providers-header">
+        <PageHeader
+          title={t('ProvidersPage.title')}
+          description={t('ProvidersPage.description')}
+          actions={
             canManageCatalog && (
-              <Button size="sm" onClick={openCreate}>
+              <Button id="tour-providers-add" leftIcon={<Plus size={16} />} onClick={openCreate}>
                 {t('ProvidersPage.addProvider')}
               </Button>
             )
           }
         />
-      )}
+      </div>
+
+      <div id="tour-providers-table">
+        {providersQuery.isError ? (
+          <ErrorBanner error={providersQuery.error} onRetry={() => providersQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={providersQuery.data ?? []}
+            keyExtractor={getProviderId}
+            isLoading={providersQuery.isPending}
+            emptyTitle={t('ProvidersPage.emptyTitle')}
+            emptyDescription={
+              canManageCatalog ? t('ProvidersPage.emptyDescription') : undefined
+            }
+            emptyAction={
+              canManageCatalog && (
+                <Button size="sm" onClick={openCreate}>
+                  {t('ProvidersPage.addProvider')}
+                </Button>
+              )
+            }
+          />
+        )}
+      </div>
 
       <ProviderFormModal isOpen={modal.isOpen} onClose={modal.close} editing={editing} />
 
