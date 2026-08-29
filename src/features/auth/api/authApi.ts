@@ -31,8 +31,11 @@ export interface MeResponse {
 }
 
 export interface UpdateOwnProfilePayload {
-  firstname: string;
-  lastname: string;
+  firstname?: string;
+  lastname?: string;
+  
+  
+  hasSeenTour?: boolean;
 }
 
 export const authApi = {

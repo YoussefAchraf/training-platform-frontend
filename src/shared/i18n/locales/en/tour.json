@@ -1,6 +1,7 @@
 {
   "guideButton": "Guide",
   "guideButtonAria": "Open guided tour",
+  "noGuideAvailable": "No guide available for this page yet.",
   "buttons": {
     "next": "Next",
     "back": "Back",
@@ -9,42 +10,137 @@
   },
   "replay": {
     "title": "Need this again?",
-    "text": "Click this Guide button anytime to replay the tour for your role."
+    "text": "Click this Guide button anytime to replay the tour for whatever page you're on."
   },
-  "superAdmin": {
-    "welcome": { "title": "Welcome, SuperAdmin", "text": "A quick look at your dashboard - what each section shows and where to go next." },
-    "statTotalUsers": { "title": "Total users", "text": "Every account on the platform, across every role." },
-    "statPendingSignups": { "title": "Pending signups", "text": "New accounts waiting for a Manager to approve them." },
-    "statDeactivated": { "title": "Deactivated", "text": "Accounts that have been switched off and can no longer sign in." },
-    "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked across the company." },
-    "quickLinkUsers": { "title": "Manage users", "text": "Edit roles, statuses, and account details for anyone on the platform." },
-    "quickLinkSessions": { "title": "Sessions overview", "text": "Every session, company-wide, with its status and instructor at a glance." },
-    "quickLinkAudit": { "title": "Audit log", "text": "A full history of every create, update, delete, and cancel action, filterable by date, role, or instructor." }
+  "dashboard": {
+    "superAdmin": {
+      "welcome": { "title": "Welcome, SuperAdmin", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+      "statTotalUsers": { "title": "Total users", "text": "Every account on the platform, across every role." },
+      "statPendingSignups": { "title": "Pending signups", "text": "New accounts waiting for a Manager to approve them." },
+      "statDeactivated": { "title": "Deactivated", "text": "Accounts that have been switched off and can no longer sign in." },
+      "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked across the company." },
+      "quickLinkUsers": { "title": "Manage users", "text": "Edit roles, statuses, and account details for anyone on the platform." },
+      "quickLinkSessions": { "title": "Sessions overview", "text": "Every session, company-wide, with its status and instructor at a glance." },
+      "quickLinkAudit": { "title": "Audit log", "text": "A full history of every create, update, delete, and cancel action, filterable by date, role, or instructor." }
+    },
+    "manager": {
+      "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+      "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked for your clients." },
+      "statNeedsInstructor": { "title": "Needs instructor", "text": "Sessions that still don't have an instructor assigned." },
+      "statInstructors": { "title": "Instructors", "text": "How many instructors are available to teach." },
+      "statPendingApprovals": { "title": "Pending approvals", "text": "New account requests waiting on your review - click to jump straight there." },
+      "cardNeedsInstructor": { "title": "Needs an instructor", "text": "The sessions from the stat above, ready for you to assign an instructor to." },
+      "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+    },
+    "sales": {
+      "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+      "statTotalSessions": { "title": "Total sessions", "text": "Every training session you've booked for clients." },
+      "statProviders": { "title": "Providers", "text": "Certification bodies you deliver trainings for." },
+      "statTrainings": { "title": "Trainings", "text": "Courses in your catalog, across every provider." },
+      "statClients": { "title": "Clients", "text": "Companies you book training sessions for." },
+      "cardAwaitingAssignment": { "title": "Awaiting instructor assignment", "text": "Sessions that still need an instructor before they can go ahead." },
+      "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+    },
+    "instructor": {
+      "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+      "statMySessions": { "title": "My sessions", "text": "Every session you're assigned to teach." },
+      "statCompleted": { "title": "Completed", "text": "Sessions you've already taught." },
+      "statUpcomingAccepted": { "title": "Upcoming, accepted", "text": "Sessions you're confirmed to teach, coming up soon." },
+      "cardRecentlyCompleted": { "title": "Recently completed", "text": "Your most recently finished sessions, most recent first." },
+      "cardYourSessions": { "title": "Your sessions", "text": "Your confirmed, scheduled or ongoing sessions, soonest first." }
+    }
   },
-  "manager": {
-    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
-    "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked for your clients." },
-    "statNeedsInstructor": { "title": "Needs instructor", "text": "Sessions that still don't have an instructor assigned." },
-    "statInstructors": { "title": "Instructors", "text": "How many instructors are available to teach." },
-    "statPendingApprovals": { "title": "Pending approvals", "text": "New account requests waiting on your review - click to jump straight there." },
-    "cardNeedsInstructor": { "title": "Needs an instructor", "text": "The sessions from the stat above, ready for you to assign an instructor to." },
-    "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+  "providers": {
+    "header": { "title": "Providers", "text": "The certification bodies your trainings are grouped under - Red Hat, AWS, and the like." },
+    "add": { "title": "Add a provider", "text": "Create a new provider, with an optional logo, to file trainings under." },
+    "table": { "title": "Provider list", "text": "Every provider on the platform. You can only edit or delete the ones you created, unless you're a SuperAdmin." }
   },
-  "sales": {
-    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
-    "statTotalSessions": { "title": "Total sessions", "text": "Every training session you've booked for clients." },
-    "statProviders": { "title": "Providers", "text": "Certification bodies you deliver trainings for." },
-    "statTrainings": { "title": "Trainings", "text": "Courses in your catalog, across every provider." },
-    "statClients": { "title": "Clients", "text": "Companies you book training sessions for." },
-    "cardAwaitingAssignment": { "title": "Awaiting instructor assignment", "text": "Sessions that still need an instructor before they can go ahead." },
-    "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+  "trainings": {
+    "header": { "title": "Trainings", "text": "The courses in your catalog, each tied to a provider." },
+    "add": { "title": "Add a training", "text": "Create a new course - name, provider, and how long it runs." },
+    "filter": { "title": "Filter by provider", "text": "Narrow the list down to one provider's trainings." },
+    "table": { "title": "Training list", "text": "Every training on the platform, with its provider and duration. You can only edit or delete the ones you created, unless you're a SuperAdmin." }
   },
-  "instructor": {
-    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
-    "statMySessions": { "title": "My sessions", "text": "Every session you're assigned to teach." },
-    "statCompleted": { "title": "Completed", "text": "Sessions you've already taught." },
-    "statUpcomingAccepted": { "title": "Upcoming, accepted", "text": "Sessions you're confirmed to teach, coming up soon." },
-    "cardRecentlyCompleted": { "title": "Recently completed", "text": "Your most recently finished sessions, most recent first." },
-    "cardYourSessions": { "title": "Your sessions", "text": "Your confirmed, scheduled or ongoing sessions, soonest first." }
+  "clients": {
+    "header": { "title": "Clients", "text": "The companies you book training sessions for." },
+    "add": { "title": "Add a client", "text": "Create a new client, with a contact email and phone number." },
+    "table": { "title": "Client list", "text": "Every client on the platform. You can only edit or delete the ones you created, unless you're a SuperAdmin." }
+  },
+  "sessions": {
+    "list": {
+      "header": { "title": "Sessions", "text": "Every training session that's been booked." },
+      "add": { "title": "Book a session", "text": "Schedule a new training session for a client." },
+      "table": { "title": "Session list", "text": "Click any row to open that session's full detail page." }
+    }
+  },
+  "sessionDetail": {
+    "common": {
+      "details": { "title": "Session details", "text": "Provider, dates, and the assigned instructor at a glance." }
+    },
+    "superAdmin": {
+      "header": { "title": "This session", "text": "Its status, assignment, and every action you can take on it." },
+      "assign": { "title": "Assign an instructor", "text": "Pick who teaches this session. Disabled until at least one attendee has been added." },
+      "edit": { "title": "Edit or cancel", "text": "Change the dates, or cancel the session outright." },
+      "attendees": { "title": "Attendees", "text": "Add attendees one at a time or import a list, and see who's completed the survey." },
+      "report": { "title": "Report", "text": "Generate the completion report once the session has attendee surveys in." }
+    },
+    "manager": {
+      "header": { "title": "This session", "text": "Its status and assignment at a glance. If you booked it, Edit and Cancel buttons also appear here." },
+      "assign": { "title": "Assign an instructor", "text": "Pick who teaches this session. Disabled until at least one attendee has been added." },
+      "attendees": { "title": "Attendees", "text": "Add attendees one at a time or import a list, and see who's completed the survey." },
+      "report": { "title": "Report", "text": "Generate the completion report once the session has attendee surveys in." }
+    },
+    "sales": {
+      "header": { "title": "This session", "text": "Its status and assignment at a glance. If you booked it, Edit and Cancel buttons also appear here." },
+      "attendees": { "title": "Attendees", "text": "Add attendees one at a time or import a list, and see who's completed the survey." },
+      "report": { "title": "Report", "text": "Generate the completion report once the session has attendee surveys in." }
+    },
+    "instructor": {
+      "header": { "title": "This session", "text": "Its status and assignment at a glance." },
+      "qr": { "title": "Survey QR code", "text": "Show this to attendees so they can fill out the post-training survey on their phone." },
+      "attendees": { "title": "Attendees", "text": "Mark each attendee present or absent, and see who's completed the survey." },
+      "report": { "title": "Report", "text": "The completion report for this session, once it's been generated." }
+    }
+  },
+  "instructors": {
+    "header": { "title": "Instructors", "text": "Everyone available to teach, with the trainings they're skilled in." },
+    "tableEdit": { "title": "Instructor list", "text": "Click Edit on any row to update an instructor's skills or details." },
+    "tableReadOnly": { "title": "Instructor list", "text": "Everyone available to teach, and which trainings they can deliver." }
+  },
+  "myProfile": {
+    "header": { "title": "My profile", "text": "What Sales and Managers see about you when assigning sessions." },
+    "card": { "title": "Bio and skills", "text": "Write a short bio and pick which trainings you're able to deliver." }
+  },
+  "pendingApprovals": {
+    "header": { "title": "Pending approvals", "text": "New account requests waiting on a decision." },
+    "table": { "title": "Requests", "text": "Approve to let someone sign in, or reject to turn them away." }
+  },
+  "auditLog": {
+    "header": { "title": "Audit log", "text": "A full history of every create, update, delete, and cancel action on the platform." },
+    "filtersSuperAdmin": { "title": "Filters", "text": "Narrow entries down by entity type (including user accounts), a specific ID, actor role, or date range." },
+    "filtersManager": { "title": "Filters", "text": "Narrow entries down by entity type, a specific ID, actor role, or date range." },
+    "list": { "title": "Entries", "text": "Click any entry to expand exactly what changed, before and after." }
+  },
+  "users": {
+    "header": { "title": "Users", "text": "Every account on the platform, across every role." },
+    "table": { "title": "User list", "text": "Edit anyone's role, status, or details, or deactivate an account." }
+  },
+  "sessionsOverview": {
+    "header": { "title": "Sessions overview", "text": "Every training session, company-wide, in one place." },
+    "table": { "title": "Session list", "text": "Status, assignment, attendees, and report readiness at a glance. Click a row for full detail." }
+  },
+  "calendar": {
+    "headerManage": { "title": "Calendar", "text": "Every session across the company, laid out by date." },
+    "headerOther": { "title": "Calendar", "text": "Your own sessions, laid out by date." },
+    "toggle": { "title": "Switch views", "text": "Heatmap shows a month grid; Agenda lists sessions day by day." },
+    "bodyManage": { "title": "Sessions by date", "text": "Click a day to see what's booked, or a session to edit or remove it." },
+    "bodyOther": { "title": "Sessions by date", "text": "Click a day to see what you're teaching." }
+  },
+  "account": {
+    "header": { "title": "Account", "text": "Your profile, account details, and notification settings." },
+    "profile": { "title": "Your name", "text": "Update your first and last name here." },
+    "details": { "title": "Account details", "text": "Your email, role, and account status - read-only, ask a Manager to change these." },
+    "detailsInstructor": { "title": "Account details", "text": "Your email, role, and account status - read-only, ask a Manager to change these. Use the link below to manage your bio and skills." },
+    "notifications": { "title": "Push notifications", "text": "Turn on notifications for this device to get alerted about new sessions and updates." }
   }
 }

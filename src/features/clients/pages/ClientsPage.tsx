@@ -96,37 +96,41 @@ export function ClientsPage() {
 
   return (
     <div>
-      <PageHeader
-        title={t('ClientsPage.title')}
-        description={t('ClientsPage.description')}
-        actions={
-          canManageCatalog && (
-            <Button leftIcon={<Plus size={16} />} onClick={openCreate}>
-              {t('ClientsPage.addClient')}
-            </Button>
-          )
-        }
-      />
-
-      {clientsQuery.isError ? (
-        <ErrorBanner error={clientsQuery.error} onRetry={() => clientsQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={clientsQuery.data ?? []}
-          keyExtractor={getClientId}
-          isLoading={clientsQuery.isPending}
-          emptyTitle={t('ClientsPage.emptyTitle')}
-          emptyDescription={canManageCatalog ? t('ClientsPage.emptyDescription') : undefined}
-          emptyAction={
+      <div id="tour-clients-header">
+        <PageHeader
+          title={t('ClientsPage.title')}
+          description={t('ClientsPage.description')}
+          actions={
             canManageCatalog && (
-              <Button size="sm" onClick={openCreate}>
+              <Button id="tour-clients-add" leftIcon={<Plus size={16} />} onClick={openCreate}>
                 {t('ClientsPage.addClient')}
               </Button>
             )
           }
         />
-      )}
+      </div>
+
+      <div id="tour-clients-table">
+        {clientsQuery.isError ? (
+          <ErrorBanner error={clientsQuery.error} onRetry={() => clientsQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={clientsQuery.data ?? []}
+            keyExtractor={getClientId}
+            isLoading={clientsQuery.isPending}
+            emptyTitle={t('ClientsPage.emptyTitle')}
+            emptyDescription={canManageCatalog ? t('ClientsPage.emptyDescription') : undefined}
+            emptyAction={
+              canManageCatalog && (
+                <Button size="sm" onClick={openCreate}>
+                  {t('ClientsPage.addClient')}
+                </Button>
+              )
+            }
+          />
+        )}
+      </div>
 
       <ClientFormModal isOpen={modal.isOpen} onClose={modal.close} editing={editing} />
 

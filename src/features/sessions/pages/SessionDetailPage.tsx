@@ -91,60 +91,64 @@ export function SessionDetailPage() {
 
   return (
     <div>
-      <PageHeader
-        title={training?.name ?? t('SessionDetailPage.unnamedSession', { id: session.id })}
-        description={client ? t('SessionDetailPage.bookedFor', { client: client.companyName }) : undefined}
-        actions={
-          <>
-            <Badge
-              tone={sessionStatusMeta[session.sessionStatus].tone}
-              pulse={sessionStatusMeta[session.sessionStatus].pulse}
-            >
-              {t(sessionStatusMeta[session.sessionStatus].labelKey)}
-            </Badge>
-            <Badge
-              tone={assignmentStatusMeta[session.assignmentStatus].tone}
-              pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
-            >
-              {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
-            </Badge>
-            {canAssignInstructor && (
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<UserCog size={15} />}
-                onClick={assignModal.open}
-                disabled={!hasAttendees}
-                title={hasAttendees ? undefined : t('SessionDetailPage.assignDisabledHint')}
+      <div id="tour-session-header">
+        <PageHeader
+          title={training?.name ?? t('SessionDetailPage.unnamedSession', { id: session.id })}
+          description={client ? t('SessionDetailPage.bookedFor', { client: client.companyName }) : undefined}
+          actions={
+            <>
+              <Badge
+                tone={sessionStatusMeta[session.sessionStatus].tone}
+                pulse={sessionStatusMeta[session.sessionStatus].pulse}
               >
-                {instructor ? t('SessionDetailPage.reassign') : t('SessionDetailPage.assign')}
-              </Button>
-            )}
-            {isMySession && (
-              <Button variant="outline" size="sm" leftIcon={<QrCode size={15} />} onClick={qrModal.open}>
-                {t('SessionDetailPage.surveyQr')}
-              </Button>
-            )}
-            {canEditSession && (
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Pencil size={15} />}
-                onClick={() => setIsEditingDates(true)}
+                {t(sessionStatusMeta[session.sessionStatus].labelKey)}
+              </Badge>
+              <Badge
+                tone={assignmentStatusMeta[session.assignmentStatus].tone}
+                pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
               >
-                {t('SessionDetailPage.editDates')}
-              </Button>
-            )}
-            {canEditSession && (
-              <Button variant="danger" size="sm" leftIcon={<Ban size={15} />} onClick={cancelDialog.open}>
-                {t('SessionDetailPage.cancel')}
-              </Button>
-            )}
-          </>
-        }
-      />
+                {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
+              </Badge>
+              {canAssignInstructor && (
+                <Button
+                  id="tour-session-assign"
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<UserCog size={15} />}
+                  onClick={assignModal.open}
+                  disabled={!hasAttendees}
+                  title={hasAttendees ? undefined : t('SessionDetailPage.assignDisabledHint')}
+                >
+                  {instructor ? t('SessionDetailPage.reassign') : t('SessionDetailPage.assign')}
+                </Button>
+              )}
+              {isMySession && (
+                <Button id="tour-session-qr" variant="outline" size="sm" leftIcon={<QrCode size={15} />} onClick={qrModal.open}>
+                  {t('SessionDetailPage.surveyQr')}
+                </Button>
+              )}
+              {canEditSession && (
+                <Button
+                  id="tour-session-edit"
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<Pencil size={15} />}
+                  onClick={() => setIsEditingDates(true)}
+                >
+                  {t('SessionDetailPage.editDates')}
+                </Button>
+              )}
+              {canEditSession && (
+                <Button id="tour-session-cancel" variant="danger" size="sm" leftIcon={<Ban size={15} />} onClick={cancelDialog.open}>
+                  {t('SessionDetailPage.cancel')}
+                </Button>
+              )}
+            </>
+          }
+        />
+      </div>
 
-      <Card className={styles.section}>
+      <Card id="tour-session-details" className={styles.section}>
         <h3 className={styles.cardTitle}>{t('SessionDetailPage.detailsCardTitle')}</h3>
         <dl className={styles.detailList}>
           <div>
@@ -168,7 +172,7 @@ export function SessionDetailPage() {
 
       <div className={styles.grid}>
         {(canManageCatalog || isSuperAdmin || isMySession) && (
-          <Card>
+          <Card id="tour-session-attendees">
             <h3 className={styles.cardTitle}>
               <UserPlus size={16} /> {t('SessionDetailPage.attendeesCardTitle')}
             </h3>
@@ -184,7 +188,7 @@ export function SessionDetailPage() {
           </Card>
         )}
 
-        <Card>
+        <Card id="tour-session-report">
           <h3 className={styles.cardTitle}>{t('SessionDetailPage.reportCardTitle')}</h3>
           <ReportView sessionId={session.id} canGenerate={canManageCatalog} />
         </Card>

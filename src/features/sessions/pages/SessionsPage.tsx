@@ -92,42 +92,46 @@ export function SessionsPage() {
 
   return (
     <div>
-      <PageHeader
-        title={t('SessionsPage.title')}
-        description={
-          isInstructor
-            ? t('SessionsPage.descriptionInstructor')
-            : t('SessionsPage.descriptionOther')
-        }
-        actions={
-          canManageCatalog && (
-            <Button leftIcon={<Plus size={16} />} onClick={modal.open}>
-              {t('SessionsPage.bookSession')}
-            </Button>
-          )
-        }
-      />
-
-      {sessionsQuery.isError ? (
-        <ErrorBanner error={sessionsQuery.error} onRetry={() => sessionsQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={sessionsQuery.data ?? []}
-          keyExtractor={getSessionId}
-          isLoading={sessionsQuery.isPending}
-          onRowClick={handleRowClick}
-          emptyTitle={isInstructor ? t('SessionsPage.emptyTitleInstructor') : t('SessionsPage.emptyTitleOther')}
-          emptyDescription={canManageCatalog ? t('SessionsPage.emptyDescription') : undefined}
-          emptyAction={
+      <div id="tour-sessions-header">
+        <PageHeader
+          title={t('SessionsPage.title')}
+          description={
+            isInstructor
+              ? t('SessionsPage.descriptionInstructor')
+              : t('SessionsPage.descriptionOther')
+          }
+          actions={
             canManageCatalog && (
-              <Button size="sm" onClick={modal.open}>
+              <Button id="tour-sessions-add" leftIcon={<Plus size={16} />} onClick={modal.open}>
                 {t('SessionsPage.bookSession')}
               </Button>
             )
           }
         />
-      )}
+      </div>
+
+      <div id="tour-sessions-table">
+        {sessionsQuery.isError ? (
+          <ErrorBanner error={sessionsQuery.error} onRetry={() => sessionsQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={sessionsQuery.data ?? []}
+            keyExtractor={getSessionId}
+            isLoading={sessionsQuery.isPending}
+            onRowClick={handleRowClick}
+            emptyTitle={isInstructor ? t('SessionsPage.emptyTitleInstructor') : t('SessionsPage.emptyTitleOther')}
+            emptyDescription={canManageCatalog ? t('SessionsPage.emptyDescription') : undefined}
+            emptyAction={
+              canManageCatalog && (
+                <Button size="sm" onClick={modal.open}>
+                  {t('SessionsPage.bookSession')}
+                </Button>
+              )
+            }
+          />
+        )}
+      </div>
 
       <SessionFormModal isOpen={modal.isOpen} onClose={modal.close} />
     </div>
