@@ -1,15 +1,10 @@
-import { addDays, addHours, format } from 'date-fns';
+import { addDays, parseISO } from 'date-fns';
 import type { TrainingDurationUnit } from '@/shared/types/domain';
 
-
-
-
-
-
-function addTrainingDays(start: Date, duration: number, skipWeekends: boolean): Date {
+function addTrainingDays(start: Date, daysNeeded: number, skipWeekends: boolean): Date {
   let end = start;
   let daysCounted = 1;
-  while (daysCounted < duration) {
+  while (daysCounted < daysNeeded) {
     end = addDays(end, 1);
     if (skipWeekends) {
       const day = end.getDay();
@@ -24,17 +19,49 @@ function addTrainingDays(start: Date, duration: number, skipWeekends: boolean): 
 
 
 
-export function computeSessionEndDate(
-  startDateLocal: string,
+
+
+export function computeSessionEndDay(
+  startDate: string,
   duration: number,
   durationUnit: TrainingDurationUnit,
+  hoursPerDay: number,
   skipWeekends: boolean,
-): string | null {
-  const start = new Date(startDateLocal);
+): Date | null {
+  const start = parseISO(startDate);
   if (Number.isNaN(start.getTime())) return null;
+  if (!hoursPerDay || hoursPerDay <= 0) return null;
+  if (!duration || duration <= 0) return null;
 
-  const end =
-    durationUnit === 'hours' ? addHours(start, duration) : addTrainingDays(start, duration, skipWeekends);
+  const daysNeeded = durationUnit === 'hours' ? Math.ceil(duration / hoursPerDay) : duration;
+  return addTrainingDays(start, daysNeeded, skipWeekends);
+}
 
-  return format(end, "yyyy-MM-dd'T'HH:mm");
+
+
+
+export function hoursBetweenTimes(startTime: string, endTime: string): number | null {
+  const start = parseTimeToMinutes(startTime);
+  const end = parseTimeToMinutes(endTime);
+  if (start === null || end === null) return null;
+  const diff = end - start;
+  if (diff <= 0) return null;
+  return diff / 60;
+}
+
+function parseTimeToMinutes(time: string): number | null {
+  const match = /^(\d{2}):(\d{2})$/.exec(time || '');
+  if (!match) return null;
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (hours > 23 || minutes > 59) return null;
+  return hours * 60 + minutes;
+}
+
+
+
+
+export function combineDateAndTime(dateValue: string, timeValue: string): string | null {
+  if (!dateValue || !timeValue) return null;
+  return `${dateValue}T${timeValue}`;
 }

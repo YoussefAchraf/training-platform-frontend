@@ -1,0 +1,16 @@
+.timeRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (--sm) {
+  .timeRow {
+    flex-direction: row;
+  }
+
+  .timeRow > * {
+    flex: 1;
+    min-width: 0;
+  }
+}

@@ -14,7 +14,6 @@ import { useToast } from '@/shared/hooks/useToast';
 import type { Provider } from '@/shared/types/domain';
 import { PROVIDER_ICONS, findProviderIcon } from '@/shared/data/providerIcons';
 import { useCreateProvider, useUpdateProvider } from '../hooks/useProviders';
-import styles from './ProviderFormModal.module.css';
 
 const providerSchema = z.object({
   name: z.string().trim().min(1, 'Provider name is required').max(150),
@@ -124,21 +123,6 @@ export function ProviderFormModal({ isOpen, onClose, editing = null }: ProviderF
               {...fieldProps}
               {...register('description')}
             />
-          )}
-        </FormField>
-
-        <FormField
-          label="Icon"
-          hint={
-            resolvedLogoUrl
-              ? 'Matched automatically from the provider name'
-              : 'No catalog match for this name — a generic icon will show instead'
-          }
-        >
-          {() => (
-            <div className={styles.logoField}>
-              <ProviderLogo name={nameValue || 'Provider'} logoUrl={resolvedLogoUrl} size={44} />
-            </div>
           )}
         </FormField>
       </form>

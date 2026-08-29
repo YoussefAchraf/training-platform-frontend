@@ -34,9 +34,6 @@ export const sessionsApi = {
       .post<TrainingSession>(`/sessions/${id}/assign-instructor`, { instructorId })
       .then((res) => res.data),
 
-  respond: (id: number, decision: 'accept' | 'refuse') =>
-    apiClient.post<TrainingSession>(`/sessions/${id}/respond`, { decision }).then((res) => res.data),
-
   addAttendee: (id: number, payload: AddAttendeePayload) =>
     apiClient.post<SessionAttendee>(`/sessions/${id}/attendees`, payload).then((res) => res.data),
 
