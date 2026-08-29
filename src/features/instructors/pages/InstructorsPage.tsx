@@ -72,20 +72,24 @@ export function InstructorsPage() {
 
   return (
     <div>
-      <PageHeader title={t('InstructorsPage.title')} description={t('InstructorsPage.description')} />
+      <div id="tour-instructors-header">
+        <PageHeader title={t('InstructorsPage.title')} description={t('InstructorsPage.description')} />
+      </div>
 
-      {instructorsQuery.isError ? (
-        <ErrorBanner error={instructorsQuery.error} onRetry={() => instructorsQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={instructorsQuery.data ?? []}
-          keyExtractor={getInstructorId}
-          isLoading={instructorsQuery.isPending}
-          emptyTitle={t('InstructorsPage.emptyTitle')}
-          emptyDescription={t('InstructorsPage.emptyDescription')}
-        />
-      )}
+      <div id="tour-instructors-table">
+        {instructorsQuery.isError ? (
+          <ErrorBanner error={instructorsQuery.error} onRetry={() => instructorsQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={instructorsQuery.data ?? []}
+            keyExtractor={getInstructorId}
+            isLoading={instructorsQuery.isPending}
+            emptyTitle={t('InstructorsPage.emptyTitle')}
+            emptyDescription={t('InstructorsPage.emptyDescription')}
+          />
+        )}
+      </div>
 
       <EditInstructorModal instructor={editing} onClose={handleCloseEdit} />
     </div>

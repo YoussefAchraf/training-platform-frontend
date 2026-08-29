@@ -67,10 +67,12 @@ export function AccountPage() {
 
   return (
     <div>
-      <PageHeader title={t('AccountPage.title')} description={t('AccountPage.description')} />
+      <div id="tour-account-header">
+        <PageHeader title={t('AccountPage.title')} description={t('AccountPage.description')} />
+      </div>
 
       <div className={styles.grid}>
-        <Card>
+        <Card id="tour-account-profile">
           <h3 className={styles.cardTitle}>{t('AccountPage.profileCardTitle')}</h3>
           <form onSubmit={onSubmit} className="stack" noValidate>
             {updateProfile.isError && <ErrorBanner error={updateProfile.error} />}
@@ -90,7 +92,7 @@ export function AccountPage() {
           </form>
         </Card>
 
-        <Card>
+        <Card id="tour-account-details">
           <h3 className={styles.cardTitle}>{t('AccountPage.accountCardTitle')}</h3>
           <dl className={styles.detailList}>
             <div>
@@ -120,7 +122,7 @@ export function AccountPage() {
         </Card>
 
         {push.status !== 'unsupported' && (
-          <Card>
+          <Card id="tour-account-notifications">
             <h3 className={styles.cardTitle}>{t('AccountPage.notificationsCardTitle')}</h3>
             {push.error && <ErrorBanner error={new Error(push.error)} />}
             <div className={styles.notificationRow}>

@@ -77,20 +77,24 @@ export function SuperAdminSessionsPage() {
 
   return (
     <div>
-      <PageHeader title={t('SuperAdminSessionsPage.title')} description={t('SuperAdminSessionsPage.description')} />
+      <div id="tour-sessionsoverview-header">
+        <PageHeader title={t('SuperAdminSessionsPage.title')} description={t('SuperAdminSessionsPage.description')} />
+      </div>
 
-      {sessionsQuery.isError ? (
-        <ErrorBanner error={sessionsQuery.error} onRetry={() => sessionsQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={sessionsQuery.data ?? []}
-          keyExtractor={getSessionId}
-          isLoading={sessionsQuery.isPending}
-          onRowClick={(session) => navigate(paths.sessionDetail(session.id))}
-          emptyTitle={t('SuperAdminSessionsPage.emptyTitle')}
-        />
-      )}
+      <div id="tour-sessionsoverview-table">
+        {sessionsQuery.isError ? (
+          <ErrorBanner error={sessionsQuery.error} onRetry={() => sessionsQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={sessionsQuery.data ?? []}
+            keyExtractor={getSessionId}
+            isLoading={sessionsQuery.isPending}
+            onRowClick={(session) => navigate(paths.sessionDetail(session.id))}
+            emptyTitle={t('SuperAdminSessionsPage.emptyTitle')}
+          />
+        )}
+      </div>
     </div>
   );
 }

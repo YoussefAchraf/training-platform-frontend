@@ -1,9 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HelpCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { paths } from '@/routes/paths';
-import { useTourStore } from './tourStore';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useToast } from '@/shared/hooks/useToast';
+import { resolveTourSteps } from './tourRoutes';
+import { useTour } from './useTour';
 import styles from './TourButton.module.css';
 
 interface TourButtonProps {
@@ -11,14 +13,22 @@ interface TourButtonProps {
 }
 
 
+
 export function TourButton({ className }: TourButtonProps) {
   const { t } = useTranslation('common');
-  const navigate = useNavigate();
-  const requestStart = useTourStore((state) => state.requestStart);
+  const { t: tTour } = useTranslation('tour');
+  const { user } = useAuth();
+  const location = useLocation();
+  const { startTour } = useTour();
+  const toast = useToast();
 
   const handleClick = () => {
-    requestStart();
-    navigate(paths.dashboard);
+    const steps = resolveTourSteps(location.pathname, user?.role, tTour);
+    if (!steps) {
+      toast.info(tTour('noGuideAvailable'));
+      return;
+    }
+    startTour(steps);
   };
 
   return (

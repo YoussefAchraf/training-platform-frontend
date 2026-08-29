@@ -104,19 +104,23 @@ export function SuperAdminUsersPage() {
 
   return (
     <div>
-      <PageHeader title={t('SuperAdminUsersPage.title')} description={t('SuperAdminUsersPage.description')} />
+      <div id="tour-users-header">
+        <PageHeader title={t('SuperAdminUsersPage.title')} description={t('SuperAdminUsersPage.description')} />
+      </div>
 
-      {usersQuery.isError ? (
-        <ErrorBanner error={usersQuery.error} onRetry={() => usersQuery.refetch()} />
-      ) : (
-        <Table
-          columns={columns}
-          data={usersQuery.data ?? []}
-          keyExtractor={getUserId}
-          isLoading={usersQuery.isPending}
-          emptyTitle={t('SuperAdminUsersPage.emptyTitle')}
-        />
-      )}
+      <div id="tour-users-table">
+        {usersQuery.isError ? (
+          <ErrorBanner error={usersQuery.error} onRetry={() => usersQuery.refetch()} />
+        ) : (
+          <Table
+            columns={columns}
+            data={usersQuery.data ?? []}
+            keyExtractor={getUserId}
+            isLoading={usersQuery.isPending}
+            emptyTitle={t('SuperAdminUsersPage.emptyTitle')}
+          />
+        )}
+      </div>
 
       <EditUserModal user={editing} onClose={handleCloseEdit} />
 

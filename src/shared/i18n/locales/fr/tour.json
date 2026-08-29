@@ -1,6 +1,7 @@
 {
   "guideButton": "Guide",
   "guideButtonAria": "Ouvrir la visite guidée",
+  "noGuideAvailable": "Aucun guide disponible pour cette page pour le moment.",
   "buttons": {
     "next": "Suivant",
     "back": "Précédent",
@@ -9,42 +10,137 @@
   },
   "replay": {
     "title": "Besoin d'un rappel ?",
-    "text": "Cliquez sur ce bouton Guide à tout moment pour revoir la visite adaptée à votre rôle."
+    "text": "Cliquez sur ce bouton Guide à tout moment pour revoir la visite de la page où vous êtes."
   },
-  "superAdmin": {
-    "welcome": { "title": "Bienvenue, SuperAdmin", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
-    "statTotalUsers": { "title": "Utilisateurs totaux", "text": "Tous les comptes de la plateforme, tous rôles confondus." },
-    "statPendingSignups": { "title": "Inscriptions en attente", "text": "Nouveaux comptes en attente d'approbation par un manager." },
-    "statDeactivated": { "title": "Désactivés", "text": "Comptes désactivés qui ne peuvent plus se connecter." },
-    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées dans l'entreprise." },
-    "quickLinkUsers": { "title": "Gérer les utilisateurs", "text": "Modifiez les rôles, statuts et détails de n'importe quel compte de la plateforme." },
-    "quickLinkSessions": { "title": "Aperçu des sessions", "text": "Toutes les sessions, à l'échelle de l'entreprise, avec leur statut et leur formateur en un coup d'œil." },
-    "quickLinkAudit": { "title": "Journal d'audit", "text": "Un historique complet de chaque création, modification, suppression et annulation, filtrable par date, rôle ou formateur." }
+  "dashboard": {
+    "superAdmin": {
+      "welcome": { "title": "Bienvenue, SuperAdmin", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+      "statTotalUsers": { "title": "Utilisateurs totaux", "text": "Tous les comptes de la plateforme, tous rôles confondus." },
+      "statPendingSignups": { "title": "Inscriptions en attente", "text": "Nouveaux comptes en attente d'approbation par un manager." },
+      "statDeactivated": { "title": "Désactivés", "text": "Comptes désactivés qui ne peuvent plus se connecter." },
+      "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées dans l'entreprise." },
+      "quickLinkUsers": { "title": "Gérer les utilisateurs", "text": "Modifiez les rôles, statuts et détails de n'importe quel compte de la plateforme." },
+      "quickLinkSessions": { "title": "Aperçu des sessions", "text": "Toutes les sessions, à l'échelle de l'entreprise, avec leur statut et leur formateur en un coup d'œil." },
+      "quickLinkAudit": { "title": "Journal d'audit", "text": "Un historique complet de chaque création, modification, suppression et annulation, filtrable par date, rôle ou formateur." }
+    },
+    "manager": {
+      "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+      "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées pour vos clients." },
+      "statNeedsInstructor": { "title": "Sans formateur", "text": "Sessions qui n'ont pas encore de formateur assigné." },
+      "statInstructors": { "title": "Formateurs", "text": "Le nombre de formateurs disponibles pour enseigner." },
+      "statPendingApprovals": { "title": "Demandes en attente", "text": "Nouvelles demandes de compte en attente de votre validation - cliquez pour y accéder directement." },
+      "cardNeedsInstructor": { "title": "En attente d'un formateur", "text": "Les sessions de la statistique ci-dessus, prêtes pour que vous leur assigniez un formateur." },
+      "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+    },
+    "sales": {
+      "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+      "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation que vous avez réservées pour des clients." },
+      "statProviders": { "title": "Prestataires", "text": "Organismes de certification pour lesquels vous dispensez des formations." },
+      "statTrainings": { "title": "Formations", "text": "Les cours de votre catalogue, tous prestataires confondus." },
+      "statClients": { "title": "Clients", "text": "Entreprises pour lesquelles vous réservez des sessions de formation." },
+      "cardAwaitingAssignment": { "title": "En attente d'affectation d'un formateur", "text": "Sessions qui ont encore besoin d'un formateur avant de pouvoir avoir lieu." },
+      "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+    },
+    "instructor": {
+      "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
+      "statMySessions": { "title": "Mes sessions", "text": "Toutes les sessions que vous êtes chargé d'enseigner." },
+      "statCompleted": { "title": "Terminées", "text": "Les sessions que vous avez déjà données." },
+      "statUpcomingAccepted": { "title": "À venir, acceptées", "text": "Sessions que vous êtes confirmé pour enseigner, bientôt." },
+      "cardRecentlyCompleted": { "title": "Terminées récemment", "text": "Vos sessions les plus récemment terminées, de la plus récente à la plus ancienne." },
+      "cardYourSessions": { "title": "Vos sessions", "text": "Vos sessions confirmées, planifiées ou en cours, de la plus proche à la plus lointaine." }
+    }
   },
-  "manager": {
-    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
-    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation réservées pour vos clients." },
-    "statNeedsInstructor": { "title": "Sans formateur", "text": "Sessions qui n'ont pas encore de formateur assigné." },
-    "statInstructors": { "title": "Formateurs", "text": "Le nombre de formateurs disponibles pour enseigner." },
-    "statPendingApprovals": { "title": "Demandes en attente", "text": "Nouvelles demandes de compte en attente de votre validation - cliquez pour y accéder directement." },
-    "cardNeedsInstructor": { "title": "En attente d'un formateur", "text": "Les sessions de la statistique ci-dessus, prêtes pour que vous leur assigniez un formateur." },
-    "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+  "providers": {
+    "header": { "title": "Prestataires", "text": "Les organismes de certification sous lesquels vos formations sont classées - Red Hat, AWS, etc." },
+    "add": { "title": "Ajouter un prestataire", "text": "Créez un nouveau prestataire, avec un logo optionnel, pour y classer des formations." },
+    "table": { "title": "Liste des prestataires", "text": "Tous les prestataires de la plateforme. Vous ne pouvez modifier ou supprimer que ceux que vous avez créés, sauf si vous êtes SuperAdmin." }
   },
-  "sales": {
-    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
-    "statTotalSessions": { "title": "Sessions totales", "text": "Toutes les sessions de formation que vous avez réservées pour des clients." },
-    "statProviders": { "title": "Prestataires", "text": "Organismes de certification pour lesquels vous dispensez des formations." },
-    "statTrainings": { "title": "Formations", "text": "Les cours de votre catalogue, tous prestataires confondus." },
-    "statClients": { "title": "Clients", "text": "Entreprises pour lesquelles vous réservez des sessions de formation." },
-    "cardAwaitingAssignment": { "title": "En attente d'affectation d'un formateur", "text": "Sessions qui ont encore besoin d'un formateur avant de pouvoir avoir lieu." },
-    "cardUpcomingSessions": { "title": "Sessions à venir", "text": "Ce qui arrive ensuite, du plus proche au plus lointain." }
+  "trainings": {
+    "header": { "title": "Formations", "text": "Les cours de votre catalogue, chacun rattaché à un prestataire." },
+    "add": { "title": "Ajouter une formation", "text": "Créez un nouveau cours - nom, prestataire et durée." },
+    "filter": { "title": "Filtrer par prestataire", "text": "Réduisez la liste aux formations d'un seul prestataire." },
+    "table": { "title": "Liste des formations", "text": "Toutes les formations de la plateforme, avec leur prestataire et leur durée. Vous ne pouvez modifier ou supprimer que celles que vous avez créées, sauf si vous êtes SuperAdmin." }
   },
-  "instructor": {
-    "welcome": { "title": "Content de vous revoir", "text": "Un tour rapide de votre tableau de bord - ce que montre chaque section et où aller ensuite." },
-    "statMySessions": { "title": "Mes sessions", "text": "Toutes les sessions que vous êtes chargé d'enseigner." },
-    "statCompleted": { "title": "Terminées", "text": "Les sessions que vous avez déjà données." },
-    "statUpcomingAccepted": { "title": "À venir, acceptées", "text": "Sessions que vous êtes confirmé pour enseigner, bientôt." },
-    "cardRecentlyCompleted": { "title": "Terminées récemment", "text": "Vos sessions les plus récemment terminées, de la plus récente à la plus ancienne." },
-    "cardYourSessions": { "title": "Vos sessions", "text": "Vos sessions confirmées, planifiées ou en cours, de la plus proche à la plus lointaine." }
+  "clients": {
+    "header": { "title": "Clients", "text": "Les entreprises pour lesquelles vous réservez des sessions de formation." },
+    "add": { "title": "Ajouter un client", "text": "Créez un nouveau client, avec un email et un numéro de téléphone de contact." },
+    "table": { "title": "Liste des clients", "text": "Tous les clients de la plateforme. Vous ne pouvez modifier ou supprimer que ceux que vous avez créés, sauf si vous êtes SuperAdmin." }
+  },
+  "sessions": {
+    "list": {
+      "header": { "title": "Sessions", "text": "Toutes les sessions de formation réservées." },
+      "add": { "title": "Réserver une session", "text": "Planifiez une nouvelle session de formation pour un client." },
+      "table": { "title": "Liste des sessions", "text": "Cliquez sur une ligne pour ouvrir la page de détail complète de cette session." }
+    }
+  },
+  "sessionDetail": {
+    "common": {
+      "details": { "title": "Détails de la session", "text": "Prestataire, dates et formateur assigné en un coup d'œil." }
+    },
+    "superAdmin": {
+      "header": { "title": "Cette session", "text": "Son statut, son affectation et toutes les actions possibles." },
+      "assign": { "title": "Assigner un formateur", "text": "Choisissez qui donne cette session. Désactivé tant qu'aucun participant n'a été ajouté." },
+      "edit": { "title": "Modifier ou annuler", "text": "Changez les dates, ou annulez carrément la session." },
+      "attendees": { "title": "Participants", "text": "Ajoutez des participants un par un ou importez une liste, et voyez qui a répondu au sondage." },
+      "report": { "title": "Rapport", "text": "Générez le rapport de fin de session une fois les sondages des participants reçus." }
+    },
+    "manager": {
+      "header": { "title": "Cette session", "text": "Son statut et son affectation en un coup d'œil. Si vous l'avez réservée, les boutons Modifier et Annuler apparaissent aussi ici." },
+      "assign": { "title": "Assigner un formateur", "text": "Choisissez qui donne cette session. Désactivé tant qu'aucun participant n'a été ajouté." },
+      "attendees": { "title": "Participants", "text": "Ajoutez des participants un par un ou importez une liste, et voyez qui a répondu au sondage." },
+      "report": { "title": "Rapport", "text": "Générez le rapport de fin de session une fois les sondages des participants reçus." }
+    },
+    "sales": {
+      "header": { "title": "Cette session", "text": "Son statut et son affectation en un coup d'œil. Si vous l'avez réservée, les boutons Modifier et Annuler apparaissent aussi ici." },
+      "attendees": { "title": "Participants", "text": "Ajoutez des participants un par un ou importez une liste, et voyez qui a répondu au sondage." },
+      "report": { "title": "Rapport", "text": "Générez le rapport de fin de session une fois les sondages des participants reçus." }
+    },
+    "instructor": {
+      "header": { "title": "Cette session", "text": "Son statut et son affectation en un coup d'œil." },
+      "qr": { "title": "QR code du sondage", "text": "Montrez-le aux participants pour qu'ils remplissent le sondage post-formation sur leur téléphone." },
+      "attendees": { "title": "Participants", "text": "Marquez chaque participant présent ou absent, et voyez qui a répondu au sondage." },
+      "report": { "title": "Rapport", "text": "Le rapport de fin de session, une fois généré." }
+    }
+  },
+  "instructors": {
+    "header": { "title": "Formateurs", "text": "Toutes les personnes disponibles pour enseigner, avec les formations qu'elles maîtrisent." },
+    "tableEdit": { "title": "Liste des formateurs", "text": "Cliquez sur Modifier sur une ligne pour mettre à jour les compétences ou les détails d'un formateur." },
+    "tableReadOnly": { "title": "Liste des formateurs", "text": "Toutes les personnes disponibles pour enseigner, et les formations qu'elles peuvent donner." }
+  },
+  "myProfile": {
+    "header": { "title": "Mon profil", "text": "Ce que Sales et Managers voient de vous lors de l'affectation des sessions." },
+    "card": { "title": "Bio et compétences", "text": "Rédigez une courte bio et choisissez les formations que vous êtes capable de donner." }
+  },
+  "pendingApprovals": {
+    "header": { "title": "Demandes en attente", "text": "Nouvelles demandes de compte en attente d'une décision." },
+    "table": { "title": "Demandes", "text": "Approuvez pour laisser la personne se connecter, ou refusez pour la rejeter." }
+  },
+  "auditLog": {
+    "header": { "title": "Journal d'audit", "text": "Un historique complet de chaque création, modification, suppression et annulation sur la plateforme." },
+    "filtersSuperAdmin": { "title": "Filtres", "text": "Réduisez les entrées par type d'entité (y compris les comptes utilisateurs), un ID précis, le rôle de l'acteur ou une plage de dates." },
+    "filtersManager": { "title": "Filtres", "text": "Réduisez les entrées par type d'entité, un ID précis, le rôle de l'acteur ou une plage de dates." },
+    "list": { "title": "Entrées", "text": "Cliquez sur une entrée pour voir exactement ce qui a changé, avant et après." }
+  },
+  "users": {
+    "header": { "title": "Utilisateurs", "text": "Tous les comptes de la plateforme, tous rôles confondus." },
+    "table": { "title": "Liste des utilisateurs", "text": "Modifiez le rôle, le statut ou les détails de n'importe qui, ou désactivez un compte." }
+  },
+  "sessionsOverview": {
+    "header": { "title": "Aperçu des sessions", "text": "Toutes les sessions de formation, à l'échelle de l'entreprise, au même endroit." },
+    "table": { "title": "Liste des sessions", "text": "Statut, affectation, participants et disponibilité du rapport en un coup d'œil. Cliquez sur une ligne pour le détail complet." }
+  },
+  "calendar": {
+    "headerManage": { "title": "Calendrier", "text": "Toutes les sessions de l'entreprise, organisées par date." },
+    "headerOther": { "title": "Calendrier", "text": "Vos propres sessions, organisées par date." },
+    "toggle": { "title": "Changer de vue", "text": "Carte thermique affiche une grille mensuelle ; Agenda liste les sessions jour par jour." },
+    "bodyManage": { "title": "Sessions par date", "text": "Cliquez sur un jour pour voir ce qui est réservé, ou sur une session pour la modifier ou la supprimer." },
+    "bodyOther": { "title": "Sessions par date", "text": "Cliquez sur un jour pour voir ce que vous enseignez." }
+  },
+  "account": {
+    "header": { "title": "Compte", "text": "Votre profil, les détails de votre compte et vos paramètres de notification." },
+    "profile": { "title": "Votre nom", "text": "Mettez à jour votre prénom et votre nom ici." },
+    "details": { "title": "Détails du compte", "text": "Votre email, rôle et statut de compte - lecture seule, demandez à un manager de les modifier." },
+    "detailsInstructor": { "title": "Détails du compte", "text": "Votre email, rôle et statut de compte - lecture seule, demandez à un manager de les modifier. Utilisez le lien ci-dessous pour gérer votre bio et vos compétences." },
+    "notifications": { "title": "Notifications push", "text": "Activez les notifications sur cet appareil pour être alerté des nouvelles sessions et mises à jour." }
   }
 }
