@@ -53,18 +53,6 @@ export function useAssignInstructor() {
   });
 }
 
-export function useRespondToSession() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, decision }: { id: number; decision: 'accept' | 'refuse' }) =>
-      sessionsApi.respond(id, decision),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list() });
-      queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
-    },
-  });
-}
-
 export function useAddAttendee() {
   const queryClient = useQueryClient();
   return useMutation({

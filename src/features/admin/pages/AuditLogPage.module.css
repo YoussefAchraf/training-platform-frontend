@@ -2,17 +2,17 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  max-width: 480px;
   margin-bottom: var(--space-4);
 }
 
 @media (--sm) {
   .filters {
     flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .filters > * {
-    flex: 1;
+    flex: 1 1 180px;
     min-width: 0;
   }
 }

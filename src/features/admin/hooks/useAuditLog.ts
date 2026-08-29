@@ -5,7 +5,13 @@ import type { AuditLogFilters } from '../api/adminApi';
 
 export function useAuditLog(filters: AuditLogFilters) {
   return useQuery({
-    queryKey: queryKeys.admin.auditLog(filters.entityType, filters.entityId),
+    queryKey: queryKeys.admin.auditLog(
+      filters.entityType,
+      filters.entityId,
+      filters.startDate,
+      filters.endDate,
+      filters.roleName,
+    ),
     queryFn: () => adminApi.auditLog(filters),
   });
 }

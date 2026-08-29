@@ -43,7 +43,15 @@ export const queryKeys = {
     all: ['admin'] as const,
     users: () => [...queryKeys.admin.all, 'users'] as const,
     sessions: () => [...queryKeys.admin.all, 'sessions'] as const,
-    auditLog: (entityType?: string, entityId?: number) =>
-      [...queryKeys.admin.all, 'auditLog', entityType ?? null, entityId ?? null] as const,
+    auditLog: (entityType?: string, entityId?: number, startDate?: string, endDate?: string, roleName?: string) =>
+      [
+        ...queryKeys.admin.all,
+        'auditLog',
+        entityType ?? null,
+        entityId ?? null,
+        startDate ?? null,
+        endDate ?? null,
+        roleName ?? null,
+      ] as const,
   },
 } as const;

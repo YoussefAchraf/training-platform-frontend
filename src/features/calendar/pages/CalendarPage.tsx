@@ -109,7 +109,11 @@ export function CalendarPage() {
         {query.isError ? (
           <ErrorBanner error={query.error} onRetry={() => query.refetch()} />
         ) : viewMode === 'heatmap' ? (
-          <CalendarHeatmap events={query.data ?? []} isLoading={query.isPending} />
+          <CalendarHeatmap
+            events={query.data ?? []}
+            isLoading={query.isPending}
+            renderActions={canManageCatalog ? renderActions : undefined}
+          />
         ) : (
           <CalendarAgenda
             events={query.data ?? []}

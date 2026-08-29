@@ -40,7 +40,7 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
       { id: session.id, instructorId: Number(instructorId) },
       {
         onSuccess: () => {
-          toast.success('Instructor assigned. Awaiting their response.');
+          toast.success('Instructor assigned.');
           handleClose();
         },
       },
@@ -52,7 +52,7 @@ export function AssignInstructorModal({ isOpen, onClose, session, instructors }:
       isOpen={isOpen}
       onClose={handleClose}
       title="Assign instructor"
-      description="The instructor will be notified and can accept or refuse this session."
+      description="The instructor will be notified by email and push notification."
       footer={
         <>
           <Button variant="outline" onClick={handleClose}>
