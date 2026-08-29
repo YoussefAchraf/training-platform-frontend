@@ -1,0 +1,50 @@
+{
+  "guideButton": "Guide",
+  "guideButtonAria": "Open guided tour",
+  "buttons": {
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "progress": "{{current}} of {{total}}"
+  },
+  "replay": {
+    "title": "Need this again?",
+    "text": "Click this Guide button anytime to replay the tour for your role."
+  },
+  "superAdmin": {
+    "welcome": { "title": "Welcome, SuperAdmin", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+    "statTotalUsers": { "title": "Total users", "text": "Every account on the platform, across every role." },
+    "statPendingSignups": { "title": "Pending signups", "text": "New accounts waiting for a Manager to approve them." },
+    "statDeactivated": { "title": "Deactivated", "text": "Accounts that have been switched off and can no longer sign in." },
+    "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked across the company." },
+    "quickLinkUsers": { "title": "Manage users", "text": "Edit roles, statuses, and account details for anyone on the platform." },
+    "quickLinkSessions": { "title": "Sessions overview", "text": "Every session, company-wide, with its status and instructor at a glance." },
+    "quickLinkAudit": { "title": "Audit log", "text": "A full history of every create, update, delete, and cancel action, filterable by date, role, or instructor." }
+  },
+  "manager": {
+    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+    "statTotalSessions": { "title": "Total sessions", "text": "Every training session booked for your clients." },
+    "statNeedsInstructor": { "title": "Needs instructor", "text": "Sessions that still don't have an instructor assigned." },
+    "statInstructors": { "title": "Instructors", "text": "How many instructors are available to teach." },
+    "statPendingApprovals": { "title": "Pending approvals", "text": "New account requests waiting on your review - click to jump straight there." },
+    "cardNeedsInstructor": { "title": "Needs an instructor", "text": "The sessions from the stat above, ready for you to assign an instructor to." },
+    "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+  },
+  "sales": {
+    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+    "statTotalSessions": { "title": "Total sessions", "text": "Every training session you've booked for clients." },
+    "statProviders": { "title": "Providers", "text": "Certification bodies you deliver trainings for." },
+    "statTrainings": { "title": "Trainings", "text": "Courses in your catalog, across every provider." },
+    "statClients": { "title": "Clients", "text": "Companies you book training sessions for." },
+    "cardAwaitingAssignment": { "title": "Awaiting instructor assignment", "text": "Sessions that still need an instructor before they can go ahead." },
+    "cardUpcomingSessions": { "title": "Upcoming sessions", "text": "What's coming up next, soonest first." }
+  },
+  "instructor": {
+    "welcome": { "title": "Welcome back", "text": "A quick look at your dashboard - what each section shows and where to go next." },
+    "statMySessions": { "title": "My sessions", "text": "Every session you're assigned to teach." },
+    "statCompleted": { "title": "Completed", "text": "Sessions you've already taught." },
+    "statUpcomingAccepted": { "title": "Upcoming, accepted", "text": "Sessions you're confirmed to teach, coming up soon." },
+    "cardRecentlyCompleted": { "title": "Recently completed", "text": "Your most recently finished sessions, most recent first." },
+    "cardYourSessions": { "title": "Your sessions", "text": "Your confirmed, scheduled or ongoing sessions, soonest first." }
+  }
+}

@@ -1,0 +1,103 @@
+
+
+.driver-popover {
+  max-width: min(340px, calc(100vw - 32px));
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-sans);
+}
+
+.driver-popover-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.driver-popover-description {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-muted);
+}
+
+.driver-popover-close-btn {
+  color: var(--color-text-faint);
+}
+
+.driver-popover-close-btn:hover,
+.driver-popover-close-btn:focus-visible {
+  color: var(--color-text);
+}
+
+.driver-popover-footer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.driver-popover-progress-text {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  font-family: var(--font-sans);
+}
+
+.driver-popover-footer-btn {
+  min-height: 36px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  text-shadow: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.driver-popover-footer-btn:hover,
+.driver-popover-footer-btn:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-text-faint);
+  color: var(--color-text);
+}
+
+.driver-popover-next-btn,
+.driver-popover-done-btn {
+  border-color: transparent;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-done-btn:hover,
+.driver-popover-next-btn:focus-visible,
+.driver-popover-done-btn:focus-visible {
+  background-color: var(--color-primary-hover);
+  border-color: transparent;
+  color: var(--color-text-on-primary);
+}
+
+.driver-popover-btn-disabled {
+  opacity: 0.5;
+}
+
+.driver-popover-arrow-side-left {
+  border-right-color: var(--color-surface);
+}
+
+.driver-popover-arrow-side-right {
+  border-left-color: var(--color-surface);
+}
+
+.driver-popover-arrow-side-top {
+  border-bottom-color: var(--color-surface);
+}
+
+.driver-popover-arrow-side-bottom {
+  border-top-color: var(--color-surface);
+}

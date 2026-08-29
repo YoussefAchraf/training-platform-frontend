@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useDashboardTour } from '@/features/tour/useDashboardTour';
 import { ManagerDashboard } from '../components/ManagerDashboard';
 import { SalesDashboard } from '../components/SalesDashboard';
 import { InstructorDashboard } from '../components/InstructorDashboard';
@@ -9,6 +10,7 @@ import { SuperAdminDashboard } from '../components/SuperAdminDashboard';
 export function DashboardPage() {
   const { t } = useTranslation('dashboard');
   const { user, isManager, isInstructor, isSuperAdmin } = useAuth();
+  useDashboardTour();
 
   return (
     <div>

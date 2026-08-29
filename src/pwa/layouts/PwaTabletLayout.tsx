@@ -5,6 +5,7 @@ import { CHATBOT_WEBHOOK_URL } from '@/features/chatbot/api/chatbotClient';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIdlePrefetch } from '@/routes/useIdlePrefetch';
 import { UserMenu } from '@/layouts/components/UserMenu';
+import { TourButton } from '@/features/tour/TourButton';
 import { paths } from '@/routes/paths';
 import type { NavItem } from '@/layouts/components/navItems';
 import { PwaHeader } from '../components/PwaHeader';
@@ -39,6 +40,7 @@ export function PwaTabletLayout() {
           extraItems={CHATBOT_WEBHOOK_URL ? [chatExtraItem] : undefined}
         />
         <div className={styles.railFooter}>
+          <TourButton />
           <UserMenu placement="up" variant="compact" align="left" />
         </div>
       </aside>

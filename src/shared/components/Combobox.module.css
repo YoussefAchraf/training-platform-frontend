@@ -54,6 +54,12 @@
   overscroll-behavior: contain;
 }
 
+
+.listUp {
+  top: auto;
+  bottom: calc(100% + var(--space-2));
+}
+
 .option {
   display: flex;
   align-items: center;

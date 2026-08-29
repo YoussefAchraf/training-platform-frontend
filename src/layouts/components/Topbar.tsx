@@ -1,6 +1,7 @@
 import { Menu } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUiStore } from '@/shared/store/uiStore';
+import { TourButton } from '@/features/tour/TourButton';
 import { UserMenu } from './UserMenu';
 import styles from './Topbar.module.css';
 
@@ -19,6 +20,7 @@ export function Topbar() {
         <Menu size={22} />
       </button>
       <span className={styles.brandName}>{t('Nav.brand')}</span>
+      <TourButton />
       <UserMenu placement="down" variant="compact" />
     </header>
   );

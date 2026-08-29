@@ -32,10 +32,10 @@
   },
   "InstructorDashboard": {
     "mySessions": "Mes sessions",
-    "awaitingResponse": "En attente de votre réponse",
+    "completedSessions": "Terminées",
     "upcomingAccepted": "À venir, acceptées",
-    "awaitingResponseCardTitle": "En attente de votre réponse",
-    "nothingWaiting": "Rien n'est en attente pour le moment.",
+    "recentlyCompletedCardTitle": "Terminées récemment",
+    "noCompletedYet": "Rien de terminé pour l'instant.",
     "yourSessionsCardTitle": "Vos sessions",
     "noScheduled": "Aucune session planifiée ou en cours."
   },

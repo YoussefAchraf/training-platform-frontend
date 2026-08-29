@@ -45,8 +45,22 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     const { t } = useTranslation('common');
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [openUpward, setOpenUpward] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const listboxId = useId();
+
+    
+    
+    
+    
+    
+    useEffect(() => {
+      if (!isOpen || !wrapperRef.current) return;
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setOpenUpward(spaceBelow < 200 && spaceAbove > spaceBelow);
+    }, [isOpen]);
 
     const filteredOptions = useMemo(() => {
       const query = value.trim().toLowerCase();
@@ -135,7 +149,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
           <ul
             id={listboxId}
             role="listbox"
-            className={styles.list}
+            className={cn(styles.list, openUpward && styles.listUp)}
             style={{ '--combobox-visible-count': visibleCount } as CSSProperties}
           >
             {filteredOptions.map((option, index) => {

@@ -10,6 +10,7 @@ import { usePrefetchRoute } from '@/routes/routeModules';
 import { useUiStore } from '@/shared/store/uiStore';
 import { cn } from '@/shared/utils/cn';
 import { UserMenu } from '@/layouts/components/UserMenu';
+import { TourButton } from '@/features/tour/TourButton';
 import { groupedNavItems } from '@/layouts/components/navItems';
 import { paths } from '@/routes/paths';
 import { CommandPalette } from '../components/CommandPalette';
@@ -47,6 +48,7 @@ export function PwaDesktopLayout() {
           <kbd className={styles.kbd}>{isMac ? '⌘K' : 'Ctrl K'}</kbd>
         </button>
         <div className={styles.userMenuSlot}>
+          <TourButton />
           <UserMenu placement="down" variant="compact" />
         </div>
       </header>

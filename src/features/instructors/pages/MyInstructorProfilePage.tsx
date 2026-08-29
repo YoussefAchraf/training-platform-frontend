@@ -29,7 +29,7 @@ export function MyInstructorProfilePage() {
         <Card>
           <div className={styles.header}>
             <Avatar firstname={profileQuery.data.firstname} lastname={profileQuery.data.lastname} size={48} />
-            <div>
+            <div className={styles.headerText}>
               <p className={styles.name}>
                 {profileQuery.data.firstname} {profileQuery.data.lastname}
               </p>

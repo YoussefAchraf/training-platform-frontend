@@ -34,24 +34,24 @@ export function SuperAdminDashboard() {
   const deactivatedCount = users.filter((user) => user.status === 'deactivated').length;
 
   const quickLinks = [
-    { to: paths.superAdminUsers, icon: UserCog, label: t('SuperAdminDashboard.manageUsers'), description: t('SuperAdminDashboard.manageUsersDescription') },
-    { to: paths.superAdminSessions, icon: CalendarClock, label: t('SuperAdminDashboard.sessionsOverview'), description: t('SuperAdminDashboard.sessionsOverviewDescription') },
-    { to: paths.auditLog, icon: History, label: t('SuperAdminDashboard.auditLog'), description: t('SuperAdminDashboard.auditLogDescription') },
+    { id: 'tour-quicklink-users', to: paths.superAdminUsers, icon: UserCog, label: t('SuperAdminDashboard.manageUsers'), description: t('SuperAdminDashboard.manageUsersDescription') },
+    { id: 'tour-quicklink-sessions', to: paths.superAdminSessions, icon: CalendarClock, label: t('SuperAdminDashboard.sessionsOverview'), description: t('SuperAdminDashboard.sessionsOverviewDescription') },
+    { id: 'tour-quicklink-audit', to: paths.auditLog, icon: History, label: t('SuperAdminDashboard.auditLog'), description: t('SuperAdminDashboard.auditLogDescription') },
   ];
 
   return (
     <div>
       <StatTileGrid>
-        <StatTile label={t('SuperAdminDashboard.totalUsers')} value={users.length} icon={Users2} tone="primary" />
-        <StatTile label={t('SuperAdminDashboard.pendingSignups')} value={pendingCount} icon={ShieldAlert} />
-        <StatTile label={t('SuperAdminDashboard.deactivated')} value={deactivatedCount} icon={UserCog} />
-        <StatTile label={t('SuperAdminDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} />
+        <StatTile id="tour-stat-total-users" label={t('SuperAdminDashboard.totalUsers')} value={users.length} icon={Users2} tone="primary" />
+        <StatTile id="tour-stat-pending-signups" label={t('SuperAdminDashboard.pendingSignups')} value={pendingCount} icon={ShieldAlert} />
+        <StatTile id="tour-stat-deactivated" label={t('SuperAdminDashboard.deactivated')} value={deactivatedCount} icon={UserCog} />
+        <StatTile id="tour-stat-total-sessions" label={t('SuperAdminDashboard.totalSessions')} value={sessions.length} icon={CalendarClock} />
       </StatTileGrid>
 
       <div className={quickLinkStyles.grid}>
         {quickLinks.map((link) => (
           <Link key={link.to} to={link.to} className={quickLinkStyles.quickLink}>
-            <Card interactive className={quickLinkStyles.quickLinkCard}>
+            <Card id={link.id} interactive className={quickLinkStyles.quickLinkCard}>
               <span className={quickLinkStyles.quickLinkIcon}>
                 <link.icon size={20} />
               </span>

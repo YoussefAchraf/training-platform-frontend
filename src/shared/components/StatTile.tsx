@@ -10,6 +10,8 @@ interface StatTileProps {
   value: string | number;
   icon?: ComponentType<{ size?: number }>;
   tone?: 'primary' | 'neutral';
+  id?: string;
+  className?: string;
 }
 
 function AnimatedNumber({ value }: { value: number }) {
@@ -29,15 +31,15 @@ function AnimatedNumber({ value }: { value: number }) {
   return <motion.span>{rounded}</motion.span>;
 }
 
-export function StatTile({ label, value, icon: Icon, tone = 'neutral' }: StatTileProps) {
+export function StatTile({ label, value, icon: Icon, tone = 'neutral', id, className }: StatTileProps) {
   return (
-    <motion.div className={cn(styles.tile, tone === 'primary' && styles.primary)} variants={fadeInUp}>
+    <motion.div id={id} className={cn(styles.tile, tone === 'primary' && styles.primary, className)} variants={fadeInUp}>
       {Icon && (
         <span className={styles.iconWrap}>
           <Icon size={18} />
         </span>
       )}
-      <div>
+      <div className={styles.text}>
         <p className={styles.value}>{typeof value === 'number' ? <AnimatedNumber value={value} /> : value}</p>
         <p className={styles.label}>{label}</p>
       </div>
