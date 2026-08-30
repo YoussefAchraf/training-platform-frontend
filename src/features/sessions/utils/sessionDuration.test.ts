@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { describe, expect, it } from 'vitest';
-import { combineDateAndTime, computeSessionEndDay, hoursBetweenTimes } from './sessionDuration';
+import { combineDateAndTime, computeDaysNeeded, computeSessionEndDay, hoursBetweenTimes } from './sessionDuration';
 
 
 
@@ -64,6 +64,23 @@ describe('computeSessionEndDay', () => {
       const withFour = computeSessionEndDay('2026-08-20', 3, 'days', 4, false);
       expect(isoDate(withEight)).toBe(isoDate(withFour));
     });
+  });
+});
+
+describe('computeDaysNeeded', () => {
+  it('returns null when hoursPerDay or duration is missing/not positive', () => {
+    expect(computeDaysNeeded(3, 'days', 0)).toBeNull();
+    expect(computeDaysNeeded(0, 'days', 8)).toBeNull();
+  });
+
+  it('is the duration itself for a days-unit training', () => {
+    expect(computeDaysNeeded(5, 'days', 8)).toBe(5);
+  });
+
+  it('rounds up for an hours-unit training that does not divide evenly', () => {
+    expect(computeDaysNeeded(10, 'hours', 8)).toBe(2);
+    expect(computeDaysNeeded(6, 'hours', 8)).toBe(1);
+    expect(computeDaysNeeded(24, 'hours', 8)).toBe(3);
   });
 });
 

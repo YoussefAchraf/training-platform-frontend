@@ -12,8 +12,6 @@ import {
   isSameDay,
   isSameMonth,
   isToday,
-  isValid,
-  parseISO,
   startOfMonth,
   startOfWeek,
   subMonths,
@@ -26,6 +24,7 @@ import { currentLocale, formatDate, formatTime } from '@/shared/utils/formatDate
 import { fadeIn, listItem, staggerContainer } from '@/shared/motion/variants';
 import type { CalendarEvent } from '@/shared/types/domain';
 import { paths } from '@/routes/paths';
+import { expandEventDays } from '../utils/expandEventDays';
 import styles from './CalendarHeatmap.module.css';
 
 interface CalendarHeatmapProps {
@@ -40,14 +39,10 @@ function dayKey(date: Date): string {
 
 
 
-
 function groupEventsByDayKey(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
   const groups = new Map<string, CalendarEvent[]>();
   for (const event of events) {
-    const start = parseISO(event.eventDate);
-    if (!isValid(start)) continue;
-    const end = event.endDate ? parseISO(event.endDate) : start;
-    const days = isValid(end) && end >= start ? eachDayOfInterval({ start, end }) : [start];
+    const days = expandEventDays(event);
     for (const day of days) {
       const key = dayKey(day);
       const existing = groups.get(key);
