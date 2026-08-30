@@ -42,7 +42,11 @@ export function SessionDetailPage() {
   
   
   
-  const attendeesQuery = useSessionAttendees(sessionId, { enabled: canAssignInstructor });
+  
+  
+  
+  
+  const attendeesQuery = useSessionAttendees(sessionId, { enabled: canManageCatalog });
   const myProfileQuery = useMyInstructorProfile({ enabled: isInstructor });
   const cancelSession = useCancelSession();
   const toast = useToast();
@@ -75,6 +79,7 @@ export function SessionDetailPage() {
   const client = clientMap.get(session.clientId);
   const instructor = session.instructorId ? instructorMap.get(session.instructorId) : undefined;
   const hasAttendees = (attendeesQuery.data?.length ?? 0) > 0;
+  const hasMarkingStarted = (attendeesQuery.data ?? []).some((attendee) => attendee.attendanceStatus !== 'pending');
   const isMySession = isInstructor && myProfileQuery.data?.id === session.instructorId;
   const isOwner = session.createdBy === user?.id && canManageCatalog;
   const canEditSession = (isOwner || isSuperAdmin) && session.sessionStatus !== 'cancelled';
@@ -178,12 +183,20 @@ export function SessionDetailPage() {
             </h3>
             <div className="stack">
               {canManageCatalog && (
-                <>
-                  <AddAttendeeForm sessionId={session.id} />
-                  <AttendeeImportForm sessionId={session.id} />
-                </>
+                hasMarkingStarted ? (
+                  <p className={styles.attendeesLockedNote}>{t('SessionDetailPage.attendeesLocked')}</p>
+                ) : (
+                  <>
+                    <AddAttendeeForm sessionId={session.id} />
+                    <AttendeeImportForm sessionId={session.id} />
+                  </>
+                )
               )}
-              <AttendeeList sessionId={session.id} canMarkAttendance={isMySession} />
+              <AttendeeList
+                sessionId={session.id}
+                canMarkAttendance={isMySession}
+                canEdit={canManageCatalog && !hasMarkingStarted}
+              />
             </div>
           </Card>
         )}
