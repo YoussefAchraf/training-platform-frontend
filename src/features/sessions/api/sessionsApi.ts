@@ -14,6 +14,11 @@ export interface AddAttendeePayload {
   email?: string;
 }
 
+export interface UpdateAttendeePayload {
+  name: string;
+  email?: string;
+}
+
 export interface UpdateSessionPayload {
   startDate: string;
   endDate: string;
@@ -54,5 +59,10 @@ export const sessionsApi = {
   markAttendance: (sessionId: number, attendeeId: number, status: 'present' | 'absent') =>
     apiClient
       .patch<SessionAttendee>(`/sessions/${sessionId}/attendees/${attendeeId}/attendance`, { status })
+      .then((res) => res.data),
+
+  updateAttendee: (sessionId: number, attendeeId: number, payload: UpdateAttendeePayload) =>
+    apiClient
+      .patch<SessionAttendee>(`/sessions/${sessionId}/attendees/${attendeeId}`, payload)
       .then((res) => res.data),
 };

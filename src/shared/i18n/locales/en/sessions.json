@@ -6,7 +6,8 @@
     "markAbsent": "Absent",
     "markPresent": "Present",
     "markedPresent": "Marked present.",
-    "markedAbsent": "Marked absent."
+    "markedAbsent": "Marked absent.",
+    "editAttendee": "Edit {{name}}"
   },
   "SessionsPage": {
     "title": "Sessions",
@@ -43,6 +44,7 @@
     "instructor": "Instructor",
     "unassigned": "Unassigned",
     "attendeesCardTitle": "Attendees",
+    "attendeesLocked": "The instructor has started marking attendance, so the attendee list is now locked - no more adding or editing.",
     "reportCardTitle": "Report",
     "cancelDialogTitle": "Cancel this session?",
     "cancelDialogDescription": "Attendees and the assigned instructor will keep their records, but the session will be marked cancelled.",
@@ -91,6 +93,16 @@
       "endDateRequired": "End date is required",
       "endAfterStart": "End date must be after the start date"
     }
+  },
+  "EditAttendeeModal": {
+    "title": "Edit attendee",
+    "description": "Update this attendee's name or email.",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "emailOptionalHint": "Optional",
+    "attendeeUpdated": "{{name}} updated."
   },
   "AddAttendeeForm": {
     "nameLabel": "Name",
