@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { sessionsApi } from '../api/sessionsApi';
-import type { AddAttendeePayload, UpdateSessionPayload } from '../api/sessionsApi';
+import type { AddAttendeePayload, UpdateAttendeePayload, UpdateSessionPayload } from '../api/sessionsApi';
 
 export function useSessions() {
   return useQuery({
@@ -87,6 +87,24 @@ export function useMarkAttendance() {
   return useMutation({
     mutationFn: ({ sessionId, attendeeId, status }: { sessionId: number; attendeeId: number; status: 'present' | 'absent' }) =>
       sessionsApi.markAttendance(sessionId, attendeeId, status),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.attendees(sessionId) });
+    },
+  });
+}
+
+export function useUpdateAttendee() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      sessionId,
+      attendeeId,
+      payload,
+    }: {
+      sessionId: number;
+      attendeeId: number;
+      payload: UpdateAttendeePayload;
+    }) => sessionsApi.updateAttendee(sessionId, attendeeId, payload),
     onSuccess: (_data, { sessionId }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.attendees(sessionId) });
     },

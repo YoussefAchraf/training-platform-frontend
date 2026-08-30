@@ -6,7 +6,8 @@
     "markAbsent": "Absent",
     "markPresent": "Présent",
     "markedPresent": "Marqué présent.",
-    "markedAbsent": "Marqué absent."
+    "markedAbsent": "Marqué absent.",
+    "editAttendee": "Modifier {{name}}"
   },
   "SessionsPage": {
     "title": "Sessions",
@@ -43,6 +44,7 @@
     "instructor": "Formateur",
     "unassigned": "Non assigné",
     "attendeesCardTitle": "Participants",
+    "attendeesLocked": "Le formateur a commencé à pointer les présences, la liste des participants est donc désormais verrouillée - plus d'ajout ni de modification possible.",
     "reportCardTitle": "Rapport",
     "cancelDialogTitle": "Annuler cette session ?",
     "cancelDialogDescription": "Les participants et le formateur assigné conserveront leurs enregistrements, mais la session sera marquée comme annulée.",
@@ -91,6 +93,16 @@
       "endDateRequired": "La date de fin est requise",
       "endAfterStart": "La date de fin doit être après la date de début"
     }
+  },
+  "EditAttendeeModal": {
+    "title": "Modifier le participant",
+    "description": "Mettez à jour le nom ou l'e-mail de ce participant.",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "nameLabel": "Nom",
+    "emailLabel": "E-mail",
+    "emailOptionalHint": "Optionnel",
+    "attendeeUpdated": "{{name}} mis à jour."
   },
   "AddAttendeeForm": {
     "nameLabel": "Nom",

@@ -10,6 +10,7 @@ vi.mock('../api/sessionsApi', () => ({
   sessionsApi: {
     listAttendees: vi.fn(),
     markAttendance: vi.fn(),
+    updateAttendee: vi.fn(),
   },
 }))
 
@@ -79,5 +80,42 @@ describe('AttendeeList', () => {
     await user.click(await screen.findByRole('button', { name: /absent/i }))
 
     await waitFor(() => expect(mockedSessionsApi.markAttendance).toHaveBeenCalledWith(42, 1, 'absent'))
+  })
+
+  it('does not show an edit button when canEdit is false', async () => {
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} />)
+
+    await screen.findByText('Jane Attendee')
+    expect(screen.queryByRole('button', { name: /edit jane attendee/i })).not.toBeInTheDocument()
+  })
+
+  it('opens the edit modal, pre-filled, when the edit button is clicked', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} canEdit />)
+
+    await user.click(await screen.findByRole('button', { name: /edit jane attendee/i }))
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Jane Attendee')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('jane@example.com')).toBeInTheDocument()
+  })
+
+  it('submitting the edit modal calls updateAttendee with the new values', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    mockedSessionsApi.updateAttendee.mockResolvedValue({ ...attendee, name: 'Jane Updated' })
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} canEdit />)
+
+    await user.click(await screen.findByRole('button', { name: /edit jane attendee/i }))
+    const nameInput = screen.getByDisplayValue('Jane Attendee')
+    await user.clear(nameInput)
+    await user.type(nameInput, 'Jane Updated')
+    await user.click(screen.getByRole('button', { name: /save changes/i }))
+
+    await waitFor(() =>
+      expect(mockedSessionsApi.updateAttendee).toHaveBeenCalledWith(42, 1, { name: 'Jane Updated', email: 'jane@example.com' }),
+    )
   })
 })

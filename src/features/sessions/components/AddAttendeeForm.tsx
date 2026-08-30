@@ -1,25 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { Input } from '@/shared/components/Input';
 import { FormField } from '@/shared/components/FormField';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { useAddAttendee } from '../hooks/useSessions';
+import { buildAttendeeSchema } from './attendeeSchema';
+import type { AttendeeFormValues } from './attendeeSchema';
 import styles from './AddAttendeeForm.module.css';
-
-function buildAttendeeSchema(t: TFunction<'sessions'>) {
-  return z.object({
-    name: z.string().trim().min(1, t('AddAttendeeForm.errors.nameRequired')).max(150),
-    email: z.union([z.email(t('AddAttendeeForm.errors.emailInvalid')), z.literal('')]).optional(),
-  });
-}
-
-type AttendeeFormValues = z.infer<ReturnType<typeof buildAttendeeSchema>>;
 
 interface AddAttendeeFormProps {
   sessionId: number;
