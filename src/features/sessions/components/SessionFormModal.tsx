@@ -16,7 +16,7 @@ import { useToast } from '@/shared/hooks/useToast';
 import { useTrainings } from '@/features/trainings/hooks/useTrainings';
 import { useClients } from '@/features/clients/hooks/useClients';
 import { useCreateSession } from '../hooks/useSessions';
-import { combineDateAndTime, computeSessionEndDay, hoursBetweenTimes } from '../utils/sessionDuration';
+import { combineDateAndTime, computeDaysNeeded, computeSessionEndDay, hoursBetweenTimes } from '../utils/sessionDuration';
 import styles from './SessionFormModal.module.css';
 
 function todayLocal(): string {
@@ -94,18 +94,20 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
   const startTime = watch('startTime');
   const dailyEndTime = watch('dailyEndTime');
   const selectedTraining = trainingsQuery.data?.find((training) => String(training.id) === String(trainingId));
+  const hoursPerDay = hoursBetweenTimes(startTime, dailyEndTime);
+  const daysNeeded =
+    selectedTraining?.duration && selectedTraining.durationUnit && hoursPerDay
+      ? computeDaysNeeded(selectedTraining.duration, selectedTraining.durationUnit, hoursPerDay)
+      : null;
+  
+  
+  
+  
+  const showIncludeWeekends = (daysNeeded ?? 0) > 1;
 
-  
-  
-  
-  
-  
-  
   useEffect(() => {
     if (dirtyFields.endDate) return;
-    if (!startDate || !selectedTraining?.duration || !selectedTraining.durationUnit) return;
-    const hoursPerDay = hoursBetweenTimes(startTime, dailyEndTime);
-    if (!hoursPerDay) return;
+    if (!startDate || !selectedTraining?.duration || !selectedTraining.durationUnit || !hoursPerDay) return;
     const endDay = computeSessionEndDay(
       startDate,
       selectedTraining.duration,
@@ -114,7 +116,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
       !includeWeekends,
     );
     if (endDay) setValue('endDate', format(endDay, 'yyyy-MM-dd'), { shouldValidate: true });
-  }, [startDate, startTime, dailyEndTime, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
+  }, [startDate, hoursPerDay, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
 
   const handleClose = () => {
     reset();
@@ -134,6 +136,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
         clientId: values.clientId,
         startDate: new Date(startIso).toISOString(),
         endDate: new Date(endIso).toISOString(),
+        includeWeekends,
       },
       {
         onSuccess: () => {
@@ -213,7 +216,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
             </FormField>
           </div>
 
-          {selectedTraining?.durationUnit === 'days' && (
+          {showIncludeWeekends && (
             <Checkbox
               checked={includeWeekends}
               onChange={(event) => setIncludeWeekends(event.target.checked)}

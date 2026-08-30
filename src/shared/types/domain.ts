@@ -86,6 +86,7 @@ export interface TrainingSession {
   endDate: string;
   sessionStatus: SessionStatus;
   assignmentStatus: AssignmentStatus;
+  includeWeekends: boolean;
   createdBy: number | null;
   createdAt: string;
 }
@@ -127,6 +128,7 @@ export interface CalendarEvent {
   eventDate: string;
   endDate: string | null;
   title: string;
+  includeWeekends: boolean;
 }
 
 export interface SurveyQR {

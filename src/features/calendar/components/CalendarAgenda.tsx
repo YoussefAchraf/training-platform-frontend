@@ -2,12 +2,14 @@ import { memo } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
+import { format } from 'date-fns';
 import { CalendarDays } from 'lucide-react';
 import { Skeleton } from '@/shared/components/Skeleton';
 import { EmptyState } from '@/shared/components/EmptyState';
-import { formatDate, formatTime } from '@/shared/utils/formatDate';
+import { currentLocale, formatTime } from '@/shared/utils/formatDate';
 import { fadeInUp, listItem, staggerContainer } from '@/shared/motion/variants';
 import type { CalendarEvent } from '@/shared/types/domain';
+import { expandEventDays } from '../utils/expandEventDays';
 import styles from './CalendarAgenda.module.css';
 
 interface CalendarAgendaProps {
@@ -16,18 +18,29 @@ interface CalendarAgendaProps {
   renderActions?: (event: CalendarEvent) => ReactNode;
 }
 
-function groupByDay(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
-  const groups = new Map<string, CalendarEvent[]>();
+interface DayGroup {
+  key: string;
+  date: Date;
+  events: CalendarEvent[];
+}
+
+
+
+
+function groupByDay(events: CalendarEvent[]): DayGroup[] {
+  const groups = new Map<string, DayGroup>();
   for (const event of events) {
-    const key = formatDate(event.eventDate, 'EEEE, MMM d, yyyy');
-    const existing = groups.get(key);
-    if (existing) {
-      existing.push(event);
-    } else {
-      groups.set(key, [event]);
+    for (const day of expandEventDays(event)) {
+      const key = format(day, 'yyyy-MM-dd');
+      const existing = groups.get(key);
+      if (existing) {
+        existing.events.push(event);
+      } else {
+        groups.set(key, { key, date: day, events: [event] });
+      }
     }
   }
-  return groups;
+  return Array.from(groups.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
 function CalendarAgendaInner({ events, isLoading, renderActions }: CalendarAgendaProps) {
@@ -56,9 +69,9 @@ function CalendarAgendaInner({ events, isLoading, renderActions }: CalendarAgend
 
   return (
     <motion.div className={styles.agenda} variants={staggerContainer(0.08)} initial="hidden" animate="show">
-      {Array.from(groups.entries()).map(([day, dayEvents]) => (
-        <motion.div key={day} className={styles.group} variants={fadeInUp}>
-          <h3 className={styles.groupTitle}>{day}</h3>
+      {groups.map(({ key, date, events: dayEvents }) => (
+        <motion.div key={key} className={styles.group} variants={fadeInUp}>
+          <h3 className={styles.groupTitle}>{format(date, 'EEEE, MMM d, yyyy', { locale: currentLocale() })}</h3>
           <motion.ul
             className={styles.eventList}
             variants={staggerContainer(0.04)}
