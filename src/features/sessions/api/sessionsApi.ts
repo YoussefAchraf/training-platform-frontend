@@ -6,6 +6,7 @@ export interface CreateSessionPayload {
   clientId: number;
   startDate: string;
   endDate: string;
+  includeWeekends?: boolean;
 }
 
 export interface AddAttendeePayload {

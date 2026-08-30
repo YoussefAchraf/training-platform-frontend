@@ -21,6 +21,17 @@ function addTrainingDays(start: Date, daysNeeded: number, skipWeekends: boolean)
 
 
 
+
+
+
+
+
+export function computeDaysNeeded(duration: number, durationUnit: TrainingDurationUnit, hoursPerDay: number): number | null {
+  if (!hoursPerDay || hoursPerDay <= 0) return null;
+  if (!duration || duration <= 0) return null;
+  return durationUnit === 'hours' ? Math.ceil(duration / hoursPerDay) : duration;
+}
+
 export function computeSessionEndDay(
   startDate: string,
   duration: number,
@@ -30,10 +41,9 @@ export function computeSessionEndDay(
 ): Date | null {
   const start = parseISO(startDate);
   if (Number.isNaN(start.getTime())) return null;
-  if (!hoursPerDay || hoursPerDay <= 0) return null;
-  if (!duration || duration <= 0) return null;
 
-  const daysNeeded = durationUnit === 'hours' ? Math.ceil(duration / hoursPerDay) : duration;
+  const daysNeeded = computeDaysNeeded(duration, durationUnit, hoursPerDay);
+  if (!daysNeeded) return null;
   return addTrainingDays(start, daysNeeded, skipWeekends);
 }
 
