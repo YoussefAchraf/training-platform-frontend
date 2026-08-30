@@ -2,7 +2,6 @@
   "AttendeeList": {
     "noAttendees": "No attendees added yet.",
     "surveySubmitted": "Submitted",
-    "surveyPending": "Survey pending",
     "markAbsent": "Absent",
     "markPresent": "Present",
     "markedPresent": "Marked present.",
@@ -85,13 +84,22 @@
     "title": "Edit session dates",
     "cancel": "Cancel",
     "saveChanges": "Save changes",
-    "startDateTimeLabel": "Start date & time",
-    "endDateTimeLabel": "End date & time",
+    "startDateLabel": "Start date",
+    "startTimeLabel": "Start time",
+    "dailyEndTimeLabel": "Daily end time",
+    "dailyEndTimeHint": "Same every day, e.g. 10:20 to 18:20",
+    "includeWeekends": "Include weekends when calculating the end date",
+    "endDateLabel": "End date",
+    "endDateHint": "Predicted from the training duration and daily hours - edit it directly to override",
     "datesUpdated": "Session dates updated.",
     "errors": {
       "startDateRequired": "Start date is required",
+      "startTimeRequired": "Start time is required",
+      "dailyEndTimeRequired": "Daily end time is required",
       "endDateRequired": "End date is required",
-      "endAfterStart": "End date must be after the start date"
+      "dailyEndTimeAfterStart": "Daily end time must be after the start time",
+      "startNotInPast": "Start date and time cannot be in the past",
+      "endOnOrAfterStart": "End date must be on or after the start date"
     }
   },
   "EditAttendeeModal": {
