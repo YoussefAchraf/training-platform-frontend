@@ -11,6 +11,7 @@ vi.mock('../api/sessionsApi', () => ({
     listAttendees: vi.fn(),
     markAttendance: vi.fn(),
     updateAttendee: vi.fn(),
+    deleteAttendee: vi.fn(),
   },
 }))
 
@@ -82,12 +83,13 @@ describe('AttendeeList', () => {
     await waitFor(() => expect(mockedSessionsApi.markAttendance).toHaveBeenCalledWith(42, 1, 'absent'))
   })
 
-  it('does not show an edit button when canEdit is false', async () => {
+  it('does not show edit or remove buttons when canEdit is false', async () => {
     mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
     renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} />)
 
     await screen.findByText('Jane Attendee')
     expect(screen.queryByRole('button', { name: /edit jane attendee/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /remove jane attendee/i })).not.toBeInTheDocument()
   })
 
   it('opens the edit modal, pre-filled, when the edit button is clicked', async () => {
@@ -117,5 +119,39 @@ describe('AttendeeList', () => {
     await waitFor(() =>
       expect(mockedSessionsApi.updateAttendee).toHaveBeenCalledWith(42, 1, { name: 'Jane Updated', email: 'jane@example.com' }),
     )
+  })
+
+  it('opens a confirm dialog when the remove button is clicked, and does not call the API yet', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} canEdit />)
+
+    await user.click(await screen.findByRole('button', { name: /remove jane attendee/i }))
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(mockedSessionsApi.deleteAttendee).not.toHaveBeenCalled()
+  })
+
+  it('confirming the remove dialog calls deleteAttendee with the right session and attendee', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    mockedSessionsApi.deleteAttendee.mockResolvedValue(undefined)
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} canEdit />)
+
+    await user.click(await screen.findByRole('button', { name: /remove jane attendee/i }))
+    await user.click(screen.getByRole('button', { name: /^remove$/i }))
+
+    await waitFor(() => expect(mockedSessionsApi.deleteAttendee).toHaveBeenCalledWith(42, 1))
+  })
+
+  it('closing the confirm dialog without confirming does not call deleteAttendee', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.listAttendees.mockResolvedValue([attendee])
+    renderWithClient(<AttendeeList sessionId={42} canMarkAttendance={false} canEdit />)
+
+    await user.click(await screen.findByRole('button', { name: /remove jane attendee/i }))
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+
+    expect(mockedSessionsApi.deleteAttendee).not.toHaveBeenCalled()
   })
 })

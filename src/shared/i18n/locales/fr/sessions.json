@@ -6,7 +6,12 @@
     "markPresent": "Présent",
     "markedPresent": "Marqué présent.",
     "markedAbsent": "Marqué absent.",
-    "editAttendee": "Modifier {{name}}"
+    "editAttendee": "Modifier {{name}}",
+    "removeAttendee": "Retirer {{name}}",
+    "deleteDialogTitle": "Retirer ce participant ?",
+    "deleteDialogDescription": "{{name}} sera retiré de cette session. Cette action est irréversible.",
+    "remove": "Retirer",
+    "attendeeRemoved": "{{name}} retiré."
   },
   "SessionsPage": {
     "title": "Sessions",

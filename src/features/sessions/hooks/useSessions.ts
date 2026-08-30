@@ -110,3 +110,14 @@ export function useUpdateAttendee() {
     },
   });
 }
+
+export function useDeleteAttendee() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, attendeeId }: { sessionId: number; attendeeId: number }) =>
+      sessionsApi.deleteAttendee(sessionId, attendeeId),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.attendees(sessionId) });
+    },
+  });
+}
