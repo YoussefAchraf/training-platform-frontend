@@ -66,4 +66,7 @@ export const sessionsApi = {
     apiClient
       .patch<SessionAttendee>(`/sessions/${sessionId}/attendees/${attendeeId}`, payload)
       .then((res) => res.data),
+
+  deleteAttendee: (sessionId: number, attendeeId: number) =>
+    apiClient.delete<void>(`/sessions/${sessionId}/attendees/${attendeeId}`).then(() => undefined),
 };
