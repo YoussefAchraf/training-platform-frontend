@@ -217,7 +217,11 @@ export function SessionDetailPage() {
       )}
 
       {canEditSession && (
-        <EditSessionModal session={isEditingDates ? session : null} onClose={() => setIsEditingDates(false)} />
+        <EditSessionModal
+          session={isEditingDates ? session : null}
+          training={training ?? null}
+          onClose={() => setIsEditingDates(false)}
+        />
       )}
 
       <ConfirmDialog

@@ -2,7 +2,6 @@
   "AttendeeList": {
     "noAttendees": "Aucun participant ajouté pour l'instant.",
     "surveySubmitted": "Envoyé",
-    "surveyPending": "Questionnaire en attente",
     "markAbsent": "Absent",
     "markPresent": "Présent",
     "markedPresent": "Marqué présent.",
@@ -85,13 +84,22 @@
     "title": "Modifier les dates de la session",
     "cancel": "Annuler",
     "saveChanges": "Enregistrer les modifications",
-    "startDateTimeLabel": "Date et heure de début",
-    "endDateTimeLabel": "Date et heure de fin",
+    "startDateLabel": "Date de début",
+    "startTimeLabel": "Heure de début",
+    "dailyEndTimeLabel": "Heure de fin journalière",
+    "dailyEndTimeHint": "La même chaque jour, ex. 10h20 à 18h20",
+    "includeWeekends": "Inclure les week-ends dans le calcul de la date de fin",
+    "endDateLabel": "Date de fin",
+    "endDateHint": "Prédite à partir de la durée de la formation et des heures quotidiennes - modifiez-la directement pour la remplacer",
     "datesUpdated": "Dates de la session mises à jour.",
     "errors": {
       "startDateRequired": "La date de début est requise",
+      "startTimeRequired": "L'heure de début est requise",
+      "dailyEndTimeRequired": "L'heure de fin journalière est requise",
       "endDateRequired": "La date de fin est requise",
-      "endAfterStart": "La date de fin doit être après la date de début"
+      "dailyEndTimeAfterStart": "L'heure de fin journalière doit être après l'heure de début",
+      "startNotInPast": "La date et l'heure de début ne peuvent pas être dans le passé",
+      "endOnOrAfterStart": "La date de fin doit être égale ou postérieure à la date de début"
     }
   },
   "EditAttendeeModal": {
