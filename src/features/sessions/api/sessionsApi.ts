@@ -22,6 +22,7 @@ export interface UpdateAttendeePayload {
 export interface UpdateSessionPayload {
   startDate: string;
   endDate: string;
+  includeWeekends?: boolean;
 }
 
 export const sessionsApi = {

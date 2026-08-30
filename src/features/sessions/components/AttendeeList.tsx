@@ -72,9 +72,7 @@ export function AttendeeList({ sessionId, canMarkAttendance, canEdit = false }: 
                   </Button>
                 )}
 
-                <Badge tone={attendee.surveySubmitted ? 'success' : 'neutral'}>
-                  {attendee.surveySubmitted ? t('AttendeeList.surveySubmitted') : t('AttendeeList.surveyPending')}
-                </Badge>
+                {attendee.surveySubmitted && <Badge tone="success">{t('AttendeeList.surveySubmitted')}</Badge>}
 
                 {canMarkAttendance ? (
                   <span className={styles.attendanceActions}>
