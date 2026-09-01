@@ -63,11 +63,24 @@ export function refreshSessionOnce(): Promise<void> {
 // means "visitor was never logged in" as "session actually expired". Only
 // force-navigate away from pages that require a session; guest-accessible
 // pages (login, signup, the SuperAdmin login, pending-approval, the public
-// survey form) must be left alone, or a plain unauthenticated visit yanks
-// the page out from under whoever's about to type their credentials in -
-// `/superadmin/login` in particular doesn't start with `/login`, so it was
-// falling through this check and bouncing straight to the regular /login.
-const GUEST_ACCESSIBLE_PREFIXES = [paths.login, paths.signup, paths.pendingApproval, paths.superAdminLogin, '/survey/'];
+// survey form, the password-reset form) must be left alone, or a plain
+// unauthenticated visit yanks the page out from under whoever's about to
+// type their credentials in - `/superadmin/login` in particular doesn't
+// start with `/login`, so it was falling through this check and bouncing
+// straight to the regular /login. `/reset-password` matters even more than
+// most: whoever's there almost certainly has a stale accessToken cookie
+// from the session that the reset itself just revoked - the very next
+// authenticated call bootstrap makes 401s, the refresh it tries fails
+// (that's the whole point of revoking), and without this entry that would
+// have bounced them off the one page meant to let them recover.
+const GUEST_ACCESSIBLE_PREFIXES = [
+  paths.login,
+  paths.signup,
+  paths.pendingApproval,
+  paths.superAdminLogin,
+  paths.resetPassword,
+  '/survey/',
+];
 
 // An intentional logout (see useLogout) already knows the correct
 // destination - paths.superAdminLogin for a SuperAdmin, paths.login
