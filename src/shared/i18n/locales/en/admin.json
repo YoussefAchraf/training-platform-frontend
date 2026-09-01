@@ -97,7 +97,11 @@
     "userDeactivated": "{{name}} was deactivated.",
     "emptyTitle": "No users yet",
     "deactivateDialogTitle": "Deactivate this account?",
-    "deactivateDialogDescription": "{{name}} will no longer be able to sign in."
+    "deactivateDialogDescription": "{{name}} will no longer be able to sign in.",
+    "sendPasswordReset": "Send password reset",
+    "passwordResetSent": "Password reset email sent to {{name}}.",
+    "resetDialogTitle": "Send a password reset?",
+    "resetDialogDescription": "{{name}} will receive an email with a link to set a new password. Every session on their account will be signed out immediately."
   },
   "EditUserModal": {
     "title": "Edit {{name}}",

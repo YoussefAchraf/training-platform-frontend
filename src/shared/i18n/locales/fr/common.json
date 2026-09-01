@@ -131,6 +131,9 @@
     "auditDelete": "Supprimé",
     "auditCancel": "Annulé",
     "auditApprove": "Approuvé",
-    "auditReject": "Rejeté"
+    "auditReject": "Rejeté",
+    "auditPasswordResetRequested": "Réinitialisation envoyée",
+    "auditPasswordResetCompleted": "Réinitialisation effectuée",
+    "auditChangePassword": "Mot de passe modifié"
   }
 }
