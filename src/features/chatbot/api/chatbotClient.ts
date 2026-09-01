@@ -5,6 +5,7 @@ import { redirectToLoginAfterRefreshFailure } from '@/shared/lib/apiClient';
 export interface ChatbotReply {
   reply: string;
   cached: boolean;
+  image?: { dataUrl: string } | null;
 }
 
 export const CHATBOT_WEBHOOK_URL = import.meta.env.VITE_CHATBOT_WEBHOOK_URL;
