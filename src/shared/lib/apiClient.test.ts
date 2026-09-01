@@ -6,7 +6,7 @@ import { redirectToLoginAfterRefreshFailure, setIntentionalLogoutInProgress } fr
 function setPathname(pathname: string) {
   Object.defineProperty(window, 'location', {
     configurable: true,
-    value: { ...window.location, pathname, href: `http://localhost${pathname}` },
+    value: { ...window.location, pathname, href: pathname },
   })
 }
 
@@ -26,14 +26,14 @@ describe('redirectToLoginAfterRefreshFailure', () => {
   it('does not redirect away from the reset-password page', () => {
     setPathname(paths.resetPassword)
     redirectToLoginAfterRefreshFailure()
-    expect(window.location.href).toBe(`http:
+    expect(window.location.href).toBe(paths.resetPassword)
   })
 
   it('does not redirect away from other guest-accessible pages (login, signup, superadmin login, survey)', () => {
     for (const path of [paths.login, paths.signup, paths.superAdminLogin, '/survey/42']) {
       setPathname(path)
       redirectToLoginAfterRefreshFailure()
-      expect(window.location.href).toBe(`http://localhost${path}`)
+      expect(window.location.href).toBe(path)
     }
   })
 
@@ -47,7 +47,7 @@ describe('redirectToLoginAfterRefreshFailure', () => {
     setIntentionalLogoutInProgress(true)
     setPathname(paths.dashboard)
     redirectToLoginAfterRefreshFailure()
-    expect(window.location.href).toBe(`http:
+    expect(window.location.href).toBe(paths.dashboard)
   })
 
   it('always clears the session, regardless of the current page', () => {
