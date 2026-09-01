@@ -68,6 +68,13 @@ export function ChatConversation() {
                 )}
               >
                 <ChatMessageText content={message.content} />
+                {message.imageDataUrl && (
+                  <img
+                    src={message.imageDataUrl}
+                    alt={t('ChatConversation.assistantImageAlt')}
+                    className={styles.messageImage}
+                  />
+                )}
               </div>
             </motion.div>
           ))}

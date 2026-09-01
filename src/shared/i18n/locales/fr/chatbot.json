@@ -4,7 +4,8 @@
     "emptyState": "Posez-moi une question sur vos formations, sessions ou clients.",
     "placeholder": "Écrivez un message...",
     "messageLabel": "Message",
-    "sendMessage": "Envoyer le message"
+    "sendMessage": "Envoyer le message",
+    "assistantImageAlt": "Image de l'assistant"
   },
   "ChatWidget": {
     "openAssistant": "Ouvrir l'assistant de discussion",
