@@ -29,6 +29,10 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    element: <AuthLayout />,
+    children: [{ path: paths.resetPassword, element: lazyPage(routeModules[paths.resetPassword]) }],
+  },
+  {
     element: <SuperAdminGuestRoute />,
     children: [
       {

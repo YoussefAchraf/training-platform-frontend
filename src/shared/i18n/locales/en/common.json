@@ -131,6 +131,9 @@
     "auditDelete": "Deleted",
     "auditCancel": "Cancelled",
     "auditApprove": "Approved",
-    "auditReject": "Rejected"
+    "auditReject": "Rejected",
+    "auditPasswordResetRequested": "Password reset sent",
+    "auditPasswordResetCompleted": "Password reset completed",
+    "auditChangePassword": "Password changed"
   }
 }

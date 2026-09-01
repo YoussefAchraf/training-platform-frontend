@@ -50,6 +50,9 @@ export const auditActionMeta: Record<AuditAction, StatusMeta> = {
   cancel: { labelKey: 'common:Status.auditCancel', tone: 'danger' },
   approve: { labelKey: 'common:Status.auditApprove', tone: 'success' },
   reject: { labelKey: 'common:Status.auditReject', tone: 'danger' },
+  'password-reset-requested': { labelKey: 'common:Status.auditPasswordResetRequested', tone: 'warning' },
+  'password-reset-completed': { labelKey: 'common:Status.auditPasswordResetCompleted', tone: 'success' },
+  'change-password': { labelKey: 'common:Status.auditChangePassword', tone: 'success' },
 };
 
 export function getAuditActionMeta(action: string): StatusMeta {

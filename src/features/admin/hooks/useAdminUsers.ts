@@ -27,3 +27,9 @@ export function useDeactivateUser() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.admin.users() }),
   });
 }
+
+export function useSendPasswordReset() {
+  return useMutation({
+    mutationFn: (id: number) => adminApi.sendPasswordReset(id),
+  });
+}

@@ -33,9 +33,19 @@ export interface MeResponse {
 export interface UpdateOwnProfilePayload {
   firstname?: string;
   lastname?: string;
-  
-  
+
+
   hasSeenTour?: boolean;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
 }
 
 export const authApi = {
@@ -69,6 +79,12 @@ export const authApi = {
 
   updateMe: (payload: UpdateOwnProfilePayload) =>
     apiClient.patch<User>('/auth/me', payload).then((res) => res.data),
+
+  resetPassword: (payload: ResetPasswordPayload) =>
+    apiClient.post<{ message: string }>('/auth/reset-password', payload).then((res) => res.data),
+
+  changePassword: (payload: ChangePasswordPayload) =>
+    apiClient.patch<{ message: string }>('/auth/me/password', payload).then((res) => res.data),
 
   // Short-lived bearer token for the one cross-origin caller (the chatbot's
   // n8n webhook) that can't receive this origin's httpOnly session cookie.

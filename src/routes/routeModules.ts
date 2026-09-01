@@ -10,6 +10,8 @@ export const routeModules: Record<string, PageModule> = {
     import('@/features/dashboard/pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
   [paths.login]: () => import('@/features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage })),
   [paths.signup]: () => import('@/features/auth/pages/SignupPage').then((m) => ({ default: m.SignupPage })),
+  [paths.resetPassword]: () =>
+    import('@/features/auth/pages/ResetPasswordPage').then((m) => ({ default: m.ResetPasswordPage })),
   [paths.pendingApproval]: () =>
     import('@/features/auth/pages/PendingApprovalPage').then((m) => ({ default: m.PendingApprovalPage })),
   [paths.account]: () => import('@/features/auth/pages/AccountPage').then((m) => ({ default: m.AccountPage })),

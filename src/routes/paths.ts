@@ -2,6 +2,7 @@ export const paths = {
   home: '/',
   login: '/login',
   signup: '/signup',
+  resetPassword: '/reset-password',
   pendingApproval: '/pending-approval',
   dashboard: '/dashboard',
   account: '/account',
