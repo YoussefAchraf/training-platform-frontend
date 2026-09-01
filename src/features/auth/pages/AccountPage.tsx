@@ -13,11 +13,14 @@ import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
 import { Badge } from '@/shared/components/Badge';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
+import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import { useToast } from '@/shared/hooks/useToast';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { roleMeta, userStatusMeta } from '@/shared/utils/statusMeta';
 import { paths } from '@/routes/paths';
 import { useUpdateOwnProfile } from '../hooks/useUpdateOwnProfile';
+import { useChangePassword } from '../hooks/useChangePassword';
+import { newPasswordRule } from '../passwordSchema';
 import { usePushSubscription } from '@/features/push/hooks/usePushSubscription';
 import styles from './AccountPage.module.css';
 
@@ -30,13 +33,34 @@ function buildProfileSchema(t: TFunction<'auth'>) {
 
 type ProfileFormValues = z.infer<ReturnType<typeof buildProfileSchema>>;
 
+function buildChangePasswordSchema(t: TFunction<'auth'>) {
+  return z
+    .object({
+      currentPassword: z.string().min(1, t('AccountPage.errors.currentPasswordRequired')),
+      newPassword: newPasswordRule(t),
+      confirmPassword: z.string().min(1, t('AccountPage.errors.confirmPasswordRequired')),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t('AccountPage.errors.passwordsMismatch'),
+      path: ['confirmPassword'],
+    })
+    .refine((data) => data.newPassword !== data.currentPassword, {
+      message: t('AccountPage.errors.newPasswordSameAsCurrent'),
+      path: ['newPassword'],
+    });
+}
+
+type ChangePasswordFormValues = z.infer<ReturnType<typeof buildChangePasswordSchema>>;
+
 export function AccountPage() {
   const { t } = useTranslation('auth');
   const { user, isInstructor } = useAuth();
   const updateProfile = useUpdateOwnProfile();
+  const changePassword = useChangePassword();
   const push = usePushSubscription();
   const toast = useToast();
   const profileSchema = useMemo(() => buildProfileSchema(t), [t]);
+  const changePasswordSchema = useMemo(() => buildChangePasswordSchema(t), [t]);
 
   const {
     register,
@@ -47,12 +71,32 @@ export function AccountPage() {
     values: user ? { firstname: user.firstname, lastname: user.lastname } : undefined,
   });
 
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    reset: resetPasswordForm,
+    formState: { errors: passwordErrors },
+  } = useForm<ChangePasswordFormValues>({ resolver: zodResolver(changePasswordSchema) });
+
   if (!user) return null;
 
   const onSubmit = handleSubmit((values) => {
     updateProfile.mutate(values, {
       onSuccess: () => toast.success(t('AccountPage.profileUpdated')),
     });
+  });
+
+  const onPasswordSubmit = handlePasswordSubmit((values) => {
+    changePassword.mutate(
+      { currentPassword: values.currentPassword, newPassword: values.newPassword },
+      {
+        onSuccess: () => {
+          toast.success(t('AccountPage.passwordChanged'));
+          resetPasswordForm();
+        },
+        onError: (error) => toast.error(getApiErrorMessage(error)),
+      },
+    );
   });
 
   const handleTogglePush = async () => {
@@ -88,6 +132,66 @@ export function AccountPage() {
 
             <Button type="submit" isLoading={updateProfile.isPending}>
               {t('AccountPage.saveChanges')}
+            </Button>
+          </form>
+        </Card>
+
+        <Card id="tour-account-password">
+          <h3 className={styles.cardTitle}>{t('AccountPage.passwordCardTitle')}</h3>
+          <form onSubmit={onPasswordSubmit} className="stack" noValidate>
+            {changePassword.isError && <ErrorBanner error={changePassword.error} />}
+
+            <FormField
+              label={t('AccountPage.currentPasswordLabel')}
+              error={passwordErrors.currentPassword?.message}
+              required
+            >
+              {(fieldProps) => (
+                <Input
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  {...fieldProps}
+                  {...registerPassword('currentPassword')}
+                />
+              )}
+            </FormField>
+
+            <div className={styles.row}>
+              <FormField
+                label={t('AccountPage.newPasswordLabel')}
+                error={passwordErrors.newPassword?.message}
+                required
+              >
+                {(fieldProps) => (
+                  <Input
+                    type="password"
+                    autoComplete="new-password"
+                    placeholder="••••••••"
+                    {...fieldProps}
+                    {...registerPassword('newPassword')}
+                  />
+                )}
+              </FormField>
+              <FormField
+                label={t('AccountPage.confirmPasswordLabel')}
+                error={passwordErrors.confirmPassword?.message}
+                required
+              >
+                {(fieldProps) => (
+                  <Input
+                    type="password"
+                    autoComplete="new-password"
+                    placeholder="••••••••"
+                    {...fieldProps}
+                    {...registerPassword('confirmPassword')}
+                  />
+                )}
+              </FormField>
+            </div>
+
+            <Button type="submit" isLoading={changePassword.isPending}>
+              {t('AccountPage.changePassword')}
             </Button>
           </form>
         </Card>

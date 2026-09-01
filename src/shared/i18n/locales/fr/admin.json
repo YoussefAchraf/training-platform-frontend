@@ -97,7 +97,11 @@
     "userDeactivated": "{{name}} a été désactivé(e).",
     "emptyTitle": "Aucun utilisateur pour l'instant",
     "deactivateDialogTitle": "Désactiver ce compte ?",
-    "deactivateDialogDescription": "{{name}} ne pourra plus se connecter."
+    "deactivateDialogDescription": "{{name}} ne pourra plus se connecter.",
+    "sendPasswordReset": "Envoyer une réinitialisation",
+    "passwordResetSent": "E-mail de réinitialisation envoyé à {{name}}.",
+    "resetDialogTitle": "Envoyer une réinitialisation du mot de passe ?",
+    "resetDialogDescription": "{{name}} recevra un e-mail avec un lien pour définir un nouveau mot de passe. Toutes les sessions de ce compte seront immédiatement déconnectées."
   },
   "EditUserModal": {
     "title": "Modifier {{name}}",

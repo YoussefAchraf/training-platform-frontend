@@ -164,7 +164,16 @@ export interface Report {
   generatedAt: string;
 }
 
-export type AuditAction = 'create' | 'update' | 'delete' | 'cancel' | 'approve' | 'reject';
+export type AuditAction =
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'cancel'
+  | 'approve'
+  | 'reject'
+  | 'password-reset-requested'
+  | 'password-reset-completed'
+  | 'change-password';
 
 export type AuditEntityType = 'Provider' | 'Training' | 'Client' | 'Session' | 'User';
 
