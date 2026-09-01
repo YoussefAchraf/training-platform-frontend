@@ -3,6 +3,18 @@ import axios from 'axios';
 import { chatbotClient, type ChatbotReply } from '../api/chatbotClient';
 import { useChatStore } from '../chatStore';
 
+
+
+
+
+
+const SAFE_IMAGE_DATA_URL = /^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+$/i;
+
+function safeImageDataUrl(image: ChatbotReply['image']): string | undefined {
+  const dataUrl = image?.dataUrl;
+  return typeof dataUrl === 'string' && SAFE_IMAGE_DATA_URL.test(dataUrl) ? dataUrl : undefined;
+}
+
 function errorReplyFor(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
@@ -34,7 +46,7 @@ export function useSendChatMessage() {
     },
     onSuccess: (data) => {
       const reply = typeof data?.reply === 'string' && data.reply.trim() ? data.reply : "Sorry, I didn't get a reply. Please try again.";
-      addMessage({ role: 'assistant', content: reply });
+      addMessage({ role: 'assistant', content: reply, imageDataUrl: safeImageDataUrl(data?.image) });
     },
     onError: (error) => {
       addMessage({ role: 'assistant', content: errorReplyFor(error) });

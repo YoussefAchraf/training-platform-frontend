@@ -4,7 +4,8 @@
     "emptyState": "Ask me anything about your trainings, sessions or clients.",
     "placeholder": "Type a message...",
     "messageLabel": "Message",
-    "sendMessage": "Send message"
+    "sendMessage": "Send message",
+    "assistantImageAlt": "Image from the assistant"
   },
   "ChatWidget": {
     "openAssistant": "Open chat assistant",

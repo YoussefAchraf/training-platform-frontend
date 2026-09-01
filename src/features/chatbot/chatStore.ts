@@ -6,6 +6,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   createdAt: string;
+  imageDataUrl?: string;
 }
 
 interface ChatState {
@@ -41,7 +42,16 @@ export const useChatStore = create<ChatState>()(
     }),
     {
       name: 'training-platform-chat',
-      partialize: (state) => ({ sessionId: state.sessionId, messages: state.messages }),
+      
+      
+      
+      
+      
+      
+      partialize: (state) => ({
+        sessionId: state.sessionId,
+        messages: state.messages.map(({ imageDataUrl: _imageDataUrl, ...rest }) => rest),
+      }),
     },
   ),
 );
