@@ -16,7 +16,7 @@ import styles from './Dashboard.module.css';
 export function SalesDashboard() {
   const { t } = useTranslation('dashboard');
   const sessionsQuery = useSessions();
-  const { trainingMap, clientMap } = useSessionLookups();
+  const { trainingMap, clientMap, instructorMap } = useSessionLookups();
   const providersQuery = useProviders();
   const trainingsQuery = useTrainings();
   const clientsQuery = useClients();
@@ -60,6 +60,7 @@ export function SalesDashboard() {
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
+            instructorMap={instructorMap}
             emptyText={t('SalesDashboard.noUpcoming')}
           />
         </Card>

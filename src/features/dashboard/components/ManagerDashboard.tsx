@@ -17,7 +17,7 @@ import styles from './Dashboard.module.css';
 export function ManagerDashboard() {
   const { t } = useTranslation('dashboard');
   const sessionsQuery = useSessions();
-  const { trainingMap, clientMap, instructors } = useSessionLookups();
+  const { trainingMap, clientMap, instructorMap, instructors } = useSessionLookups();
   const pendingUsersQuery = usePendingUsers();
 
   const unassignedCount =
@@ -65,6 +65,7 @@ export function ManagerDashboard() {
             sessions={upcoming}
             trainingMap={trainingMap}
             clientMap={clientMap}
+            instructorMap={instructorMap}
             emptyText={t('ManagerDashboard.noUpcoming')}
           />
         </Card>
