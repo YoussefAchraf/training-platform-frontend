@@ -110,9 +110,11 @@
 .changeFrom {
   color: var(--color-text-faint);
   text-decoration: line-through;
+  overflow-wrap: anywhere;
 }
 
 .changeTo {
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
+  overflow-wrap: anywhere;
 }

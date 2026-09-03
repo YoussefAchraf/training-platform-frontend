@@ -39,11 +39,14 @@
 
 .detailList dt {
   color: var(--color-text-muted);
+  flex-shrink: 0;
 }
 
 .detailList dd {
   font-weight: var(--font-weight-medium);
   text-align: right;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .attendeesLockedNote {
