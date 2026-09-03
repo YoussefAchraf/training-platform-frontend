@@ -6,6 +6,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-on-primary);
   flex-shrink: 0;
+  -webkit-user-select: none;
   user-select: none;
 }
 

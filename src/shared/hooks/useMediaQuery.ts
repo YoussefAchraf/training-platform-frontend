@@ -31,6 +31,12 @@ export function useIsIos(): boolean {
   return isClassicIos || isModernIpad;
 }
 
+
+export function useIsFirefoxAndroid(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
+}
+
 export function useIsStandalone(): boolean {
   const displayModeStandalone = useMediaQuery('(display-mode: standalone)');
   const iosStandalone =

@@ -31,6 +31,21 @@
     "afterAddIcon": "Sur l'écran d'accueil.",
     "notNow": "Pas maintenant"
   },
+  "FirefoxInstallBanner": {
+    "title": "Installer Training Platform",
+    "beforeMenuIcon": "Appuyez sur le",
+    "menuIconLabel": "menu",
+    "betweenIcons": ", puis",
+    "installIconLabel": "Installer",
+    "afterInstallIcon": "Installer (ou Ajouter à l'écran d'accueil).",
+    "notNow": "Pas maintenant"
+  },
+  "IOSNotificationsNudge": {
+    "title": "Activer les notifications",
+    "subtitle": "Soyez informé des nouvelles affectations et des sessions qui approchent.",
+    "enable": "Activer",
+    "notNow": "Pas maintenant"
+  },
   "PwaChatPage": {
     "back": "Retour"
   }
