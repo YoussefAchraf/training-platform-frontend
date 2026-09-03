@@ -1,19 +1,29 @@
 .statsGrid {
+  
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
   margin-bottom: var(--space-6);
 }
 
 @media (--sm) {
   .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
   }
+}
+
+
+.statsGrid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 @media (--lg) {
   .statsGrid {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .statsGrid > :last-child:nth-child(odd) {
+    grid-column: auto;
   }
 }
 
