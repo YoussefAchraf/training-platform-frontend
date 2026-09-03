@@ -162,6 +162,21 @@ path. Firefox desktop has no stable native "install this site" feature at all as
 writing (Mozilla's "Taskbar Tabs" is still experimental/opt-in) — only Firefox *Android*
 gets an install banner here, for exactly that reason.
 
+**Links open in the installed app, not a new browser tab** — once installed, tapping a link
+to this site (from an email, a search result, another app, or the address bar) opens the
+already-running PWA instead of a browser tab, as of Chrome/Edge/Brave/Opera 139+. This is
+automatic browser behavior keyed off the manifest's `scope` (no extra site-side setup, and
+specifically *not* the deprecated `capture_links` field, whose origin trial expired back in
+2022 and was superseded — the manifest doesn't carry that dead field). `launch_handler`'s
+`client_mode: "navigate-existing"` only controls what happens *once* a launch is already
+being captured — reusing the existing app window instead of opening a second one — it
+doesn't do the capturing itself. On Android this needs no Digital Asset Links / TWA setup;
+that's a separate, heavier mechanism (`.well-known/assetlinks.json`) for wrapping a PWA in a
+real native Android app for the Play Store, which this project doesn't do. **iOS Safari has
+no equivalent at all** — a link to this site from Mail, Messages, or anywhere else always
+opens in Safari, never in the home-screen app; Apple has never shipped this for web apps.
+Firefox and desktop Safari's support, if any, is unconfirmed as of this writing.
+
 ### Internationalization
 Every namespace in the app — fifteen in total, from shared UI copy to feature- and
 PWA-specific strings — ships complete English and French translations. Language is
