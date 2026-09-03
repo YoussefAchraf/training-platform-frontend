@@ -74,7 +74,9 @@
   },
   "ConfirmDialog": {
     "confirm": "Confirmer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "typeToConfirmLabel": "Tapez « {{phrase}} » pour confirmer",
+    "typeToConfirmPlaceholder": "Tapez ici"
   },
   "ErrorBanner": {
     "fallback": "Une erreur s'est produite.",
@@ -140,6 +142,7 @@
     "auditReject": "Rejeté",
     "auditPasswordResetRequested": "Réinitialisation envoyée",
     "auditPasswordResetCompleted": "Réinitialisation effectuée",
-    "auditChangePassword": "Mot de passe modifié"
+    "auditChangePassword": "Mot de passe modifié",
+    "auditPurge": "Supprimé définitivement"
   }
 }
