@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeyRound, Pencil, UserX } from 'lucide-react';
+import { KeyRound, Pencil, Trash2, UserX } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Table } from '@/shared/components/Table';
 import type { TableColumn } from '@/shared/components/Table';
@@ -8,12 +8,13 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { Badge } from '@/shared/components/Badge';
 import { Button } from '@/shared/components/Button';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useDisclosure } from '@/shared/hooks/useDisclosure';
 import { useToast } from '@/shared/hooks/useToast';
 import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import { roleMeta, userStatusMeta } from '@/shared/utils/statusMeta';
 import { roleNameOf, type User } from '@/shared/types/domain';
-import { useAdminUsers, useDeactivateUser, useSendPasswordReset } from '../hooks/useAdminUsers';
+import { useAdminUsers, useDeactivateUser, useHardDeleteUser, useSendPasswordReset } from '../hooks/useAdminUsers';
 import { EditUserModal } from '../components/EditUserModal';
 import styles from './SuperAdminUsersPage.module.css';
 
@@ -21,14 +22,18 @@ const getUserId = (user: User) => user.id;
 
 export function SuperAdminUsersPage() {
   const { t } = useTranslation('admin');
+  const { user: currentUser } = useAuth();
   const usersQuery = useAdminUsers();
   const deactivateUser = useDeactivateUser();
+  const hardDeleteUser = useHardDeleteUser();
   const sendPasswordReset = useSendPasswordReset();
   const toast = useToast();
   const [editing, setEditing] = useState<User | null>(null);
   const [deactivating, setDeactivating] = useState<User | null>(null);
+  const [deleting, setDeleting] = useState<User | null>(null);
   const [resetting, setResetting] = useState<User | null>(null);
   const deactivateDialog = useDisclosure();
+  const deleteDialog = useDisclosure();
   const resetDialog = useDisclosure();
 
   const handleEdit = useCallback((user: User) => setEditing(user), []);
@@ -53,6 +58,26 @@ export function SuperAdminUsersPage() {
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
   }, [deactivating, deactivateUser, toast, deactivateDialog, t]);
+
+  const openDelete = useCallback(
+    (user: User) => {
+      setDeleting(user);
+      deleteDialog.open();
+    },
+    [deleteDialog],
+  );
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (!deleting) return;
+    hardDeleteUser.mutate(deleting.id, {
+      onSuccess: () => {
+        toast.success(t('SuperAdminUsersPage.userDeleted', { name: `${deleting.firstname} ${deleting.lastname}` }));
+        deleteDialog.close();
+        setDeleting(null);
+      },
+      onError: (error) => toast.error(getApiErrorMessage(error)),
+    });
+  }, [deleting, hardDeleteUser, toast, deleteDialog, t]);
 
   const openReset = useCallback(
     (user: User) => {
@@ -123,11 +148,21 @@ export function SuperAdminUsersPage() {
                 {t('SuperAdminUsersPage.deactivate')}
               </Button>
             )}
+            {user.status === 'deactivated' && user.id !== currentUser?.id && (
+              <Button
+                size="sm"
+                variant="danger"
+                leftIcon={<Trash2 size={14} />}
+                onClick={() => openDelete(user)}
+              >
+                {t('SuperAdminUsersPage.deletePermanently')}
+              </Button>
+            )}
           </span>
         ),
       },
     ],
-    [handleEdit, openDeactivate, openReset, t],
+    [currentUser?.id, handleEdit, openDeactivate, openDelete, openReset, t],
   );
 
   return (
@@ -165,6 +200,22 @@ export function SuperAdminUsersPage() {
         confirmLabel={t('SuperAdminUsersPage.deactivate')}
         tone="danger"
         isLoading={deactivateUser.isPending}
+      />
+
+      <ConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={deleteDialog.close}
+        onConfirm={handleDeleteConfirm}
+        title={t('SuperAdminUsersPage.deleteDialogTitle')}
+        description={
+          deleting
+            ? t('SuperAdminUsersPage.deleteDialogDescription', { name: `${deleting.firstname} ${deleting.lastname}` })
+            : undefined
+        }
+        confirmLabel={t('SuperAdminUsersPage.deletePermanently')}
+        tone="danger"
+        isLoading={hardDeleteUser.isPending}
+        confirmPhrase={deleting ? t('SuperAdminUsersPage.deleteConfirmPhrase', { name: `${deleting.firstname} ${deleting.lastname}` }) : undefined}
       />
 
       <ConfirmDialog

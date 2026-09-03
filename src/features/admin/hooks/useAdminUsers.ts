@@ -28,6 +28,14 @@ export function useDeactivateUser() {
   });
 }
 
+export function useHardDeleteUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => adminApi.hardDeleteUser(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.admin.users() }),
+  });
+}
+
 export function useSendPasswordReset() {
   return useMutation({
     mutationFn: (id: number) => adminApi.sendPasswordReset(id),

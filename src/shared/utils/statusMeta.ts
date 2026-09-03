@@ -68,6 +68,7 @@ export const auditActionMeta: Record<AuditAction, StatusMeta> = {
   'password-reset-requested': { labelKey: 'common:Status.auditPasswordResetRequested', tone: 'warning' },
   'password-reset-completed': { labelKey: 'common:Status.auditPasswordResetCompleted', tone: 'success' },
   'change-password': { labelKey: 'common:Status.auditChangePassword', tone: 'success' },
+  purge: { labelKey: 'common:Status.auditPurge', tone: 'danger' },
 };
 
 export function getAuditActionMeta(action: string): StatusMeta {

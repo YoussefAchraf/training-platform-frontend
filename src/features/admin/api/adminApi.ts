@@ -25,6 +25,9 @@ export const adminApi = {
 
   deactivateUser: (id: number) => apiClient.delete<User>(`/admin/users/${id}`).then((res) => res.data),
 
+  hardDeleteUser: (id: number) =>
+    apiClient.delete<{ id: number; deleted: boolean }>(`/admin/users/${id}/purge`).then((res) => res.data),
+
   sendPasswordReset: (id: number) =>
     apiClient.post<{ message: string }>(`/admin/users/${id}/send-password-reset`).then((res) => res.data),
 

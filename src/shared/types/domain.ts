@@ -175,7 +175,8 @@ export type AuditAction =
   | 'reject'
   | 'password-reset-requested'
   | 'password-reset-completed'
-  | 'change-password';
+  | 'change-password'
+  | 'purge';
 
 export type AuditEntityType = 'Provider' | 'Training' | 'Client' | 'Session' | 'User';
 
@@ -183,6 +184,7 @@ export interface AuditLogEntry {
   id: number;
   actorId: number | null;
   actorName: string | null;
+  actorDeleted: boolean;
   action: AuditAction;
   entityType: AuditEntityType;
   entityId: number;
