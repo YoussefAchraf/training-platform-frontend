@@ -138,16 +138,29 @@ every published announcement showing its overall rating plus a breakdown by role
 ## Platform capabilities
 
 ### Progressive Web App
-Installable on desktop and mobile, with a custom install prompt (and step-by-step
-instructions on iOS, where the browser doesn't support a native prompt). Once installed,
-the app renders a shell tailored to the device: a native-app-style title bar and sidebar on
-desktop, an icon rail on tablet, and a bottom tab bar on phone — the same routes and data
-throughout, just different chrome. A Workbox service worker precaches the app shell and
-serves cached data with a visible offline indicator when the network drops, with a
-dedicated offline page for a first-ever visit with no connection. New versions are offered
-via a "Refresh" toast rather than a silent reload, so nothing is lost mid-task. Home-screen
-shortcuts, adaptive app icons, device-specific splash screens, and optional app-icon
-badging round it out.
+Installable on desktop and mobile, with a custom install prompt on Chromium browsers
+(Chrome, Edge, Brave, Opera) and step-by-step manual instructions on the two platforms with
+no `beforeinstallprompt` event at all: iOS Safari (Share → Add to Home Screen) and Firefox
+Android (⋮ menu → Install). Once installed, the app renders a shell tailored to the device:
+a native-app-style title bar and sidebar on desktop, an icon rail on tablet, and a bottom
+tab bar on phone — the same routes and data throughout, just different chrome. A Workbox
+service worker precaches the app shell and serves cached data with a visible offline
+indicator when the network drops, with a dedicated offline page for a first-ever visit with
+no connection. New versions are offered via a "Refresh" toast rather than a silent reload,
+so nothing is lost mid-task. Home-screen shortcuts, adaptive app icons, device-specific
+splash screens, and app-icon badging (Chrome/Edge on Windows/macOS, Safari 16.4+) round it
+out. Push notification permission is only ever requested from a direct user gesture — a
+click, never a mount-time effect — since iOS Safari silently drops (and can permanently
+deny) a request that isn't; a one-time nudge on iOS points to the click that actually
+enables it, once the app is already installed (push there requires that first).
+
+Two platform quirks worth knowing, neither fixable from this codebase: Brave sometimes
+installs a PWA as a plain home-screen shortcut instead of a full app — confirmed via
+Brave's own open GitHub issues to be a Brave-side setting/bug, not a manifest gap, since
+Brave uses the same installability criteria as Chrome once it decides to offer the real
+path. Firefox desktop has no stable native "install this site" feature at all as of this
+writing (Mozilla's "Taskbar Tabs" is still experimental/opt-in) — only Firefox *Android*
+gets an install banner here, for exactly that reason.
 
 ### Internationalization
 Every namespace in the app — fifteen in total, from shared UI copy to feature- and
