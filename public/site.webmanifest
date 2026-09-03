@@ -9,7 +9,7 @@
   "display": "standalone",
   "background_color": "#fafafa",
   "theme_color": "#dc2626",
-  "capture_links": "existing-client-navigate",
+  "launch_handler": { "client_mode": "navigate-existing" },
   "categories": ["business", "productivity", "education"],
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
