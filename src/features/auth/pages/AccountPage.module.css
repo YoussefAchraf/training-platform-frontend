@@ -49,6 +49,14 @@
 
 .detailList dt {
   color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.detailList dd {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .instructorLink {
