@@ -96,7 +96,10 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(payload.title ?? 'Training Platform', {
       body: payload.body,
       icon: '/icon-192.png',
-      badge: '/icon-192.png',
+      // Android renders this from its alpha channel only, silhouetted and
+      // tinted by the system - a monochrome asset, not the colored icon
+      // above (see scripts/generate-notification-badge.mjs).
+      badge: '/badge-96.png',
       data: { url: payload.url ?? '/' },
     }),
   );

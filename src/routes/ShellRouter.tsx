@@ -1,6 +1,7 @@
 import { useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
 import { useAutoEnableNotifications } from '@/features/push/hooks/useAutoEnableNotifications';
 import { FeatureAnnouncementPopup } from '@/features/announcements/components/FeatureAnnouncementPopup';
+import { IOSNotificationsNudge } from '@/pwa/components/IOSNotificationsNudge';
 import { AppLayout } from '@/layouts/AppLayout';
 import { PwaLayout } from '@/pwa/layouts/PwaLayout';
 import { PwaTabletLayout } from '@/pwa/layouts/PwaTabletLayout';
@@ -42,6 +43,7 @@ export function ShellRouter() {
       {layout}
       {}
       <FeatureAnnouncementPopup />
+      <IOSNotificationsNudge />
     </>
   );
 }

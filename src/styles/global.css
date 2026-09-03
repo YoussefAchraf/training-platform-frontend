@@ -1,5 +1,8 @@
 html {
   font-size: 16px;
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
 }
 
 body {
