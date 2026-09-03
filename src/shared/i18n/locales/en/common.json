@@ -74,7 +74,9 @@
   },
   "ConfirmDialog": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "typeToConfirmLabel": "Type \"{{phrase}}\" to confirm",
+    "typeToConfirmPlaceholder": "Type here"
   },
   "ErrorBanner": {
     "fallback": "Something went wrong.",
@@ -140,6 +142,7 @@
     "auditReject": "Rejected",
     "auditPasswordResetRequested": "Password reset sent",
     "auditPasswordResetCompleted": "Password reset completed",
-    "auditChangePassword": "Password changed"
+    "auditChangePassword": "Password changed",
+    "auditPurge": "Permanently deleted"
   }
 }

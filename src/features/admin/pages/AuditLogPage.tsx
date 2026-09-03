@@ -123,7 +123,10 @@ function AuditLogRow({ entry }: { entry: AuditLogEntry }) {
   // actorName now comes straight from the API (a JOIN, not a client-side
   // lookup) - fixes Managers previously always seeing "User #N" here, since
   // that used to depend on a SuperAdmin-only /admin/users fetch.
-  const actorName = entry.actorName ?? (entry.actorId === null ? t('AuditLogPage.system') : t('AuditLogPage.user', { id: entry.actorId }));
+  // A null actorId means one of two different things: no actor was ever set
+  // (an automated/scheduled action - "System"), or the actor was a real
+  // user whose account has since been permanently deleted ("Deleted user").
+  const actorName = entry.actorName ?? (entry.actorDeleted ? t('AuditLogPage.deletedUser') : entry.actorId === null ? t('AuditLogPage.system') : t('AuditLogPage.user', { id: entry.actorId }));
   const isCreate = !entry.before;
 
   return (
