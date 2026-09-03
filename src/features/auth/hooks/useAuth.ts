@@ -1,5 +1,5 @@
 import { roleNameOf } from '@/shared/types/domain';
-import { canManageCatalog, isInstructor, isManager, isSales, isSuperAdmin, useAuthStore } from '../authStore';
+import { canManageCatalog, isDeveloper, isInstructor, isManager, isSales, isSuperAdmin, useAuthStore } from '../authStore';
 
 export function useAuth() {
   const rawUser = useAuthStore((state) => state.user);
@@ -18,6 +18,7 @@ export function useAuth() {
     isSales: isSales(rawUser),
     isInstructor: isInstructor(rawUser),
     isSuperAdmin: isSuperAdmin(rawUser),
+    isDeveloper: isDeveloper(rawUser),
     canManageCatalog: canManageCatalog(rawUser),
   };
 }

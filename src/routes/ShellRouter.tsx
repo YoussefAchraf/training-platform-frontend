@@ -1,5 +1,6 @@
 import { useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
 import { useAutoEnableNotifications } from '@/features/push/hooks/useAutoEnableNotifications';
+import { FeatureAnnouncementPopup } from '@/features/announcements/components/FeatureAnnouncementPopup';
 import { AppLayout } from '@/layouts/AppLayout';
 import { PwaLayout } from '@/pwa/layouts/PwaLayout';
 import { PwaTabletLayout } from '@/pwa/layouts/PwaTabletLayout';
@@ -21,14 +22,26 @@ export function ShellRouter() {
   const deviceClass = useStandaloneDeviceClass();
   useAutoEnableNotifications();
 
+  let layout;
   switch (deviceClass) {
     case 'phone':
-      return <PwaLayout />;
+      layout = <PwaLayout />;
+      break;
     case 'tablet':
-      return <PwaTabletLayout />;
+      layout = <PwaTabletLayout />;
+      break;
     case 'desktop':
-      return <PwaDesktopLayout />;
+      layout = <PwaDesktopLayout />;
+      break;
     default:
-      return <AppLayout />;
+      layout = <AppLayout />;
   }
+
+  return (
+    <>
+      {layout}
+      {}
+      <FeatureAnnouncementPopup />
+    </>
+  );
 }

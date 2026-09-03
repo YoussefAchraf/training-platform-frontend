@@ -18,6 +18,8 @@ interface ModalProps {
   children?: ReactNode;
   footer?: ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  
+  dismissible?: boolean;
 }
 
 const overlayVariants: Variants = {
@@ -44,7 +46,16 @@ const reducedMotionVariants: Variants = {
   exit: { opacity: 0, transition: { duration: 0.1 } },
 };
 
-export function Modal({ isOpen, onClose, title, description, children, footer, size = 'md' }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  description,
+  children,
+  footer,
+  size = 'md',
+  dismissible = true,
+}: ModalProps) {
   const { t } = useTranslation('common');
   const titleId = useId();
   const isDesktop = useIsDesktop();
@@ -54,7 +65,7 @@ export function Modal({ isOpen, onClose, title, description, children, footer, s
     if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (dismissible && event.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
 
@@ -65,9 +76,10 @@ export function Modal({ isOpen, onClose, title, description, children, footer, s
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, dismissible, onClose]);
 
   const stopPropagation = (event: MouseEvent) => event.stopPropagation();
+  const handleOverlayClick = dismissible ? onClose : undefined;
 
   const dialogVariants = shouldReduceMotion
     ? reducedMotionVariants
@@ -80,7 +92,7 @@ export function Modal({ isOpen, onClose, title, description, children, footer, s
       {isOpen && (
         <motion.div
           className={styles.overlay}
-          onClick={onClose}
+          onClick={handleOverlayClick}
           variants={overlayVariants}
           initial="hidden"
           animate="show"
@@ -105,9 +117,16 @@ export function Modal({ isOpen, onClose, title, description, children, footer, s
                 </h2>
                 {description && <p className={styles.description}>{description}</p>}
               </div>
-              <button type="button" className={styles.closeButton} onClick={onClose} aria-label={t('Modal.closeDialog')}>
-                <X size={20} />
-              </button>
+              {dismissible && (
+                <button
+                  type="button"
+                  className={styles.closeButton}
+                  onClick={onClose}
+                  aria-label={t('Modal.closeDialog')}
+                >
+                  <X size={20} />
+                </button>
+              )}
             </div>
             {children && <div className={styles.body}>{children}</div>}
             {footer && <div className={styles.footer}>{footer}</div>}

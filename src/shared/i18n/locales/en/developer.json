@@ -1,0 +1,46 @@
+{
+  "DeveloperLayout": {
+    "brand": "Developer",
+    "navLabel": "Developer navigation",
+    "feedbackNav": "Feedback",
+    "announcementsNav": "Announcements",
+    "signOut": "Sign out"
+  },
+  "DeveloperFeedbackPage": {
+    "title": "Feedback inbox",
+    "description": "Bug reports and enhancement ideas submitted by Sales, Managers, Instructors, and SuperAdmin.",
+    "emptyTitle": "No feedback yet",
+    "emptyDescription": "Reports submitted by other roles will show up here.",
+    "columnSubmitter": "From",
+    "columnCategory": "Category",
+    "columnMessage": "Message",
+    "columnDate": "Received"
+  },
+  "DeveloperAnnouncementsPage": {
+    "title": "Feature announcements",
+    "description": "Publish a new feature to the roles you pick. Every targeted user is shown it once and must rate it 1-5 stars.",
+    "createButton": "Publish a feature",
+    "formTitle": "Publish a feature",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Weekend scheduling for multi-day trainings",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "A short description of what changed and why it's useful...",
+    "targetRolesLabel": "Visible to",
+    "publish": "Publish",
+    "publishSuccess": "Published. It will appear for the roles you picked next time they use the app.",
+    "genericError": "Couldn't publish this announcement. Please try again.",
+    "errors": {
+      "titleRequired": "Enter a title",
+      "descriptionRequired": "Enter a description",
+      "targetRolesRequired": "Pick at least one role"
+    },
+    "emptyTitle": "No announcements published yet",
+    "emptyDescription": "Publish your first feature above - it'll show up here with its ratings as people respond.",
+    "overallRating": "Overall",
+    "noRatingsYet": "No ratings yet",
+    "ratingCount_one": "{{count}} rating",
+    "ratingCount_other": "{{count}} ratings",
+    "byRoleTitle": "By role",
+    "publishedOn": "Published {{date}}"
+  }
+}

@@ -24,6 +24,8 @@ const DISALLOWED_ROUTES = [
   '/instructors',
   '/admin',
   '/superadmin',
+  '/developer',
+  '/feedback',
   '/reports',
   '/pending-approval',
   '/survey',

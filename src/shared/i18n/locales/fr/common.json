@@ -3,6 +3,10 @@
     "administratorAccess": "Accès administrateur",
     "footnote": "Zone restreinte. Les tentatives d'accès peuvent être enregistrées et surveillées."
   },
+  "DeveloperAuthLayout": {
+    "developerAccess": "Accès développeur",
+    "footnote": "Zone restreinte. Les tentatives d'accès peuvent être enregistrées et surveillées."
+  },
   "AuthLayout": {
     "brandTagline": "Planifiez prestataires et formations, réservez des sessions pour vos clients, assignez des formateurs et suivez les retours - le tout au même endroit."
   },
@@ -22,7 +26,8 @@
       "users": "Utilisateurs",
       "sessionsOverview": "Aperçu des sessions",
       "auditLog": "Journal d'audit",
-      "chat": "Discussion"
+      "chat": "Discussion",
+      "feedback": "Retours"
     },
     "groups": {
       "Catalog": "Catalogue",
@@ -126,6 +131,7 @@
     "roleManager": "Manager",
     "roleSales": "Ventes",
     "roleInstructor": "Formateur",
+    "roleDeveloper": "Développeur",
     "auditCreate": "Créé",
     "auditUpdate": "Modifié",
     "auditDelete": "Supprimé",

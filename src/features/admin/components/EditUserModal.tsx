@@ -51,7 +51,11 @@ export function EditUserModal({ user, onClose }: EditUserModalProps) {
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          role: roleNameOf(user)!,
+          
+          
+          
+          
+          role: roleNameOf(user) as EditUserFormValues['role'],
           status: user.status,
         }
       : undefined,

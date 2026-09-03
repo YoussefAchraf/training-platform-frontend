@@ -7,6 +7,7 @@ import {
   GraduationCap,
   History,
   LayoutDashboard,
+  MessageSquareHeart,
   UserCog,
   Users,
   Users2,
@@ -69,6 +70,10 @@ export const navItems: NavItem[] = [
     roles: ['Manager', 'SuperAdmin'],
     group: 'Administration',
   },
+  
+  
+  
+  { labelKey: 'common:Nav.items.feedback', to: paths.feedback, icon: MessageSquareHeart },
 ];
 
 export function visibleNavItems(role: Role | undefined): NavItem[] {

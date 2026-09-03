@@ -3,6 +3,10 @@
     "administratorAccess": "Administrator access",
     "footnote": "Restricted area. Access attempts may be logged and monitored."
   },
+  "DeveloperAuthLayout": {
+    "developerAccess": "Developer access",
+    "footnote": "Restricted area. Access attempts may be logged and monitored."
+  },
   "AuthLayout": {
     "brandTagline": "Plan providers and trainings, book sessions for clients, assign instructors, and track feedback - all in one place."
   },
@@ -22,7 +26,8 @@
       "users": "Users",
       "sessionsOverview": "Sessions Overview",
       "auditLog": "Audit Log",
-      "chat": "Chat"
+      "chat": "Chat",
+      "feedback": "Feedback"
     },
     "groups": {
       "Catalog": "Catalog",
@@ -126,6 +131,7 @@
     "roleManager": "Manager",
     "roleSales": "Sales",
     "roleInstructor": "Instructor",
+    "roleDeveloper": "Developer",
     "auditCreate": "Created",
     "auditUpdate": "Updated",
     "auditDelete": "Deleted",

@@ -23,4 +23,8 @@ export const paths = {
   superAdminLogin: '/superadmin/login',
   superAdminUsers: '/superadmin/users',
   superAdminSessions: '/superadmin/sessions',
+  feedback: '/feedback',
+  developerLogin: '/developer/login',
+  developer: '/developer',
+  developerAnnouncements: '/developer/announcements',
 } as const;
