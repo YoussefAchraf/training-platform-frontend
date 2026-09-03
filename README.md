@@ -5,14 +5,20 @@ A mobile-first, installable React + TypeScript web app for
 management platform. Four roles (**Sales**, **Manager**, **Instructor**, **SuperAdmin**)
 manage the full lifecycle of a training engagement: providers → trainings → client
 sessions → instructor assignment → attendees → QR-code surveys → auto-generated reports.
-The app runs equally well as an ordinary web page, an installed desktop/tablet/phone PWA,
-and offline.
+A fifth role, **Developer**, lives in its own separate area entirely outside this app —
+receiving feedback from the other four roles and publishing feature announcements back to
+them. The app runs equally well as an ordinary web page, an installed desktop/tablet/phone
+PWA, and offline.
 
 ## Highlights
 
 - **Four tailored experiences, one codebase** — Sales, Manager, Instructor, and SuperAdmin
   each get dashboards, navigation, and page content scoped to what they need, with a
   dedicated `/superadmin/login` and full platform-oversight tools for SuperAdmin.
+- **A fifth, separate Developer area** (`/developer/login`) — its own login, its own shell,
+  no sidebar or catalog nav. A Developer reads feedback the other four roles send in and
+  publishes feature announcements to whichever roles they pick; each targeted user is shown
+  a mandatory, star-rated popup once, and the Developer sees the aggregated ratings back.
 - **Installable, native-feeling PWA** — distinct desktop, tablet, and phone shells once
   installed (title bar + sidebar on desktop, an icon rail on tablet, a bottom tab bar on
   phone), home-screen shortcuts, app badging, and offline support with a graceful
@@ -50,6 +56,7 @@ and offline.
 | **Manager** | Everything Sales does, plus assigning instructors, approving new accounts, and the audit log |
 | **Instructor** | Their own assigned sessions, a personal calendar, marking attendance, and a bio/skills profile that drives assignment eligibility |
 | **SuperAdmin** | Platform-wide oversight — every user, every session, the full audit trail, and a dedicated login |
+| **Developer** | Separate area entirely (`/developer/login`) — reads feedback from the other four roles, publishes feature announcements and sees their star ratings |
 
 ## Feature tour
 
@@ -117,6 +124,17 @@ first time a new account reaches its dashboard, automatically — walks through 
 sections with role-appropriate explanations, so a new SuperAdmin, Manager, Sales rep, or
 Instructor gets an instant, in-context orientation wherever they are.
 
+### Feedback & feature announcements
+Every Sales, Manager, Instructor, and SuperAdmin gets a "Feedback" page (in the main nav,
+not on the mobile bottom bar) to send a bug report, an enhancement idea, or a general
+message straight to the Developer. Whenever the Developer publishes a new feature to one or
+more of those roles, each targeted user is shown a popup — title, description, and a 1-5
+star rating — the next time they use the app; it's mandatory (no Escape, no backdrop click,
+no × button) and, with several pending, walks through them one at a time, unlocking "Next"
+only once the current one is rated. The Developer's own area (`/developer/login`, a
+separate shell with no sidebar) has an inbox of every submitted report and a dashboard for
+every published announcement showing its overall rating plus a breakdown by role.
+
 ## Platform capabilities
 
 ### Progressive Web App
@@ -158,13 +176,14 @@ fail silently.
 ```
 src/
 ├── app/            App.tsx (providers), ErrorBoundary
-├── routes/         router.tsx, path constants, guards (Protected/Guest/Role)
-├── layouts/        AuthLayout, AppLayout (sidebar+topbar+drawer), PublicLayout
+├── routes/         router.tsx, path constants, guards (Protected/Guest/Role/Developer)
+├── layouts/        AuthLayout, AppLayout (sidebar+topbar+drawer), PublicLayout,
+│                   SuperAdminAuthLayout, DeveloperAuthLayout, DeveloperLayout
 ├── pwa/            Installed-app shells (phone/tablet/desktop), install prompts, splash
 ├── styles/         tokens.css, breakpoints.css, reset.css, global.css
 ├── shared/         components/, hooks/, utils/, types/, lib/ (apiClient, queryClient), i18n/
 └── features/
-    ├── auth/           session store, login/signup, SuperAdmin login, account page
+    ├── auth/           session store, login/signup, SuperAdmin/Developer login, account page
     ├── dashboard/      role-specific summary views (incl. SuperAdmin)
     ├── providers/      trainings/  clients/  — catalog CRUD (create/edit/delete)
     ├── sessions/       list/detail/create/edit/cancel, assign-instructor, attendees
@@ -175,7 +194,10 @@ src/
     ├── admin/          pending approvals, user management, sessions overview, audit log
     ├── chatbot/        floating assistant widget (n8n webhook), every signed-in role
     ├── push/           per-device push-notification opt-in
-    └── tour/           the role-aware, per-page guided tour
+    ├── tour/           the role-aware, per-page guided tour
+    ├── feedback/       the "send feedback" page (Sales/Manager/Instructor/SuperAdmin)
+    ├── announcements/  the mandatory rating popup + its API/hooks (shared with developer/)
+    └── developer/      the Developer-only feedback inbox + announcement dashboard pages
 ```
 
 Each feature mirrors `api/ → hooks/ → components/ → pages/`. Route-level screens live in
@@ -187,7 +209,11 @@ Signup → account is `pending` until a Manager approves it (`/admin/pending-app
 login sets an httpOnly session cookie → `/dashboard` renders role-specific content from the
 same route. A 401 triggers a single in-flight `/auth/refresh` (queued for concurrent
 requests) before retrying; the session is otherwise silently restored on every app load via
-one bootstrap call to `/auth/me`.
+one bootstrap call to `/auth/me`. SuperAdmin and Developer both skip self-service signup
+entirely — each signs in at its own dedicated route (`/superadmin/login`,
+`/developer/login`) and lands on its own area (`/dashboard`, `/developer`); an already
+logged-in visit to the wrong login page redirects to the right area instead of showing the
+form.
 
 ## Getting started
 
@@ -206,7 +232,8 @@ needs to change between local dev and a deployed container.
 `VITE_CHATBOT_WEBHOOK_URL` points at `training-platform-chatbot-n8n`'s webhook
 (`docker compose up -d` in that repo). A SuperAdmin account isn't self-service signup —
 seed one in the backend with `npm run db:seed-superadmin`, then sign in at
-`/superadmin/login` (not `/login`).
+`/superadmin/login` (not `/login`). A Developer account works the same way: seed one with
+`npm run db:seed-developer` in the backend, then sign in at `/developer/login`.
 
 ```bash
 npm run build       # tsc -b && vite build

@@ -1,6 +1,8 @@
 
 
-export type Role = 'Sales' | 'Manager' | 'Instructor' | 'SuperAdmin';
+export type Role = 'Sales' | 'Manager' | 'Instructor' | 'SuperAdmin' | 'Developer';
+
+export type TargetableRole = 'Sales' | 'Manager' | 'Instructor' | 'SuperAdmin';
 
 export interface RoleCatalogEntry {
   id: number;
@@ -207,6 +209,40 @@ export interface AdminSessionOverview {
   attendeeCount: number;
   attendeeSurveysSubmitted: number;
   hasReport: boolean;
+}
+
+export type FeedbackCategory = 'bug' | 'enhancement' | 'other';
+
+export interface FeedbackReport {
+  id: number;
+  submittedBy: number;
+  submitterName: string;
+  submitterEmail: string;
+  submitterRole: Role;
+  category: FeedbackCategory;
+  message: string;
+  createdAt: string;
+}
+
+export interface FeatureAnnouncement {
+  id: number;
+  createdBy: number;
+  title: string;
+  description: string;
+  targetRoles: TargetableRole[];
+  createdAt: string;
+}
+
+export interface FeatureAnnouncementRoleRating {
+  role: TargetableRole;
+  averageStars: number;
+  ratingCount: number;
+}
+
+export interface FeatureAnnouncementWithRatings extends FeatureAnnouncement {
+  overallAverageStars: number | null;
+  overallRatingCount: number;
+  byRole: FeatureAnnouncementRoleRating[];
 }
 
 export interface ApiErrorBody {

@@ -1,0 +1,31 @@
+{
+  "FeedbackCategories": {
+    "bug": "Signalement de bug",
+    "enhancement": "Idée d'amélioration",
+    "other": "Autre"
+  },
+  "FeedbackPage": {
+    "title": "Envoyer un retour",
+    "description": "Signalez un bug, suggérez une amélioration, ou envoyez un message directement au développeur.",
+    "categoryLabel": "De quoi s'agit-il ?",
+    "selectCategory": "Sélectionnez une catégorie",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Décrivez le bug, votre idée, ou ce que vous avez en tête...",
+    "submit": "Envoyer",
+    "successTitle": "Merci - votre retour a été envoyé.",
+    "successDescription": "Vous pouvez en envoyer un autre à tout moment.",
+    "genericError": "Impossible d'envoyer votre retour. Veuillez réessayer.",
+    "errors": {
+      "categoryRequired": "La catégorie est requise",
+      "messageRequired": "Saisissez un message"
+    }
+  },
+  "FeatureAnnouncementPopup": {
+    "badge": "Nouvelle fonctionnalité",
+    "ratingPrompt": "Qu'en pensez-vous ? Votre note aide à orienter ce qui sera développé ensuite.",
+    "next": "Suivant",
+    "done": "Terminé",
+    "progress": "{{current}} sur {{total}}",
+    "ratingRequiredHint": "Choisissez une note pour continuer."
+  }
+}

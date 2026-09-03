@@ -1,0 +1,124 @@
+.wrapper {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-1);
+  order: 3;
+  width: 100%;
+}
+
+@media (--sm) {
+  .nav {
+    order: 0;
+    width: auto;
+    margin-inline-start: var(--space-4);
+  }
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.navLink:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.navLinkActive {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.userArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-inline-start: auto;
+}
+
+.userEmail {
+  display: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+@media (--md) {
+  .userEmail {
+    display: inline;
+  }
+}
+
+.logoutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  transition: background-color var(--transition-fast);
+}
+
+.logoutButton:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.main {
+  flex: 1;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+
+@media (--md) {
+  .content {
+    padding: var(--space-6);
+  }
+}
+
+@media (--lg) {
+  .content {
+    padding: var(--space-8);
+  }
+}

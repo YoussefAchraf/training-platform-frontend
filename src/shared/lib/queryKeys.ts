@@ -54,4 +54,13 @@ export const queryKeys = {
         roleName ?? null,
       ] as const,
   },
+  feedback: {
+    all: ['feedback'] as const,
+    list: () => [...queryKeys.feedback.all, 'list'] as const,
+  },
+  announcements: {
+    all: ['announcements'] as const,
+    list: () => [...queryKeys.announcements.all, 'list'] as const,
+    mine: () => [...queryKeys.announcements.all, 'mine'] as const,
+  },
 } as const;

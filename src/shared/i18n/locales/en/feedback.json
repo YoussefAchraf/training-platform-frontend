@@ -1,0 +1,31 @@
+{
+  "FeedbackCategories": {
+    "bug": "Bug report",
+    "enhancement": "Enhancement idea",
+    "other": "Other"
+  },
+  "FeedbackPage": {
+    "title": "Send feedback",
+    "description": "Report a bug, suggest an improvement, or send a message straight to the developer.",
+    "categoryLabel": "What's this about?",
+    "selectCategory": "Select a category",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Describe the bug, your idea, or what's on your mind...",
+    "submit": "Send feedback",
+    "successTitle": "Thanks - your feedback was sent.",
+    "successDescription": "Send another one any time.",
+    "genericError": "Couldn't send your feedback. Please try again.",
+    "errors": {
+      "categoryRequired": "Category is required",
+      "messageRequired": "Enter a message"
+    }
+  },
+  "FeatureAnnouncementPopup": {
+    "badge": "New feature",
+    "ratingPrompt": "What do you think? Your rating helps shape what gets built next.",
+    "next": "Next",
+    "done": "Done",
+    "progress": "{{current}} of {{total}}",
+    "ratingRequiredHint": "Pick a star rating to continue."
+  }
+}

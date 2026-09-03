@@ -16,6 +16,7 @@ import {
 } from './steps/adminSteps';
 import { buildCalendarSteps } from './steps/calendarSteps';
 import { buildAccountSteps } from './steps/accountSteps';
+import { buildFeedbackSteps } from './steps/feedbackSteps';
 
 type Builder = (role: Role, t: TFunction<'tour'>) => DriveStep[];
 
@@ -42,6 +43,7 @@ const TOUR_ROUTES: TourRoute[] = [
   { pattern: paths.superAdminUsers, build: buildUsersSteps },
   { pattern: paths.superAdminSessions, build: buildSessionsOverviewSteps },
   { pattern: paths.account, build: buildAccountSteps },
+  { pattern: paths.feedback, build: buildFeedbackSteps },
 ];
 
 export function withReplayStep(steps: DriveStep[], t: TFunction<'tour'>): DriveStep[] {

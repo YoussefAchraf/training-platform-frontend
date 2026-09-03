@@ -1,4 +1,12 @@
-import type { AssignmentStatus, AttendanceStatus, AuditAction, Role, SessionStatus, UserStatus } from '@/shared/types/domain';
+import type {
+  AssignmentStatus,
+  AttendanceStatus,
+  AuditAction,
+  FeedbackCategory,
+  Role,
+  SessionStatus,
+  UserStatus,
+} from '@/shared/types/domain';
 
 export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
 
@@ -41,6 +49,13 @@ export const roleMeta: Record<Role, StatusMeta> = {
   Manager: { labelKey: 'common:Status.roleManager', tone: 'info' },
   Sales: { labelKey: 'common:Status.roleSales', tone: 'neutral' },
   Instructor: { labelKey: 'common:Status.roleInstructor', tone: 'neutral' },
+  Developer: { labelKey: 'common:Status.roleDeveloper', tone: 'info' },
+};
+
+export const feedbackCategoryMeta: Record<FeedbackCategory, StatusMeta> = {
+  bug: { labelKey: 'feedback:FeedbackCategories.bug', tone: 'danger' },
+  enhancement: { labelKey: 'feedback:FeedbackCategories.enhancement', tone: 'info' },
+  other: { labelKey: 'feedback:FeedbackCategories.other', tone: 'neutral' },
 };
 
 export const auditActionMeta: Record<AuditAction, StatusMeta> = {

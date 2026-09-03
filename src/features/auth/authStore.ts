@@ -40,6 +40,10 @@ export function isSuperAdmin(user: User | null): boolean {
   return roleNameOf(user) === 'SuperAdmin';
 }
 
+export function isDeveloper(user: User | null): boolean {
+  return roleNameOf(user) === 'Developer';
+}
+
 export function canManageCatalog(user: User | null): boolean {
   return isSales(user) || isManager(user) || isSuperAdmin(user);
 }

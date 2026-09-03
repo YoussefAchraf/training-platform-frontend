@@ -41,6 +41,16 @@ export const routeModules: Record<string, PageModule> = {
     import('@/features/admin/pages/SuperAdminSessionsPage').then((m) => ({ default: m.SuperAdminSessionsPage })),
   [paths.superAdminLogin]: () =>
     import('@/features/auth/pages/SuperAdminLoginPage').then((m) => ({ default: m.SuperAdminLoginPage })),
+  [paths.developerLogin]: () =>
+    import('@/features/auth/pages/DeveloperLoginPage').then((m) => ({ default: m.DeveloperLoginPage })),
+  [paths.feedback]: () =>
+    import('@/features/feedback/pages/FeedbackPage').then((m) => ({ default: m.FeedbackPage })),
+  [paths.developer]: () =>
+    import('@/features/developer/pages/DeveloperFeedbackPage').then((m) => ({ default: m.DeveloperFeedbackPage })),
+  [paths.developerAnnouncements]: () =>
+    import('@/features/developer/pages/DeveloperAnnouncementsPage').then((m) => ({
+      default: m.DeveloperAnnouncementsPage,
+    })),
 };
 
 const prefetched = new Set<string>();

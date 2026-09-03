@@ -62,6 +62,9 @@ export const authApi = {
   adminLogin: (payload: LoginPayload) =>
     apiClient.post<LoginResponse>('/auth/admin-login', payload).then((res) => res.data),
 
+  developerLogin: (payload: LoginPayload) =>
+    apiClient.post<LoginResponse>('/auth/developer-login', payload).then((res) => res.data),
+
   me: () => apiClient.get<MeResponse>('/auth/me').then((res) => res.data),
 
   

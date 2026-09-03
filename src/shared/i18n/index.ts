@@ -17,6 +17,8 @@ import enSurvey from './locales/en/survey.json';
 import enChatbot from './locales/en/chatbot.json';
 import enPwa from './locales/en/pwa.json';
 import enTour from './locales/en/tour.json';
+import enFeedback from './locales/en/feedback.json';
+import enDeveloper from './locales/en/developer.json';
 
 import frCommon from './locales/fr/common.json';
 import frAuth from './locales/fr/auth.json';
@@ -33,6 +35,8 @@ import frSurvey from './locales/fr/survey.json';
 import frChatbot from './locales/fr/chatbot.json';
 import frPwa from './locales/fr/pwa.json';
 import frTour from './locales/fr/tour.json';
+import frFeedback from './locales/fr/feedback.json';
+import frDeveloper from './locales/fr/developer.json';
 
 export const defaultNS = 'common';
 
@@ -53,6 +57,8 @@ export const resources = {
     chatbot: enChatbot,
     pwa: enPwa,
     tour: enTour,
+    feedback: enFeedback,
+    developer: enDeveloper,
   },
   fr: {
     common: frCommon,
@@ -70,6 +76,8 @@ export const resources = {
     chatbot: frChatbot,
     pwa: frPwa,
     tour: frTour,
+    feedback: frFeedback,
+    developer: frDeveloper,
   },
 } as const;
 

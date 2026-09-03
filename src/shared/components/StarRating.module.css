@@ -1,0 +1,29 @@
+.readOnly,
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.button {
+  display: inline-flex;
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast);
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: scale(1.12);
+}
+
+.star {
+  color: var(--color-border-strong);
+  fill: transparent;
+  transition: color var(--transition-fast), fill var(--transition-fast);
+}
+
+.starFilled {
+  color: var(--amber-500);
+  fill: var(--amber-500);
+}

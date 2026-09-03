@@ -78,6 +78,7 @@ const GUEST_ACCESSIBLE_PREFIXES = [
   paths.signup,
   paths.pendingApproval,
   paths.superAdminLogin,
+  paths.developerLogin,
   paths.resetPassword,
   '/survey/',
 ];
