@@ -3,6 +3,7 @@ import { OfflineBanner } from '@/shared/components/OfflineBanner';
 import { ChatWidget } from '@/features/chatbot/components/ChatWidget';
 import { InstallBanner } from '@/pwa/components/InstallBanner';
 import { IOSInstallBanner } from '@/pwa/components/IOSInstallBanner';
+import { FirefoxInstallBanner } from '@/pwa/components/FirefoxInstallBanner';
 import { useIdlePrefetch } from '@/routes/useIdlePrefetch';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
@@ -29,6 +30,7 @@ export function AppLayout() {
       {}
       <InstallBanner />
       <IOSInstallBanner />
+      <FirefoxInstallBanner />
     </div>
   );
 }

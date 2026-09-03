@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { usePwaStore } from '../store/pwaStore';
 import type { BeforeInstallPromptEvent } from '../store/pwaStore';
-import { useIsIos, useIsStandalone } from '@/shared/hooks/useMediaQuery';
+import { useIsFirefoxAndroid, useIsIos, useIsStandalone } from '@/shared/hooks/useMediaQuery';
+import { usePushSubscription } from '@/features/push/hooks/usePushSubscription';
 
 const PROMPT_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; 
 
@@ -80,4 +81,41 @@ export function useIosInstallHint() {
   const dismiss = () => recordPrompted();
 
   return { canShowHint, dismiss };
+}
+
+
+export function useFirefoxInstallHint() {
+  const isFirefoxAndroid = useIsFirefoxAndroid();
+  const isStandalone = useIsStandalone();
+  const lastPromptedAt = usePwaStore((state) => state.lastPromptedAt);
+  const dismissedPermanently = usePwaStore((state) => state.dismissedPermanently);
+  const recordPrompted = usePwaStore((state) => state.recordPrompted);
+
+  const dueForPrompt =
+    !lastPromptedAt || Date.now() - new Date(lastPromptedAt).getTime() > PROMPT_COOLDOWN_MS;
+
+  const canShowHint = isFirefoxAndroid && !isStandalone && !dismissedPermanently && dueForPrompt;
+
+  const dismiss = () => recordPrompted();
+
+  return { canShowHint, dismiss };
+}
+
+
+export function useIosNotificationsNudge() {
+  const isIos = useIsIos();
+  const isStandalone = useIsStandalone();
+  const dismissed = usePwaStore((state) => state.notificationsNudgeDismissed);
+  const dismissNotificationsNudge = usePwaStore((state) => state.dismissNotificationsNudge);
+  const { status, subscribe } = usePushSubscription();
+
+  const permission = typeof Notification !== 'undefined' ? Notification.permission : 'denied';
+  const canShowNudge = isIos && isStandalone && status === 'unsubscribed' && permission === 'default' && !dismissed;
+
+  const enable = async () => {
+    await subscribe();
+    dismissNotificationsNudge();
+  };
+
+  return { canShowNudge, enable, dismiss: dismissNotificationsNudge };
 }

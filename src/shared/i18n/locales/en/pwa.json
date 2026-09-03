@@ -31,6 +31,21 @@
     "afterAddIcon": "Add to Home Screen.",
     "notNow": "Not now"
   },
+  "FirefoxInstallBanner": {
+    "title": "Install Training Platform",
+    "beforeMenuIcon": "Tap the",
+    "menuIconLabel": "menu",
+    "betweenIcons": "button, then",
+    "installIconLabel": "Install",
+    "afterInstallIcon": "Install (or Add app to Home Screen).",
+    "notNow": "Not now"
+  },
+  "IOSNotificationsNudge": {
+    "title": "Turn on notifications",
+    "subtitle": "Get notified about new assignments and sessions starting soon.",
+    "enable": "Enable",
+    "notNow": "Not now"
+  },
   "PwaChatPage": {
     "back": "Back"
   }

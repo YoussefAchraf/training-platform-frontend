@@ -3,10 +3,15 @@ import { renderHook } from '@testing-library/react'
 import { useAutoEnableNotifications } from './useAutoEnableNotifications'
 import { usePushSubscription } from './usePushSubscription'
 import type { PushSupportStatus } from './usePushSubscription'
+import { useIsIos } from '@/shared/hooks/useMediaQuery'
 
 vi.mock('./usePushSubscription')
+vi.mock('@/shared/hooks/useMediaQuery', () => ({
+  useIsIos: vi.fn(),
+}))
 
 const mockedUsePushSubscription = vi.mocked(usePushSubscription)
+const mockedUseIsIos = vi.mocked(useIsIos)
 const originalNotification = globalThis.Notification
 
 function mockStatus(status: PushSupportStatus) {
@@ -32,6 +37,7 @@ function setPermission(permission: NotificationPermission) {
 describe('useAutoEnableNotifications', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockedUseIsIos.mockReturnValue(false)
   })
 
   afterEach(() => {
@@ -72,6 +78,16 @@ describe('useAutoEnableNotifications', () => {
   it('does nothing on a device that does not support push', () => {
     setPermission('default')
     const subscribe = mockStatus('unsupported')
+
+    renderHook(() => useAutoEnableNotifications())
+
+    expect(subscribe).not.toHaveBeenCalled()
+  })
+
+  it('never auto-attempts on iOS, even when otherwise eligible - iOS requires a real user gesture', () => {
+    setPermission('default')
+    mockedUseIsIos.mockReturnValue(true)
+    const subscribe = mockStatus('unsubscribed')
 
     renderHook(() => useAutoEnableNotifications())
 
