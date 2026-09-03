@@ -142,5 +142,9 @@
     "details": { "title": "Account details", "text": "Your email, role, and account status - read-only, ask a Manager to change these." },
     "detailsInstructor": { "title": "Account details", "text": "Your email, role, and account status - read-only, ask a Manager to change these. Use the link below to manage your bio and skills." },
     "notifications": { "title": "Push notifications", "text": "Turn on notifications for this device to get alerted about new sessions and updates." }
+  },
+  "feedback": {
+    "header": { "title": "Send feedback", "text": "Report a bug, suggest an improvement, or send a message straight to the developer." },
+    "form": { "title": "Your message", "text": "Pick a category and describe what's on your mind, then send it." }
   }
 }

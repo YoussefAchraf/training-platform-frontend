@@ -1,0 +1,27 @@
+.heading {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background-color: rgb(37 99 235 / 15%);
+  color: var(--blue-500);
+  margin-bottom: var(--space-4);
+}
+
+.heading h2 {
+  font-size: var(--text-xl);
+  color: var(--grey-50);
+  margin-bottom: var(--space-2);
+}
+
+.heading p {
+  font-size: var(--text-sm);
+  color: var(--grey-400);
+}

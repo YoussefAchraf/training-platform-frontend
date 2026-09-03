@@ -22,7 +22,7 @@ import styles from './PwaProfilePage.module.css';
 
 export function PwaProfilePage() {
   const { t } = useTranslation(['pwa', 'common']);
-  const { user, isSuperAdmin } = useAuth();
+  const { user, isSuperAdmin, isDeveloper } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
   const prefetchRoute = usePrefetchRoute();
@@ -32,7 +32,7 @@ export function PwaProfilePage() {
   const overflow = overflowNavItems(user.role);
 
   const handleLogout = () => {
-    logout.mutate(isSuperAdmin ? paths.superAdminLogin : paths.login);
+    logout.mutate(isDeveloper ? paths.developerLogin : isSuperAdmin ? paths.superAdminLogin : paths.login);
   };
 
   return (

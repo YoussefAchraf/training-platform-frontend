@@ -1,0 +1,65 @@
+
+.wrapper {
+  color-scheme: dark;
+  --color-bg: var(--grey-950);
+  --color-bg-subtle: var(--grey-900);
+  --color-surface: var(--grey-900);
+  --color-surface-hover: var(--grey-800);
+  --color-border: var(--grey-800);
+  --color-border-strong: var(--grey-700);
+  --color-text: var(--grey-50);
+  --color-text-muted: var(--grey-400);
+  --color-text-faint: var(--grey-600);
+  --color-primary-light: rgb(37 99 235 / 15%);
+  --color-primary-border: rgb(37 99 235 / 35%);
+  --color-danger-bg: rgb(220 38 38 / 15%);
+  --color-danger-border: rgb(220 38 38 / 35%);
+  --color-overlay: rgb(0 0 0 / 65%);
+  --shadow-focus: 0 0 0 3px rgb(59 130 246 / 35%);
+
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-4);
+  background: radial-gradient(circle at 50% 0%, var(--blue-700) 0%, var(--grey-950) 55%);
+  color: var(--grey-50);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background-color: rgb(255 255 255 / 8%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  color: var(--blue-500);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.formPanel {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.formPanelInner {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--space-8);
+  background-color: rgb(255 255 255 / 4%);
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(8px);
+}
+
+.footnote {
+  font-size: var(--text-xs);
+  color: var(--grey-500);
+  text-align: center;
+  max-width: 32ch;
+}

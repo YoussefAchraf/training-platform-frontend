@@ -14,3 +14,10 @@ export function useAdminLogin() {
     mutationFn: authApi.adminLogin,
   });
 }
+
+
+export function useDeveloperLogin() {
+  return useMutation({
+    mutationFn: authApi.developerLogin,
+  });
+}

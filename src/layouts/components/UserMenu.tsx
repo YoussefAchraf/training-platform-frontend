@@ -36,7 +36,7 @@ function panelVariants(placement: 'up' | 'down'): Variants {
 
 export function UserMenu({ placement = 'down', variant = 'full', align = 'right' }: UserMenuProps) {
   const { t } = useTranslation('common');
-  const { user, isSuperAdmin } = useAuth();
+  const { user, isSuperAdmin, isDeveloper } = useAuth();
   const logout = useLogout();
   const { isOpen, toggle, close } = useDisclosure(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ export function UserMenu({ placement = 'down', variant = 'full', align = 'right'
   if (!user) return null;
 
   const handleLogout = () => {
-    logout.mutate(isSuperAdmin ? paths.superAdminLogin : paths.login);
+    logout.mutate(isDeveloper ? paths.developerLogin : isSuperAdmin ? paths.superAdminLogin : paths.login);
   };
 
   return (

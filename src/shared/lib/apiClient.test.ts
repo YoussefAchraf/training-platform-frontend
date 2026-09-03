@@ -29,8 +29,8 @@ describe('redirectToLoginAfterRefreshFailure', () => {
     expect(window.location.href).toBe(paths.resetPassword)
   })
 
-  it('does not redirect away from other guest-accessible pages (login, signup, superadmin login, survey)', () => {
-    for (const path of [paths.login, paths.signup, paths.superAdminLogin, '/survey/42']) {
+  it('does not redirect away from other guest-accessible pages (login, signup, superadmin login, developer login, survey)', () => {
+    for (const path of [paths.login, paths.signup, paths.superAdminLogin, paths.developerLogin, '/survey/42']) {
       setPathname(path)
       redirectToLoginAfterRefreshFailure()
       expect(window.location.href).toBe(path)

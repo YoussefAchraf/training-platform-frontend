@@ -3,11 +3,15 @@ import { ShellRouter } from './ShellRouter';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { SuperAdminAuthLayout } from '@/layouts/SuperAdminAuthLayout';
+import { DeveloperAuthLayout } from '@/layouts/DeveloperAuthLayout';
+import { DeveloperLayout } from '@/layouts/DeveloperLayout';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { GuestRoute } from './guards/GuestRoute';
 import { RoleRoute } from './guards/RoleRoute';
 import { RootRedirect } from './guards/RootRedirect';
 import { SuperAdminGuestRoute } from './guards/SuperAdminGuestRoute';
+import { DeveloperGuestRoute } from './guards/DeveloperGuestRoute';
+import { DeveloperRoute } from './guards/DeveloperRoute';
 import { NotFoundPage } from './NotFoundPage';
 import { lazyPage } from './lazyPage';
 import { routeModules } from './routeModules';
@@ -38,6 +42,30 @@ export const router = createBrowserRouter([
       {
         element: <SuperAdminAuthLayout />,
         children: [{ path: paths.superAdminLogin, element: lazyPage(routeModules[paths.superAdminLogin]) }],
+      },
+    ],
+  },
+  {
+    element: <DeveloperGuestRoute />,
+    children: [
+      {
+        element: <DeveloperAuthLayout />,
+        children: [{ path: paths.developerLogin, element: lazyPage(routeModules[paths.developerLogin]) }],
+      },
+    ],
+  },
+  {
+    
+    
+    
+    element: <DeveloperRoute />,
+    children: [
+      {
+        element: <DeveloperLayout />,
+        children: [
+          { path: paths.developer, element: lazyPage(routeModules[paths.developer]) },
+          { path: paths.developerAnnouncements, element: lazyPage(routeModules[paths.developerAnnouncements]) },
+        ],
       },
     ],
   },
@@ -75,6 +103,7 @@ export const router = createBrowserRouter([
             ),
           },
           { path: paths.calendar, element: lazyPage(routeModules[paths.calendar]) },
+          { path: paths.feedback, element: lazyPage(routeModules[paths.feedback]) },
           {
             path: '/reports/:sessionId',
             element: lazyPage(() =>

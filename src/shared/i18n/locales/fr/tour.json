@@ -142,5 +142,9 @@
     "details": { "title": "Détails du compte", "text": "Votre email, rôle et statut de compte - lecture seule, demandez à un manager de les modifier." },
     "detailsInstructor": { "title": "Détails du compte", "text": "Votre email, rôle et statut de compte - lecture seule, demandez à un manager de les modifier. Utilisez le lien ci-dessous pour gérer votre bio et vos compétences." },
     "notifications": { "title": "Notifications push", "text": "Activez les notifications sur cet appareil pour être alerté des nouvelles sessions et mises à jour." }
+  },
+  "feedback": {
+    "header": { "title": "Envoyer un retour", "text": "Signalez un bug, suggérez une amélioration, ou envoyez un message directement au développeur." },
+    "form": { "title": "Votre message", "text": "Choisissez une catégorie et décrivez ce que vous avez en tête, puis envoyez-le." }
   }
 }

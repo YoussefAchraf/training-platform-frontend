@@ -1,0 +1,46 @@
+{
+  "DeveloperLayout": {
+    "brand": "Développeur",
+    "navLabel": "Navigation développeur",
+    "feedbackNav": "Retours",
+    "announcementsNav": "Annonces",
+    "signOut": "Se déconnecter"
+  },
+  "DeveloperFeedbackPage": {
+    "title": "Boîte de réception des retours",
+    "description": "Signalements de bugs et idées d'amélioration envoyés par les Ventes, Managers, Formateurs et SuperAdmin.",
+    "emptyTitle": "Aucun retour pour le moment",
+    "emptyDescription": "Les retours envoyés par les autres rôles apparaîtront ici.",
+    "columnSubmitter": "De",
+    "columnCategory": "Catégorie",
+    "columnMessage": "Message",
+    "columnDate": "Reçu"
+  },
+  "DeveloperAnnouncementsPage": {
+    "title": "Annonces de fonctionnalités",
+    "description": "Publiez une nouvelle fonctionnalité pour les rôles de votre choix. Chaque utilisateur ciblé la voit une fois et doit la noter de 1 à 5 étoiles.",
+    "createButton": "Publier une fonctionnalité",
+    "formTitle": "Publier une fonctionnalité",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "ex. Planification le week-end pour les formations sur plusieurs jours",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Une courte description de ce qui a changé et pourquoi c'est utile...",
+    "targetRolesLabel": "Visible par",
+    "publish": "Publier",
+    "publishSuccess": "Publié. Cela apparaîtra pour les rôles choisis lors de leur prochaine utilisation de l'application.",
+    "genericError": "Impossible de publier cette annonce. Veuillez réessayer.",
+    "errors": {
+      "titleRequired": "Saisissez un titre",
+      "descriptionRequired": "Saisissez une description",
+      "targetRolesRequired": "Choisissez au moins un rôle"
+    },
+    "emptyTitle": "Aucune annonce publiée pour le moment",
+    "emptyDescription": "Publiez votre première fonctionnalité ci-dessus - elle apparaîtra ici avec ses notes au fur et à mesure des réponses.",
+    "overallRating": "Global",
+    "noRatingsYet": "Aucune note pour le moment",
+    "ratingCount_one": "{{count}} note",
+    "ratingCount_other": "{{count}} notes",
+    "byRoleTitle": "Par rôle",
+    "publishedOn": "Publié le {{date}}"
+  }
+}
