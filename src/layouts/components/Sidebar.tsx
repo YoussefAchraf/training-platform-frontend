@@ -69,7 +69,7 @@ export function Sidebar() {
         <div className={styles.footerActions}>
           <TourButton />
         </div>
-        <UserMenu placement="up" variant={collapsed ? 'compact' : 'full'} />
+        <UserMenu placement="up" variant={collapsed ? 'compact' : 'full'} align={collapsed ? 'left' : 'right'} />
       </div>
     </aside>
   );
