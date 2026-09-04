@@ -61,6 +61,11 @@ export const PROVIDER_ICONS: ProviderIconEntry[] = [
     category: 'Open-Source Foundations & Neutral Bodies',
     iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Cloud_Security_Alliance_logo.png',
   },
+  {
+    name: 'CompTIA',
+    category: 'Open-Source Foundations & Neutral Bodies',
+    iconUrl: 'https://cdn.simpleicons.org/comptia',
+  },
 
   
   { name: 'Red Hat', category: 'Linux & Enterprise Software Giants', iconUrl: 'https://cdn.simpleicons.org/redhat' },
@@ -76,7 +81,9 @@ export const PROVIDER_ICONS: ProviderIconEntry[] = [
   {
     name: 'IBM',
     category: 'Linux & Enterprise Software Giants',
-    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/49/IBM_rgb_logo.svg',
+    
+    
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
   },
 
   
