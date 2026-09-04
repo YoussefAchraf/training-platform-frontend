@@ -40,6 +40,15 @@ export function SessionsPage() {
         header: t('SessionsPage.columnClient'),
         render: (session) => clientMap.get(session.clientId)?.companyName ?? `#${session.clientId}`,
       },
+      {
+        key: 'locationType',
+        header: t('SessionsPage.columnLocation'),
+        render: (session) => (
+          <Badge tone={session.locationType === 'remote' ? 'info' : 'neutral'}>
+            {t(`SessionsPage.${session.locationType}`)}
+          </Badge>
+        ),
+      },
       ...(!isInstructor
         ? [
             {

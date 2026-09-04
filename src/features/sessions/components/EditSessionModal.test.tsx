@@ -32,6 +32,7 @@ const session: TrainingSession = {
   sessionStatus: 'scheduled',
   assignmentStatus: 'unassigned',
   includeWeekends: true,
+  locationType: 'onsite',
   createdBy: 1,
   createdAt: '2026-09-01T00:00:00.000Z',
 }
