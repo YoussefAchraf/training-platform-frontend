@@ -59,7 +59,8 @@ export function usePushSubscription() {
       });
       setStatus('subscribed');
       return true;
-    } catch {
+    } catch (err) {
+      console.error('[usePushSubscription] Failed to subscribe:', err);
       setError(t('PushNotifications.enableFailed'));
       return false;
     } finally {
@@ -79,7 +80,8 @@ export function usePushSubscription() {
       }
       setStatus('unsubscribed');
       return true;
-    } catch {
+    } catch (err) {
+      console.error('[usePushSubscription] Failed to unsubscribe:', err);
       setError(t('PushNotifications.disableFailed'));
       return false;
     } finally {
