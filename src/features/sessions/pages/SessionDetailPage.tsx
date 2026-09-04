@@ -224,6 +224,7 @@ export function SessionDetailPage() {
         <EditSessionModal
           session={isEditingDates ? session : null}
           training={training ?? null}
+          client={client ?? null}
           onClose={() => setIsEditingDates(false)}
         />
       )}
