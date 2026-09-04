@@ -154,13 +154,20 @@ click, never a mount-time effect — since iOS Safari silently drops (and can pe
 deny) a request that isn't; a one-time nudge on iOS points to the click that actually
 enables it, once the app is already installed (push there requires that first).
 
-Two platform quirks worth knowing, neither fixable from this codebase: Brave sometimes
-installs a PWA as a plain home-screen shortcut instead of a full app — confirmed via
-Brave's own open GitHub issues to be a Brave-side setting/bug, not a manifest gap, since
-Brave uses the same installability criteria as Chrome once it decides to offer the real
-path. Firefox desktop has no stable native "install this site" feature at all as of this
-writing (Mozilla's "Taskbar Tabs" is still experimental/opt-in) — only Firefox *Android*
-gets an install banner here, for exactly that reason.
+Two platform quirks worth knowing, neither fixable from this codebase. On Android, a truly
+installed app (a WebAPK — no browser badge on the icon, its own entry in Settings → Apps)
+requires a *minting server*: a trusted, cryptographically-signed APK-packaging service.
+Only Google's (used by Chrome) and Samsung's (used by Samsung Internet, Samsung devices
+only) exist. Brave, Edge, Opera, and Samsung Internet on non-Samsung phones all correctly
+detect this app as installable — same manifest, same criteria as Chrome — but have no
+trusted minting server to finish the job, so they fall back to a home-screen shortcut
+badged with their own icon instead. Firefox Android has no WebAPK mechanism at all, so it
+gets the same shortcut-with-badge outcome via a different route. Both still correctly
+launch the installed shell (no browser chrome) since that part *is* controlled by the
+manifest's `display: standalone` — only the icon/OS-integration layer is out of reach.
+Firefox desktop has no stable native "install this site" feature at all as of this writing
+(Mozilla's "Taskbar Tabs" is still experimental/opt-in) — only Firefox *Android* gets an
+install banner here, for exactly that reason.
 
 **Links open in the installed app, not a new browser tab** — once installed, tapping a link
 to this site (from an email, a search result, another app, or the address bar) opens the
