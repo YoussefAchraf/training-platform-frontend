@@ -107,6 +107,27 @@ describe('hoursBetweenTimes', () => {
   });
 });
 
+describe('computeSessionEndDay - country-specific weekend days', () => {
+  it('defaults to Saturday-Sunday when no weekendDays is given', () => {
+    
+    expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, true))).toBe('2026-08-26');
+  });
+
+  it('skips only Friday for a single-day-weekend country (e.g. Iran) - a shorter span than the default', () => {
+    
+    expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, true, [5]))).toBe('2026-08-25');
+  });
+
+  it('skips Friday-Saturday for a Gulf/North-Africa-style weekend (e.g. Egypt)', () => {
+    
+    expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, true, [5, 6]))).toBe('2026-08-26');
+  });
+
+  it('ignores weekendDays entirely when skipWeekends is false', () => {
+    expect(isoDate(computeSessionEndDay('2026-08-20', 5, 'days', 8, false, [5]))).toBe('2026-08-24');
+  });
+});
+
 describe('combineDateAndTime', () => {
   it('combines a date and a time into a datetime-local value', () => {
     expect(combineDateAndTime('2026-08-20', '10:20')).toBe('2026-08-20T10:20');

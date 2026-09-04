@@ -12,8 +12,12 @@ import { Input } from '@/shared/components/Input';
 import { Checkbox } from '@/shared/components/Checkbox';
 import { Select } from '@/shared/components/Select';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
+import { Globe2 } from 'lucide-react';
 import { useToast } from '@/shared/hooks/useToast';
-import type { Training, TrainingSession } from '@/shared/types/domain';
+import type { Client, Training, TrainingSession } from '@/shared/types/domain';
+import { getWeekendDays } from '@/shared/data/countryWeekends';
+import { getPrimaryTimezone, REFERENCE_TIMEZONE } from '@/shared/data/countryTimezones';
+import { formatDateTimeInZone, utcIsoToZonedParts, zonedTimeToUtcIso } from '@/shared/utils/timezoneConversion';
 import { useUpdateSession } from '../hooks/useSessions';
 import { combineDateAndTime, computeDaysNeeded, computeSessionEndDay, hoursBetweenTimes } from '../utils/sessionDuration';
 
@@ -65,17 +69,25 @@ type EditSessionFormValues = z.infer<ReturnType<typeof buildEditSessionSchema>>;
 interface EditSessionModalProps {
   session: TrainingSession | null;
   training: Training | null;
+  client: Client | null;
   onClose: () => void;
 }
 
 const FORM_ID = 'edit-session-form';
 
-export function EditSessionModal({ session, training, onClose }: EditSessionModalProps) {
+export function EditSessionModal({ session, training, client, onClose }: EditSessionModalProps) {
   const { t } = useTranslation('sessions');
   const updateSession = useUpdateSession();
   const toast = useToast();
   const editSessionSchema = useMemo(() => buildEditSessionSchema(t), [t]);
   const [includeWeekends, setIncludeWeekends] = useState(false);
+
+  
+  
+  
+  
+  
+  const clientTimeZone = getPrimaryTimezone(client?.country);
 
   const {
     register,
@@ -87,10 +99,18 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
     resolver: zodResolver(editSessionSchema),
     values: session
       ? {
-          startDate: format(parseISO(session.startDate), 'yyyy-MM-dd'),
-          startTime: format(parseISO(session.startDate), 'HH:mm'),
-          dailyEndTime: format(parseISO(session.endDate), 'HH:mm'),
-          endDate: format(parseISO(session.endDate), 'yyyy-MM-dd'),
+          startDate: clientTimeZone
+            ? utcIsoToZonedParts(session.startDate, clientTimeZone).date
+            : format(parseISO(session.startDate), 'yyyy-MM-dd'),
+          startTime: clientTimeZone
+            ? utcIsoToZonedParts(session.startDate, clientTimeZone).time
+            : format(parseISO(session.startDate), 'HH:mm'),
+          dailyEndTime: clientTimeZone
+            ? utcIsoToZonedParts(session.endDate, clientTimeZone).time
+            : format(parseISO(session.endDate), 'HH:mm'),
+          endDate: clientTimeZone
+            ? utcIsoToZonedParts(session.endDate, clientTimeZone).date
+            : format(parseISO(session.endDate), 'yyyy-MM-dd'),
           locationType: session.locationType,
         }
       : undefined,
@@ -114,26 +134,38 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
       : null;
   const showIncludeWeekends = (daysNeeded ?? 0) > 1;
 
+  const weekendDays = getWeekendDays(client?.country);
+  const startUtcIso = clientTimeZone ? zonedTimeToUtcIso(startDate, startTime, clientTimeZone) : null;
+
   useEffect(() => {
     if (dirtyFields.endDate) return;
     if (!startDate || !training?.duration || !training.durationUnit || !hoursPerDay) return;
-    const endDay = computeSessionEndDay(startDate, training.duration, training.durationUnit, hoursPerDay, !includeWeekends);
+    const endDay = computeSessionEndDay(startDate, training.duration, training.durationUnit, hoursPerDay, !includeWeekends, weekendDays);
     if (endDay) setValue('endDate', format(endDay, 'yyyy-MM-dd'), { shouldValidate: true });
-  }, [startDate, hoursPerDay, training, includeWeekends, dirtyFields.endDate, setValue]);
+  }, [startDate, hoursPerDay, training, includeWeekends, weekendDays, dirtyFields.endDate, setValue]);
 
   if (!session) return null;
 
   const onSubmit = handleSubmit((values) => {
-    const startIso = combineDateAndTime(values.startDate, values.startTime);
-    const endIso = combineDateAndTime(values.endDate, values.dailyEndTime);
-    if (!startIso || !endIso) return;
+    let startUtc: string | null;
+    let endUtc: string | null;
+    if (clientTimeZone) {
+      startUtc = zonedTimeToUtcIso(values.startDate, values.startTime, clientTimeZone);
+      endUtc = zonedTimeToUtcIso(values.endDate, values.dailyEndTime, clientTimeZone);
+    } else {
+      const startIso = combineDateAndTime(values.startDate, values.startTime);
+      const endIso = combineDateAndTime(values.endDate, values.dailyEndTime);
+      startUtc = startIso ? new Date(startIso).toISOString() : null;
+      endUtc = endIso ? new Date(endIso).toISOString() : null;
+    }
+    if (!startUtc || !endUtc) return;
 
     updateSession.mutate(
       {
         id: session.id,
         payload: {
-          startDate: new Date(startIso).toISOString(),
-          endDate: new Date(endIso).toISOString(),
+          startDate: startUtc,
+          endDate: endUtc,
           includeWeekends,
           locationType: values.locationType,
         },
@@ -192,6 +224,18 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
             {(fieldProps) => <Input type="time" {...fieldProps} {...register('dailyEndTime')} />}
           </FormField>
         </div>
+
+        {startUtcIso && clientTimeZone && (
+          <p className={styles.timezoneNote}>
+            <Globe2 size={14} aria-hidden="true" />
+            {clientTimeZone === REFERENCE_TIMEZONE
+              ? t('EditSessionModal.timezoneSameAsTunisia', { time: formatDateTimeInZone(startUtcIso, clientTimeZone) })
+              : t('EditSessionModal.timezoneEquivalent', {
+                  clientTime: formatDateTimeInZone(startUtcIso, clientTimeZone),
+                  tunisiaTime: formatDateTimeInZone(startUtcIso, REFERENCE_TIMEZONE),
+                })}
+          </p>
+        )}
 
         {showIncludeWeekends && (
           <Checkbox
