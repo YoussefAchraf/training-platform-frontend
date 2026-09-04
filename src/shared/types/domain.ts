@@ -74,6 +74,7 @@ export interface Client {
   companyName: string;
   email: string | null;
   phone: string | null;
+  country: string | null;
   createdBy: number | null;
   creatorName: string | null;
   createdAt: string;

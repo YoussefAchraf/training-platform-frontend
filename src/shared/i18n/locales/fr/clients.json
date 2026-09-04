@@ -11,14 +11,20 @@
     "emailLabel": "E-mail",
     "emailOptionalHint": "Optionnel",
     "emailPlaceholder": "contact@acme.com",
+    "countryLabel": "Pays",
+    "countryOptionalHint": "Optionnel - cliquez pour parcourir, ou tapez pour filtrer",
+    "countryPlaceholder": "Tunisie",
     "phoneLabel": "Téléphone",
     "phoneOptionalHint": "Optionnel",
+    "phoneNoCountryHint": "Choisissez un pays pour valider le numéro et ajouter son indicatif",
     "phonePlaceholder": "+33 1 23 45 67 89",
+    "phoneNationalPlaceholder": "6 12 34 56 78",
     "clientUpdated": "{{name}} a été mis à jour.",
     "clientAdded": "{{name}} a été ajouté aux clients.",
     "errors": {
       "companyNameRequired": "Le nom de l'entreprise est requis",
-      "emailInvalid": "Saisissez une adresse e-mail valide"
+      "emailInvalid": "Saisissez une adresse e-mail valide",
+      "phoneInvalid": "Saisissez un numéro de téléphone valide pour le pays sélectionné"
     }
   },
   "ClientsPage": {
@@ -28,6 +34,7 @@
     "columnCompany": "Entreprise",
     "columnEmail": "E-mail",
     "columnPhone": "Téléphone",
+    "columnCountry": "Pays",
     "createdBy": "Créé par {{name}}",
     "anotherUser": "un autre utilisateur",
     "edit": "Modifier",
