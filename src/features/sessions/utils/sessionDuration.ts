@@ -1,14 +1,13 @@
 import { addDays, parseISO } from 'date-fns';
 import type { TrainingDurationUnit } from '@/shared/types/domain';
 
-function addTrainingDays(start: Date, daysNeeded: number, skipWeekends: boolean): Date {
+function addTrainingDays(start: Date, daysNeeded: number, skipWeekends: boolean, weekendDays: number[] = [0, 6]): Date {
   let end = start;
   let daysCounted = 1;
   while (daysCounted < daysNeeded) {
     end = addDays(end, 1);
     if (skipWeekends) {
-      const day = end.getDay();
-      if (day === 0 || day === 6) continue;
+      if (weekendDays.includes(end.getDay())) continue;
     }
     daysCounted += 1;
   }
@@ -38,13 +37,14 @@ export function computeSessionEndDay(
   durationUnit: TrainingDurationUnit,
   hoursPerDay: number,
   skipWeekends: boolean,
+  weekendDays: number[] = [0, 6],
 ): Date | null {
   const start = parseISO(startDate);
   if (Number.isNaN(start.getTime())) return null;
 
   const daysNeeded = computeDaysNeeded(duration, durationUnit, hoursPerDay);
   if (!daysNeeded) return null;
-  return addTrainingDays(start, daysNeeded, skipWeekends);
+  return addTrainingDays(start, daysNeeded, skipWeekends, weekendDays);
 }
 
 

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
+import { Globe2 } from 'lucide-react';
 import { Modal } from '@/shared/components/Modal';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
@@ -15,6 +16,9 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { useToast } from '@/shared/hooks/useToast';
 import { useTrainings } from '@/features/trainings/hooks/useTrainings';
 import { useClients } from '@/features/clients/hooks/useClients';
+import { getWeekendDays } from '@/shared/data/countryWeekends';
+import { getPrimaryTimezone, REFERENCE_TIMEZONE } from '@/shared/data/countryTimezones';
+import { formatDateTimeInZone, zonedTimeToUtcIso } from '@/shared/utils/timezoneConversion';
 import { useCreateSession } from '../hooks/useSessions';
 import { combineDateAndTime, computeDaysNeeded, computeSessionEndDay, hoursBetweenTimes } from '../utils/sessionDuration';
 import styles from './SessionFormModal.module.css';
@@ -87,24 +91,34 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
     formState: { errors, dirtyFields },
   } = useForm<SessionFormInput, unknown, SessionFormOutput>({
     resolver: zodResolver(sessionSchema),
-    defaultValues: { startTime: '09:00', dailyEndTime: '17:00', locationType: 'onsite' },
+    
+    
+    
+    
+    
+    defaultValues: { startTime: '09:00', dailyEndTime: '17:00', locationType: 'onsite', endDate: '' },
   });
 
   const trainingId = watch('trainingId');
+  const clientId = watch('clientId');
   const startDate = watch('startDate');
   const startTime = watch('startTime');
   const dailyEndTime = watch('dailyEndTime');
   const selectedTraining = trainingsQuery.data?.find((training) => String(training.id) === String(trainingId));
+  const selectedClient = clientsQuery.data?.find((client) => String(client.id) === String(clientId));
   const hoursPerDay = hoursBetweenTimes(startTime, dailyEndTime);
   const daysNeeded =
     selectedTraining?.duration && selectedTraining.durationUnit && hoursPerDay
       ? computeDaysNeeded(selectedTraining.duration, selectedTraining.durationUnit, hoursPerDay)
       : null;
-  
-  
-  
-  
   const showIncludeWeekends = (daysNeeded ?? 0) > 1;
+
+  
+  
+  
+  const weekendDays = getWeekendDays(selectedClient?.country);
+  const clientTimeZone = getPrimaryTimezone(selectedClient?.country);
+  const startUtcIso = clientTimeZone ? zonedTimeToUtcIso(startDate, startTime, clientTimeZone) : null;
 
   useEffect(() => {
     if (dirtyFields.endDate) return;
@@ -115,9 +129,10 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
       selectedTraining.durationUnit,
       hoursPerDay,
       !includeWeekends,
+      weekendDays,
     );
     if (endDay) setValue('endDate', format(endDay, 'yyyy-MM-dd'), { shouldValidate: true });
-  }, [startDate, hoursPerDay, selectedTraining, includeWeekends, dirtyFields.endDate, setValue]);
+  }, [startDate, hoursPerDay, selectedTraining, includeWeekends, weekendDays, dirtyFields.endDate, setValue]);
 
   const handleClose = () => {
     reset();
@@ -127,16 +142,29 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
   };
 
   const onSubmit = handleSubmit((values) => {
-    const startIso = combineDateAndTime(values.startDate, values.startTime);
-    const endIso = combineDateAndTime(values.endDate, values.dailyEndTime);
-    if (!startIso || !endIso) return;
+    
+    
+    
+    
+    let startUtc: string | null;
+    let endUtc: string | null;
+    if (clientTimeZone) {
+      startUtc = zonedTimeToUtcIso(values.startDate, values.startTime, clientTimeZone);
+      endUtc = zonedTimeToUtcIso(values.endDate, values.dailyEndTime, clientTimeZone);
+    } else {
+      const startIso = combineDateAndTime(values.startDate, values.startTime);
+      const endIso = combineDateAndTime(values.endDate, values.dailyEndTime);
+      startUtc = startIso ? new Date(startIso).toISOString() : null;
+      endUtc = endIso ? new Date(endIso).toISOString() : null;
+    }
+    if (!startUtc || !endUtc) return;
 
     createSession.mutate(
       {
         trainingId: values.trainingId,
         clientId: values.clientId,
-        startDate: new Date(startIso).toISOString(),
-        endDate: new Date(endIso).toISOString(),
+        startDate: startUtc,
+        endDate: endUtc,
         includeWeekends,
         locationType: values.locationType,
       },
@@ -226,6 +254,18 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
               {(fieldProps) => <Input type="time" {...fieldProps} {...register('dailyEndTime')} />}
             </FormField>
           </div>
+
+          {startUtcIso && clientTimeZone && (
+            <p className={styles.timezoneNote}>
+              <Globe2 size={14} aria-hidden="true" />
+              {clientTimeZone === REFERENCE_TIMEZONE
+                ? t('SessionFormModal.timezoneSameAsTunisia', { time: formatDateTimeInZone(startUtcIso, clientTimeZone) })
+                : t('SessionFormModal.timezoneEquivalent', {
+                    clientTime: formatDateTimeInZone(startUtcIso, clientTimeZone),
+                    tunisiaTime: formatDateTimeInZone(startUtcIso, REFERENCE_TIMEZONE),
+                  })}
+            </p>
+          )}
 
           {showIncludeWeekends && (
             <Checkbox

@@ -59,15 +59,15 @@ describe('EditSessionModal', () => {
 
   it('renders nothing when session is null', () => {
     const { container } = renderWithClient(
-      <EditSessionModal session={null} training={multiDayTraining} onClose={vi.fn()} />,
+      <EditSessionModal session={null} training={multiDayTraining} client={null} onClose={vi.fn()} />,
     )
     expect(container).toBeEmptyDOMElement()
   })
 
   it('pre-fills every field from the session and training being edited', async () => {
-    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} onClose={vi.fn()} />)
+    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} client={null} onClose={vi.fn()} />)
 
-    expect(await screen.findByDisplayValue('2026-09-17')).toBeInTheDocument() 
+    expect(await screen.findByDisplayValue('2026-09-17')).toBeInTheDocument()
     expect(screen.getByDisplayValue('09:00')).toBeInTheDocument() 
     expect(screen.getByDisplayValue('17:00')).toBeInTheDocument() 
     expect(screen.getByDisplayValue('2026-09-21')).toBeInTheDocument() 
@@ -75,7 +75,7 @@ describe('EditSessionModal', () => {
   })
 
   it('does not show the include-weekends checkbox for a single-day training', async () => {
-    renderWithClient(<EditSessionModal session={session} training={singleDayTraining} onClose={vi.fn()} />)
+    renderWithClient(<EditSessionModal session={session} training={singleDayTraining} client={null} onClose={vi.fn()} />)
 
     await waitFor(() => expect(screen.getByLabelText(/^start date/i)).toHaveValue('2026-09-17'))
     expect(screen.queryByRole('checkbox', { name: /include weekends/i })).not.toBeInTheDocument()
@@ -83,7 +83,7 @@ describe('EditSessionModal', () => {
 
   it('recomputes the end date when the start date changes, respecting includeWeekends', async () => {
     const user = userEvent.setup()
-    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} onClose={vi.fn()} />)
+    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} client={null} onClose={vi.fn()} />)
 
     const startDateInput = await screen.findByLabelText(/^start date/i)
     await waitFor(() => expect(startDateInput).toHaveValue('2026-09-17'))
@@ -97,7 +97,7 @@ describe('EditSessionModal', () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
     mockedSessionsApi.update.mockResolvedValue({ ...session })
-    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} onClose={onClose} />)
+    renderWithClient(<EditSessionModal session={session} training={multiDayTraining} client={null} onClose={onClose} />)
 
     await screen.findByDisplayValue('2026-09-17')
     await user.click(screen.getByRole('button', { name: /save changes/i }))
