@@ -161,6 +161,10 @@ export function SessionDetailPage() {
             <dd>{training?.providerName ?? '—'}</dd>
           </div>
           <div>
+            <dt>{t('SessionDetailPage.locationType')}</dt>
+            <dd>{t(`SessionDetailPage.${session.locationType}`)}</dd>
+          </div>
+          <div>
             <dt>{t('SessionDetailPage.starts')}</dt>
             <dd>{formatDateTime(session.startDate)}</dd>
           </div>

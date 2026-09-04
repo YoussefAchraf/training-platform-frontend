@@ -10,6 +10,7 @@ import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
 import { Input } from '@/shared/components/Input';
 import { Checkbox } from '@/shared/components/Checkbox';
+import { Select } from '@/shared/components/Select';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { useToast } from '@/shared/hooks/useToast';
 import type { Training, TrainingSession } from '@/shared/types/domain';
@@ -36,6 +37,7 @@ function buildEditSessionSchema(t: TFunction<'sessions'>) {
       startTime: z.string().min(1, t('EditSessionModal.errors.startTimeRequired')),
       dailyEndTime: z.string().min(1, t('EditSessionModal.errors.dailyEndTimeRequired')),
       endDate: z.string().min(1, t('EditSessionModal.errors.endDateRequired')),
+      locationType: z.enum(['onsite', 'remote']),
     })
     .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
       message: t('EditSessionModal.errors.dailyEndTimeAfterStart'),
@@ -89,6 +91,7 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
           startTime: format(parseISO(session.startDate), 'HH:mm'),
           dailyEndTime: format(parseISO(session.endDate), 'HH:mm'),
           endDate: format(parseISO(session.endDate), 'yyyy-MM-dd'),
+          locationType: session.locationType,
         }
       : undefined,
   });
@@ -132,6 +135,7 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
           startDate: new Date(startIso).toISOString(),
           endDate: new Date(endIso).toISOString(),
           includeWeekends,
+          locationType: values.locationType,
         },
       },
       {
@@ -161,6 +165,15 @@ export function EditSessionModal({ session, training, onClose }: EditSessionModa
     >
       <form onSubmit={onSubmit} id={FORM_ID} className="stack" noValidate>
         {updateSession.isError && <ErrorBanner error={updateSession.error} />}
+
+        <FormField label={t('EditSessionModal.locationTypeLabel')} error={errors.locationType?.message} required>
+          {(fieldProps) => (
+            <Select {...fieldProps} {...register('locationType')}>
+              <option value="onsite">{t('EditSessionModal.onsite')}</option>
+              <option value="remote">{t('EditSessionModal.remote')}</option>
+            </Select>
+          )}
+        </FormField>
 
         <FormField label={t('EditSessionModal.startDateLabel')} error={errors.startDate?.message} required>
           {(fieldProps) => <Input type="date" min={todayLocal()} {...fieldProps} {...register('startDate')} />}

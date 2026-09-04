@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/lib/apiClient';
-import type { BulkImportResult, SessionAttendee, TrainingSession } from '@/shared/types/domain';
+import type { BulkImportResult, SessionAttendee, SessionLocationType, TrainingSession } from '@/shared/types/domain';
 
 export interface CreateSessionPayload {
   trainingId: number;
@@ -7,6 +7,7 @@ export interface CreateSessionPayload {
   startDate: string;
   endDate: string;
   includeWeekends?: boolean;
+  locationType?: SessionLocationType;
 }
 
 export interface AddAttendeePayload {
@@ -23,6 +24,7 @@ export interface UpdateSessionPayload {
   startDate: string;
   endDate: string;
   includeWeekends?: boolean;
+  locationType?: SessionLocationType;
 }
 
 export const sessionsApi = {

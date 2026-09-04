@@ -38,6 +38,7 @@ function buildSessionSchema(t: TFunction<'sessions'>) {
       startTime: z.string().min(1, t('SessionFormModal.errors.startTimeRequired')),
       dailyEndTime: z.string().min(1, t('SessionFormModal.errors.dailyEndTimeRequired')),
       endDate: z.string().min(1, t('SessionFormModal.errors.endDateRequired')),
+      locationType: z.enum(['onsite', 'remote']),
     })
     .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
       message: t('SessionFormModal.errors.dailyEndTimeAfterStart'),
@@ -86,7 +87,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
     formState: { errors, dirtyFields },
   } = useForm<SessionFormInput, unknown, SessionFormOutput>({
     resolver: zodResolver(sessionSchema),
-    defaultValues: { startTime: '09:00', dailyEndTime: '17:00' },
+    defaultValues: { startTime: '09:00', dailyEndTime: '17:00', locationType: 'onsite' },
   });
 
   const trainingId = watch('trainingId');
@@ -137,6 +138,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
         startDate: new Date(startIso).toISOString(),
         endDate: new Date(endIso).toISOString(),
         includeWeekends,
+        locationType: values.locationType,
       },
       {
         onSuccess: () => {
@@ -193,6 +195,15 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
                   {client.companyName}
                 </option>
               ))}
+            </Select>
+          )}
+        </FormField>
+
+        <FormField label={t('SessionFormModal.locationTypeLabel')} error={errors.locationType?.message} required>
+          {(fieldProps) => (
+            <Select {...fieldProps} {...register('locationType')}>
+              <option value="onsite">{t('SessionFormModal.onsite')}</option>
+              <option value="remote">{t('SessionFormModal.remote')}</option>
             </Select>
           )}
         </FormField>
