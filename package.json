@@ -34,7 +34,7 @@
     "i18next-browser-languagedetector": "^8.2.1",
     "libphonenumber-js": "^1.13.12",
     "lucide-react": "^1.31.0",
-    "motion": "^13.1.0",
+    "motion": "^13.1.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.83.0",
