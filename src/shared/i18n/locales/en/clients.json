@@ -11,14 +11,20 @@
     "emailLabel": "Email",
     "emailOptionalHint": "Optional",
     "emailPlaceholder": "contact@acme.com",
+    "countryLabel": "Country",
+    "countryOptionalHint": "Optional - click to browse, or type to filter",
+    "countryPlaceholder": "Tunisia",
     "phoneLabel": "Phone",
     "phoneOptionalHint": "Optional",
+    "phoneNoCountryHint": "Pick a country to validate the number and add its dialing code",
     "phonePlaceholder": "+1 555 000 1234",
+    "phoneNationalPlaceholder": "20 123 456",
     "clientUpdated": "{{name}} was updated.",
     "clientAdded": "{{name}} was added to clients.",
     "errors": {
       "companyNameRequired": "Company name is required",
-      "emailInvalid": "Enter a valid email address"
+      "emailInvalid": "Enter a valid email address",
+      "phoneInvalid": "Enter a valid phone number for the selected country"
     }
   },
   "ClientsPage": {
@@ -28,6 +34,7 @@
     "columnCompany": "Company",
     "columnEmail": "Email",
     "columnPhone": "Phone",
+    "columnCountry": "Country",
     "createdBy": "Created by {{name}}",
     "anotherUser": "another user",
     "edit": "Edit",

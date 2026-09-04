@@ -5,6 +5,7 @@ export interface CreateClientPayload {
   companyName: string;
   email?: string;
   phone?: string;
+  country?: string;
 }
 
 export type UpdateClientPayload = CreateClientPayload;

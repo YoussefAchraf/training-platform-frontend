@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import enCommon from './locales/en/common.json';
+import enCountries from './locales/en/countries.json';
 import enAuth from './locales/en/auth.json';
 import enDashboard from './locales/en/dashboard.json';
 import enSessions from './locales/en/sessions.json';
@@ -21,6 +22,7 @@ import enFeedback from './locales/en/feedback.json';
 import enDeveloper from './locales/en/developer.json';
 
 import frCommon from './locales/fr/common.json';
+import frCountries from './locales/fr/countries.json';
 import frAuth from './locales/fr/auth.json';
 import frDashboard from './locales/fr/dashboard.json';
 import frSessions from './locales/fr/sessions.json';
@@ -43,6 +45,7 @@ export const defaultNS = 'common';
 export const resources = {
   en: {
     common: enCommon,
+    countries: enCountries,
     auth: enAuth,
     dashboard: enDashboard,
     sessions: enSessions,
@@ -62,6 +65,7 @@ export const resources = {
   },
   fr: {
     common: frCommon,
+    countries: frCountries,
     auth: frAuth,
     dashboard: frDashboard,
     sessions: frSessions,

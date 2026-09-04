@@ -12,6 +12,7 @@ import { useToast } from '@/shared/hooks/useToast';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import type { Client } from '@/shared/types/domain';
+import { countryFlagEmoji } from '@/shared/data/countries';
 import { useClients, useDeleteClient } from '../hooks/useClients';
 import { ClientFormModal } from '../components/ClientFormModal';
 import styles from './ClientsPage.module.css';
@@ -20,6 +21,7 @@ const getClientId = (client: Client) => client.id;
 
 export function ClientsPage() {
   const { t } = useTranslation('clients');
+  const { t: tCountry } = useTranslation('countries');
   const { user, canManageCatalog, isSuperAdmin } = useAuth();
   const clientsQuery = useClients();
   const deleteClient = useDeleteClient();
@@ -65,6 +67,18 @@ export function ClientsPage() {
   const columns = useMemo<TableColumn<Client>[]>(
     () => [
       { key: 'companyName', header: t('ClientsPage.columnCompany'), render: (client) => client.companyName },
+      {
+        key: 'country',
+        header: t('ClientsPage.columnCountry'),
+        render: (client) =>
+          client.country ? (
+            <span>
+              <span aria-hidden="true">{countryFlagEmoji(client.country)}</span> {tCountry(client.country)}
+            </span>
+          ) : (
+            '—'
+          ),
+      },
       { key: 'email', header: t('ClientsPage.columnEmail'), render: (client) => client.email || '—' },
       { key: 'phone', header: t('ClientsPage.columnPhone'), render: (client) => client.phone || '—' },
       {
@@ -91,7 +105,7 @@ export function ClientsPage() {
         },
       },
     ],
-    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t],
+    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t, tCountry],
   );
 
   return (
