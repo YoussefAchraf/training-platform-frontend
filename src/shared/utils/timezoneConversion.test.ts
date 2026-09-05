@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { zonedTimeToUtcIso, formatDateTimeInZone, utcIsoToZonedParts } from './timezoneConversion';
+import { zonedTimeToUtcIso, formatDateTimeInZone, formatFullDateTimeInZone, utcIsoToZonedParts } from './timezoneConversion';
 
 describe('zonedTimeToUtcIso', () => {
   it('converts a Tunisia (fixed UTC+1, no DST) time to UTC correctly in winter', () => {
@@ -57,6 +57,25 @@ describe('formatDateTimeInZone', () => {
 
   it('returns an em dash for an invalid instant', () => {
     expect(formatDateTimeInZone('not-a-date', 'Africa/Tunis')).toBe('—');
+  });
+});
+
+describe('formatFullDateTimeInZone', () => {
+  it('includes the full calendar date alongside the time, unlike formatDateTimeInZone', () => {
+    const formatted = formatFullDateTimeInZone('2026-09-15T07:00:00.000Z', 'Europe/Paris');
+    expect(formatted).toContain('2026');
+    expect(formatted).toContain('9:00');
+  });
+
+  it('reflects the DST offset actually in effect for the given zone and date', () => {
+    const winter = formatFullDateTimeInZone('2026-01-15T08:00:00.000Z', 'Europe/Paris');
+    const summer = formatFullDateTimeInZone('2026-07-15T07:00:00.000Z', 'Europe/Paris');
+    expect(winter).toContain('9:00');
+    expect(summer).toContain('9:00');
+  });
+
+  it('returns an em dash for an invalid instant', () => {
+    expect(formatFullDateTimeInZone('not-a-date', 'Africa/Tunis')).toBe('—');
   });
 });
 

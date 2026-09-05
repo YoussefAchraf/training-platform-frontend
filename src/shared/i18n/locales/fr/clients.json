@@ -35,6 +35,7 @@
     "columnEmail": "E-mail",
     "columnPhone": "Téléphone",
     "columnCountry": "Pays",
+    "columnWeekend": "Week-end",
     "createdBy": "Créé par {{name}}",
     "anotherUser": "un autre utilisateur",
     "edit": "Modifier",

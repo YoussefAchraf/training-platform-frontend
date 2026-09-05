@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Ban, Pencil, QrCode, UserCog, UserPlus } from 'lucide-react';
+import { Ban, Globe2, Pencil, QrCode, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Card } from '@/shared/components/Card';
 import { Badge } from '@/shared/components/Badge';
@@ -18,6 +18,9 @@ import { ReportView } from '@/features/reports/components/ReportView';
 import { QRCodeModal } from '@/features/survey/components/QRCodeModal';
 import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import { formatDateTime } from '@/shared/utils/formatDate';
+import { formatFullDateTimeInZone } from '@/shared/utils/timezoneConversion';
+import { getPrimaryTimezone, REFERENCE_TIMEZONE } from '@/shared/data/countryTimezones';
+import { formatWeekendDays } from '@/shared/data/countryWeekends';
 import { assignmentStatusMeta, sessionStatusMeta } from '@/shared/utils/statusMeta';
 import { useSessionLookups } from '../hooks/useSessionLookups';
 import { useCancelSession, useSessionAttendees, useSessions } from '../hooks/useSessions';
@@ -38,14 +41,6 @@ export function SessionDetailPage() {
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap, instructorMap } = useSessionLookups();
   const instructorsQuery = useInstructors({ enabled: canAssignInstructor });
-  
-  
-  
-  
-  
-  
-  
-  
   const attendeesQuery = useSessionAttendees(sessionId, { enabled: canManageCatalog });
   const myProfileQuery = useMyInstructorProfile({ enabled: isInstructor });
   const cancelSession = useCancelSession();
@@ -78,6 +73,10 @@ export function SessionDetailPage() {
   const training = trainingMap.get(session.trainingId);
   const client = clientMap.get(session.clientId);
   const instructor = session.instructorId ? instructorMap.get(session.instructorId) : undefined;
+  
+  
+  
+  const clientTimeZone = getPrimaryTimezone(client?.country);
   const hasAttendees = (attendeesQuery.data?.length ?? 0) > 0;
   const hasMarkingStarted = (attendeesQuery.data ?? []).some((attendee) => attendee.attendanceStatus !== 'pending');
   const isMySession = isInstructor && myProfileQuery.data?.id === session.instructorId;
@@ -92,6 +91,28 @@ export function SessionDetailPage() {
       },
       onError: (error) => toast.error(getApiErrorMessage(error)),
     });
+  };
+
+  
+  
+  
+  
+  const renderSessionMoment = (iso: string) => {
+    if (!clientTimeZone) return formatDateTime(iso);
+    const clientReading = formatFullDateTimeInZone(iso, clientTimeZone);
+    const secondary =
+      clientTimeZone === REFERENCE_TIMEZONE
+        ? t('SessionDetailPage.sameAsTunisia')
+        : t('SessionDetailPage.tunisiaEquivalent', { time: formatFullDateTimeInZone(iso, REFERENCE_TIMEZONE) });
+    return (
+      <span className={styles.momentStack}>
+        <span>{clientReading}</span>
+        <span className={styles.secondaryTime}>
+          <Globe2 size={13} aria-hidden="true" />
+          {secondary}
+        </span>
+      </span>
+    );
   };
 
   return (
@@ -166,11 +187,15 @@ export function SessionDetailPage() {
           </div>
           <div>
             <dt>{t('SessionDetailPage.starts')}</dt>
-            <dd>{formatDateTime(session.startDate)}</dd>
+            <dd>{renderSessionMoment(session.startDate)}</dd>
           </div>
           <div>
             <dt>{t('SessionDetailPage.ends')}</dt>
-            <dd>{formatDateTime(session.endDate)}</dd>
+            <dd>{renderSessionMoment(session.endDate)}</dd>
+          </div>
+          <div>
+            <dt>{t('SessionDetailPage.clientWeekend')}</dt>
+            <dd>{client ? formatWeekendDays(client.country) : '—'}</dd>
           </div>
           <div>
             <dt>{t('SessionDetailPage.instructor')}</dt>

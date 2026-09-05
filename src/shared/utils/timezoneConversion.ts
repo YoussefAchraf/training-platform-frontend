@@ -1,11 +1,4 @@
-import i18n from '@/shared/i18n';
-
-const INTL_LOCALES = { en: 'en-US', fr: 'fr-FR' } as const;
-
-function currentIntlLocale(): string {
-  const lang = (i18n.resolvedLanguage ?? i18n.language ?? 'en').slice(0, 2) as keyof typeof INTL_LOCALES;
-  return INTL_LOCALES[lang] ?? 'en-US';
-}
+import { currentIntlLocale } from '@/shared/i18n/intlLocale';
 
 
 
@@ -62,6 +55,23 @@ export function formatDateTimeInZone(iso: string, timeZone: string): string {
   return new Intl.DateTimeFormat(currentIntlLocale(), {
     timeZone,
     weekday: 'short',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(date);
+}
+
+// Same inverse read as formatDateTimeInZone, but with the full calendar
+// date included - for a persistent display (e.g. a session's detail page)
+// where, unlike the booking form, there's no separate date input already
+// showing the day.
+export function formatFullDateTimeInZone(iso: string, timeZone: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '—';
+  return new Intl.DateTimeFormat(currentIntlLocale(), {
+    timeZone,
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
   }).format(date);

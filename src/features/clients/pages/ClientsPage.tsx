@@ -13,6 +13,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import type { Client } from '@/shared/types/domain';
 import { countryFlagEmoji } from '@/shared/data/countries';
+import { formatWeekendDays } from '@/shared/data/countryWeekends';
 import { useClients, useDeleteClient } from '../hooks/useClients';
 import { ClientFormModal } from '../components/ClientFormModal';
 import styles from './ClientsPage.module.css';
@@ -78,6 +79,11 @@ export function ClientsPage() {
           ) : (
             '—'
           ),
+      },
+      {
+        key: 'weekend',
+        header: t('ClientsPage.columnWeekend'),
+        render: (client) => formatWeekendDays(client.country),
       },
       { key: 'email', header: t('ClientsPage.columnEmail'), render: (client) => client.email || '—' },
       { key: 'phone', header: t('ClientsPage.columnPhone'), render: (client) => client.phone || '—' },

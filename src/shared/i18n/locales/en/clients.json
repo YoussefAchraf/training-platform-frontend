@@ -35,6 +35,7 @@
     "columnEmail": "Email",
     "columnPhone": "Phone",
     "columnCountry": "Country",
+    "columnWeekend": "Weekend",
     "createdBy": "Created by {{name}}",
     "anotherUser": "another user",
     "edit": "Edit",
