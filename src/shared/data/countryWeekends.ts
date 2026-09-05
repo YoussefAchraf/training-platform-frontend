@@ -1,3 +1,5 @@
+import { currentIntlLocale } from '@/shared/i18n/intlLocale';
+
 
 
 
@@ -40,9 +42,31 @@ const WEEKEND_OVERRIDES: Record<string, number[]> = {
   NP: SATURDAY_ONLY, 
 };
 
-const DEFAULT_WEEKEND = [0, 6]; 
+
+
+
+
+const DEFAULT_WEEKEND = [6, 0];
 
 export function getWeekendDays(countryCode: string | null | undefined): number[] {
   if (!countryCode) return DEFAULT_WEEKEND;
   return WEEKEND_OVERRIDES[countryCode.toUpperCase()] ?? DEFAULT_WEEKEND;
+}
+
+
+
+const WEEKDAY_REFERENCE_SUNDAY = new Date(2023, 0, 1);
+
+
+
+
+
+export function formatWeekendDays(countryCode: string | null | undefined): string {
+  const locale = currentIntlLocale();
+  const names = getWeekendDays(countryCode).map((day) => {
+    const date = new Date(WEEKDAY_REFERENCE_SUNDAY);
+    date.setDate(date.getDate() + day);
+    return new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(date);
+  });
+  return new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(names);
 }
