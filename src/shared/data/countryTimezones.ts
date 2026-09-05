@@ -6,9 +6,6 @@ import { getCountry } from 'countries-and-timezones';
 
 
 
-
-
-
 const PRIMARY_TIMEZONE_OVERRIDES: Record<string, string> = {
   US: 'America/New_York',
   CA: 'America/Toronto',
@@ -36,9 +33,6 @@ export function getPrimaryTimezone(countryCode: string | null | undefined): stri
   if (PRIMARY_TIMEZONE_OVERRIDES[code]) return PRIMARY_TIMEZONE_OVERRIDES[code];
   return getCountry(code)?.timezones[0];
 }
-
-
-
 
 
 export const REFERENCE_TIMEZONE = 'Africa/Tunis';
