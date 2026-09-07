@@ -9,12 +9,19 @@
   "InstructorsPage": {
     "title": "Formateurs",
     "description": "Profils, bios et formations que chaque formateur peut dispenser.",
-    "columnName": "Nom",
-    "columnEmail": "E-mail",
-    "columnTrainings": "Formations",
-    "edit": "Modifier",
+    "columnTrainings": "Qualifié pour",
+    "editAria": "Modifier {{name}}",
+    "noSkills": "Aucune formation qualifiée pour l'instant",
     "emptyTitle": "Aucun formateur pour l'instant",
-    "emptyDescription": "Les formateurs apparaîtront ici une fois inscrits et approuvés."
+    "emptyDescription": "Les formateurs apparaîtront ici une fois inscrits et approuvés.",
+    "emptyTitleFiltered": "Aucun formateur ne correspond à vos filtres",
+    "emptyDescriptionFiltered": "Essayez d'ajuster ou de réinitialiser les filtres ci-dessus."
+  },
+  "InstructorsFilterToolbar": {
+    "searchPlaceholder": "Rechercher par nom ou e-mail…",
+    "trainingLabel": "Formation",
+    "allTrainings": "Toutes les formations",
+    "clearFilters": "Réinitialiser les filtres"
   },
   "InstructorProfileForm": {
     "saveChanges": "Enregistrer les modifications",

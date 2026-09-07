@@ -9,12 +9,9 @@ import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useLogout } from '@/features/auth/hooks/useLogout';
 import { usePrefetchRoute } from '@/routes/routeModules';
-import { overflowNavItems } from '@/layouts/components/navItems';
 import { roleMeta } from '@/shared/utils/statusMeta';
 import { paths } from '@/routes/paths';
 import styles from './PwaProfilePage.module.css';
-
-
 
 
 
@@ -28,8 +25,6 @@ export function PwaProfilePage() {
   const prefetchRoute = usePrefetchRoute();
 
   if (!user) return null;
-
-  const overflow = overflowNavItems(user.role);
 
   const handleLogout = () => {
     logout.mutate(isDeveloper ? paths.developerLogin : isSuperAdmin ? paths.superAdminLogin : paths.login);
@@ -74,27 +69,6 @@ export function PwaProfilePage() {
         <span>{t('PwaProfilePage.accountSettings')}</span>
         <ArrowRight size={15} className={styles.chevron} />
       </button>
-
-      {overflow.length > 0 && (
-        <>
-          <p className={styles.sectionLabel}>{t('PwaProfilePage.more')}</p>
-          <Card className={styles.moreCard}>
-            {overflow.map((item) => (
-              <button
-                key={item.to}
-                type="button"
-                className={styles.menuLink}
-                onClick={() => navigate(item.to)}
-                onTouchStart={() => prefetchRoute(item.to)}
-              >
-                <item.icon size={17} />
-                <span>{t(item.labelKey)}</span>
-                <ArrowRight size={15} className={styles.chevron} />
-              </button>
-            ))}
-          </Card>
-        </>
-      )}
 
       <button
         type="button"

@@ -12,7 +12,7 @@ import { useToast } from '@/shared/hooks/useToast';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { getApiErrorMessage } from '@/shared/lib/apiClient';
 import type { Client } from '@/shared/types/domain';
-import { countryFlagEmoji } from '@/shared/data/countries';
+import { CountryFlag } from '@/shared/components/CountryFlag';
 import { formatWeekendDays } from '@/shared/data/countryWeekends';
 import { useClients, useDeleteClient } from '../hooks/useClients';
 import { ClientFormModal } from '../components/ClientFormModal';
@@ -74,7 +74,7 @@ export function ClientsPage() {
         render: (client) =>
           client.country ? (
             <span>
-              <span aria-hidden="true">{countryFlagEmoji(client.country)}</span> {tCountry(client.country)}
+              <CountryFlag code={client.country} /> {tCountry(client.country)}
             </span>
           ) : (
             '—'

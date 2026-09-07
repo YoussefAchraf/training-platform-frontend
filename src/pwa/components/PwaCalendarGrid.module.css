@@ -1,0 +1,115 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text);
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.navButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.monthLabel {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  min-width: 160px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto repeat(var(--week-rows, 6), minmax(0, 1fr));
+  gap: 6px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+}
+
+.dow {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  text-align: center;
+  padding-bottom: var(--space-2);
+}
+
+.dayCell {
+  position: relative;
+  min-height: 52px;
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.dayCell:active {
+  transform: scale(0.94);
+}
+
+.today {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.muted {
+  opacity: 0.35;
+}
+
+.dateNum {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.countPill {
+  align-self: flex-start;
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  background-color: rgb(255 255 255 / 55%);
+}
+
+.heat0 {
+  background-color: var(--color-heat-0);
+  color: var(--color-text-faint);
+}
+
+.heat1 {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.hint {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: 0 var(--space-4);
+}

@@ -9,7 +9,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  
+  overflow-x: hidden;
+  
+  padding-bottom: calc(var(--bottom-nav-height) + var(--space-3) * 2 + env(safe-area-inset-bottom, 0px));
 }
 
 .content {

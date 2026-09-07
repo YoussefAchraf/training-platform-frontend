@@ -23,7 +23,7 @@ export function App() {
         {isBootstrapped ? (
           <RouterProvider router={router} />
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+          <div className="app-loading-fallback">
             <Spinner size={28} />
           </div>
         )}

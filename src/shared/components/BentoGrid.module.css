@@ -1,0 +1,51 @@
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@media (--md) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  
+  .rowSpan2,
+  .span4,
+  .span6 {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (--lg) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    
+    grid-auto-flow: dense;
+  }
+
+  .span2 {
+    grid-column: span 2;
+  }
+
+  .span3 {
+    grid-column: span 3;
+  }
+
+  .span4 {
+    grid-column: span 4;
+  }
+
+  .span6 {
+    grid-column: span 6;
+  }
+
+  
+  .lgSpan6 {
+    grid-column: span 6;
+  }
+
+  .rowSpan2 {
+    grid-row: span 2;
+  }
+}

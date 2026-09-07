@@ -85,6 +85,15 @@ textarea {
   border: 2px solid var(--color-bg);
 }
 
+.app-loading-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

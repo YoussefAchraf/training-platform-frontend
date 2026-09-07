@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Combobox } from './Combobox';
 import type { ComboboxOption } from './Combobox';
-import { COUNTRY_CODES, countryFlagEmoji } from '@/shared/data/countries';
+import { CountryFlag } from './CountryFlag';
+import { COUNTRY_CODES } from '@/shared/data/countries';
 import type { CountryCode } from 'libphonenumber-js';
 
 interface CountrySelectProps {
@@ -30,11 +31,7 @@ export function CountrySelect({ value, onChange, id, invalid, placeholder, ...re
     return COUNTRY_CODES.map((code) => ({
       value: code,
       label: t(code),
-      icon: (
-        <span aria-hidden="true" style={{ fontSize: '1.1em', lineHeight: 1 }}>
-          {countryFlagEmoji(code)}
-        </span>
-      ),
+      icon: <CountryFlag code={code} />,
     })).sort((a, b) => collator.compare(a.label, b.label));
   }, [t, i18n.language]);
 

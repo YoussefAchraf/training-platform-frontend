@@ -9,12 +9,19 @@
   "InstructorsPage": {
     "title": "Instructors",
     "description": "Instructor profiles, bios, and the trainings they can deliver.",
-    "columnName": "Name",
-    "columnEmail": "Email",
-    "columnTrainings": "Trainings",
-    "edit": "Edit",
+    "columnTrainings": "Qualified for",
+    "editAria": "Edit {{name}}",
+    "noSkills": "No qualified trainings yet",
     "emptyTitle": "No instructors yet",
-    "emptyDescription": "Instructors appear here once they sign up and are approved."
+    "emptyDescription": "Instructors appear here once they sign up and are approved.",
+    "emptyTitleFiltered": "No instructors match your filters",
+    "emptyDescriptionFiltered": "Try adjusting or clearing the filters above."
+  },
+  "InstructorsFilterToolbar": {
+    "searchPlaceholder": "Search by name or email…",
+    "trainingLabel": "Training",
+    "allTrainings": "All trainings",
+    "clearFilters": "Clear filters"
   },
   "InstructorProfileForm": {
     "saveChanges": "Save changes",

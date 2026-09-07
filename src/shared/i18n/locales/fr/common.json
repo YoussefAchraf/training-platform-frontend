@@ -33,7 +33,11 @@
       "Catalog": "Catalogue",
       "People": "Personnes",
       "Administration": "Administration"
-    }
+    },
+    "pendingApprovalsBadge_one": "{{count}} compte en attente d'approbation",
+    "pendingApprovalsBadge_other": "{{count}} comptes en attente d'approbation",
+    "newAssignmentsBadge_one": "{{count}} nouvelle session assignée",
+    "newAssignmentsBadge_other": "{{count}} nouvelles sessions assignées"
   },
   "Topbar": {
     "openMenu": "Ouvrir le menu de navigation"

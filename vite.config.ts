@@ -1,8 +1,9 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, normalizePath } from 'vite'
 import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import Sitemap from 'vite-plugin-sitemap'
 import { VitePWA } from 'vite-plugin-pwa'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'node:path'
 import JavaScriptObfuscator from 'javascript-obfuscator'
 
@@ -140,6 +141,37 @@ export default defineConfig(({ mode }) => {
       }),
       obfuscateBuild(),
       preloadFonts(),
+      // Copies flag-icons' css+flags folders as raw files, served via a
+      // plain <link> in index.html - keeps them out of Vite's CSS/asset
+      // pipeline entirely (see index.html's comment for why), and out of
+      // the PWA precache manifest below (globIgnores: 'vendor/**') since
+      // there's no need to precache all ~250 countries' flags for offline
+      // use - the handful actually shown just load over the network like
+      // any other image, same as they would on a non-PWA site.
+      viteStaticCopy({
+        targets: [
+          {
+            src: normalizePath(path.resolve(__dirname, 'node_modules/flag-icons/css/flag-icons.min.css')),
+            dest: 'vendor/flag-icons/css',
+            rename: { stripBase: true },
+          },
+          {
+            // Copied as the two flat 4x3/1x1 leaf folders individually
+            // (rather than the whole flags/ tree at once) - stripBase
+            // flattens whatever's under src, and both folders share
+            // filenames (ad.svg exists in each), so copying them together
+            // silently let one variant overwrite the other.
+            src: normalizePath(path.resolve(__dirname, 'node_modules/flag-icons/flags/4x3')),
+            dest: 'vendor/flag-icons/flags/4x3',
+            rename: { stripBase: true },
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, 'node_modules/flag-icons/flags/1x1')),
+            dest: 'vendor/flag-icons/flags/1x1',
+            rename: { stripBase: true },
+          },
+        ],
+      }),
       // manifest: false - public/site.webmanifest is already hand-maintained
       // (icons, maskable variants, theme colors) from earlier PWA-icon work;
       // injectManifest (not generateSW) because push notifications need a
@@ -153,6 +185,7 @@ export default defineConfig(({ mode }) => {
         manifest: false,
         injectManifest: {
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          globIgnores: ['vendor/**'],
         },
         devOptions: {
           enabled: false,
