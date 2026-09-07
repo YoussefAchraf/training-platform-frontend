@@ -166,7 +166,7 @@ export function CalendarPage() {
   if (isPwaPhone) {
     return (
       <div className={pwaStyles.page}>
-        <header className={pwaStyles.header}>
+        <header className={pwaStyles.header} id="tour-calendar-header">
           <span className={pwaStyles.title}>{t('CalendarPage.title')}</span>
         </header>
 
@@ -201,11 +201,13 @@ export function CalendarPage() {
           />
         )}
 
-        {query.isError ? (
-          <ErrorBanner error={query.error} onRetry={() => query.refetch()} />
-        ) : (
-          <PwaCalendarGrid events={visibleEvents} isLoading={query.isPending} />
-        )}
+        <div id="tour-calendar-body">
+          {query.isError ? (
+            <ErrorBanner error={query.error} onRetry={() => query.refetch()} />
+          ) : (
+            <PwaCalendarGrid events={visibleEvents} isLoading={query.isPending} />
+          )}
+        </div>
 
         <NewAssignmentsModal sessions={newAssignments} onClose={() => markSeen(newAssignments.map((session) => session.id))} />
       </div>
