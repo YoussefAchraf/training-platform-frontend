@@ -8,23 +8,24 @@
   height: var(--bottom-nav-height);
   display: flex;
   border-radius: var(--radius-full);
-  background-color: rgb(255 255 255 / 72%);
+  background-color: rgb(255 255 255 / 82%);
   backdrop-filter: blur(24px) saturate(1.8);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  border: 1px solid rgb(255 255 255 / 50%);
-  box-shadow: var(--shadow-lg);
+  
+  border: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-lg), 0 1px 2px rgb(9 9 11 / 10%);
   padding-inline: var(--space-1);
 }
 
 :root[data-theme='dark'] .bar {
-  background-color: rgb(28 28 31 / 68%);
-  border-color: rgb(255 255 255 / 10%);
+  background-color: rgb(32 32 36 / 85%);
+  border-color: rgb(255 255 255 / 16%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .bar {
-    background-color: rgb(28 28 31 / 68%);
-    border-color: rgb(255 255 255 / 10%);
+    background-color: rgb(32 32 36 / 85%);
+    border-color: rgb(255 255 255 / 16%);
   }
 }
 
