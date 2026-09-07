@@ -3,10 +3,11 @@ import { queryKeys } from '@/shared/lib/queryKeys';
 import { sessionsApi } from '../api/sessionsApi';
 import type { AddAttendeePayload, UpdateAttendeePayload, UpdateSessionPayload } from '../api/sessionsApi';
 
-export function useSessions() {
+export function useSessions(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.sessions.list(),
     queryFn: sessionsApi.list,
+    enabled: options?.enabled,
   });
 }
 

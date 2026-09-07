@@ -36,6 +36,25 @@
   display: inline-flex;
 }
 
+.railBadge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-danger);
+  color: var(--color-text-on-primary);
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
 .activePill {
   position: absolute;
   inset: 0;

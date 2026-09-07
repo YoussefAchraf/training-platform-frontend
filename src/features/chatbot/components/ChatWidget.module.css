@@ -40,7 +40,9 @@
     right: var(--space-6);
     bottom: var(--space-6);
     width: 380px;
+    
     height: min(600px, calc(100vh - var(--space-10)));
+    height: min(600px, calc(100dvh - var(--space-10)));
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     overflow: hidden;

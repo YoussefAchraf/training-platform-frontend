@@ -2,10 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { authApi } from '../api/authApi';
 
-export function usePendingUsers() {
+export function usePendingUsers(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.auth.pendingUsers(),
     queryFn: authApi.listPendingUsers,
+    enabled: options?.enabled,
   });
 }
 

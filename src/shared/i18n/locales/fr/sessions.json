@@ -18,6 +18,9 @@
     "descriptionInstructor": "Sessions de formation qui vous sont assignées.",
     "descriptionOther": "Sessions de formation réservées pour des clients.",
     "bookSession": "Réserver une session",
+    "viewToggleLabel": "Basculer entre l'affichage en cartes et en tableau",
+    "viewCards": "Cartes",
+    "viewTable": "Tableau",
     "columnTraining": "Formation",
     "columnClient": "Client",
     "columnLocation": "Lieu",
@@ -30,7 +33,27 @@
     "columnAssignment": "Affectation",
     "emptyTitleInstructor": "Aucune session assignée pour l'instant",
     "emptyTitleOther": "Aucune session réservée pour l'instant",
-    "emptyDescription": "Réservez une session pour commencer."
+    "emptyDescription": "Réservez une session pour commencer.",
+    "emptyTitleFiltered": "Aucune session ne correspond à vos filtres",
+    "emptyDescriptionFiltered": "Essayez d'ajuster ou de réinitialiser les filtres ci-dessus."
+  },
+  "PwaSessionsDayPage": {
+    "back": "Retour au calendrier",
+    "invalidDate": "Date invalide",
+    "sessionCount_one": "{{count}} session",
+    "sessionCount_other": "{{count}} sessions",
+    "emptyTitle": "Rien de prévu ce jour-là",
+    "emptyDescription": "Choisissez un autre jour sur le calendrier."
+  },
+  "SessionsFilterToolbar": {
+    "searchPlaceholder": "Rechercher par formation, client ou formateur…",
+    "statusLabel": "Statut",
+    "allStatuses": "Tous les statuts",
+    "locationLabel": "Lieu",
+    "allLocations": "Tous les lieux",
+    "instructorLabel": "Formateur",
+    "allInstructors": "Tous les formateurs",
+    "clearFilters": "Réinitialiser les filtres"
   },
   "SessionDetailPage": {
     "unnamedSession": "Session n° {{id}}",

@@ -104,7 +104,7 @@
   },
   "instructors": {
     "header": { "title": "Instructors", "text": "Everyone available to teach, with the trainings they're skilled in." },
-    "tableEdit": { "title": "Instructor list", "text": "Click Edit on any row to update an instructor's skills or details." },
+    "tableEdit": { "title": "Instructor list", "text": "Click Edit on any card to update an instructor's skills or details." },
     "tableReadOnly": { "title": "Instructor list", "text": "Everyone available to teach, and which trainings they can deliver." }
   },
   "myProfile": {

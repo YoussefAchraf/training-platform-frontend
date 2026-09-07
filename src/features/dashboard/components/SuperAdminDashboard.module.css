@@ -36,8 +36,21 @@
   height: 44px;
   flex-shrink: 0;
   border-radius: var(--radius-md);
+}
+
+.iconPrimary {
   background-color: var(--color-primary-light);
   color: var(--color-primary);
+}
+
+.iconInfo {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.iconNeutral {
+  background-color: var(--color-neutral-bg);
+  color: var(--color-neutral);
 }
 
 .quickLinkTitle {

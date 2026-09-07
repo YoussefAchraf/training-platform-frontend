@@ -13,6 +13,7 @@ export const paths = {
   clients: '/clients',
   sessions: '/sessions',
   sessionDetail: (id: number | string) => `/sessions/${id}`,
+  sessionsForDate: (date: string) => `/sessions/date/${date}`,
   instructors: '/instructors',
   myInstructorProfile: '/instructors/me',
   calendar: '/calendar',

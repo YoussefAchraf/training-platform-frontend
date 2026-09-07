@@ -6,10 +6,15 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { GraduationCap, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
+import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
 import { useUiStore } from '@/shared/store/uiStore';
 import { cn } from '@/shared/utils/cn';
 import { easeOut } from '@/shared/motion/variants';
 import { usePrefetchRoute } from '@/routes/routeModules';
+import { Badge } from '@/shared/components/Badge';
+import { roleMeta } from '@/shared/utils/statusMeta';
+import { paths } from '@/routes/paths';
 import { visibleNavItems } from './navItems';
 import styles from './MobileDrawer.module.css';
 
@@ -25,14 +30,31 @@ const drawerVariants: Variants = {
   exit: { x: '-100%', transition: { duration: 0.22, ease: easeOut } },
 };
 
-export function MobileDrawer() {
+interface MobileDrawerProps {
+  
+  roleInsteadOfBrand?: boolean;
+}
+
+export function MobileDrawer({ roleInsteadOfBrand = false }: MobileDrawerProps) {
   const { t } = useTranslation('common');
-  const { user } = useAuth();
+  const { user, isManager, isSuperAdmin, isInstructor } = useAuth();
   const isOpen = useUiStore((state) => state.isDrawerOpen);
   const closeDrawer = useUiStore((state) => state.closeDrawer);
   const items = visibleNavItems(user?.role);
   const shouldReduceMotion = useReducedMotion();
   const prefetchRoute = usePrefetchRoute();
+
+  
+  
+  
+  
+  const canSeePendingApprovals = isManager || isSuperAdmin;
+  const pendingUsersQuery = usePendingUsers({ enabled: canSeePendingApprovals });
+  const { newAssignments } = useNewAssignments({ enabled: isInstructor });
+  const navBadgeCounts: Record<string, number> = {
+    [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
+    [paths.calendar]: newAssignments.length,
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -63,12 +85,16 @@ export function MobileDrawer() {
             exit="exit"
           >
             <div className={styles.header}>
-              <div className={styles.brand}>
-                <span className={styles.brandMark}>
-                  <GraduationCap size={18} />
-                </span>
-                <span>{t('Nav.brand')}</span>
-              </div>
+              {roleInsteadOfBrand && user ? (
+                <Badge tone={roleMeta[user.role].tone}>{t(roleMeta[user.role].labelKey)}</Badge>
+              ) : (
+                <div className={styles.brand}>
+                  <span className={styles.brandMark}>
+                    <GraduationCap size={18} />
+                  </span>
+                  <span>{t('Nav.brand')}</span>
+                </div>
+              )}
               <button type="button" className={styles.closeButton} onClick={closeDrawer} aria-label={t('MobileDrawer.closeMenu')}>
                 <X size={20} />
               </button>
@@ -96,6 +122,17 @@ export function MobileDrawer() {
                         <item.icon size={19} />
                         <span>{t(item.labelKey)}</span>
                       </span>
+                      {navBadgeCounts[item.to] > 0 && (
+                        <span
+                          className={styles.navBadge}
+                          aria-label={t(
+                            item.to === paths.pendingApprovals ? 'Nav.pendingApprovalsBadge' : 'Nav.newAssignmentsBadge',
+                            { count: navBadgeCounts[item.to] },
+                          )}
+                        >
+                          {navBadgeCounts[item.to]}
+                        </span>
+                      )}
                     </>
                   )}
                 </NavLink>

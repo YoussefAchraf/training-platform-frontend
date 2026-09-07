@@ -1,32 +1,48 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Plus } from 'lucide-react';
+import { LayoutGrid, List, Plus } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Button } from '@/shared/components/Button';
 import { Table } from '@/shared/components/Table';
 import type { TableColumn } from '@/shared/components/Table';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { Badge } from '@/shared/components/Badge';
+import { ViewToggle } from '@/shared/components/ViewToggle';
 import { useDisclosure } from '@/shared/hooks/useDisclosure';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import { assignmentStatusMeta, sessionStatusMeta } from '@/shared/utils/statusMeta';
+import { CountryFlag } from '@/shared/components/CountryFlag';
 import { paths } from '@/routes/paths';
 import type { TrainingSession } from '@/shared/types/domain';
 import { useSessions } from '../hooks/useSessions';
 import { useSessionLookups } from '../hooks/useSessionLookups';
 import { SessionFormModal } from '../components/SessionFormModal';
+import { SessionCardGrid } from '../components/SessionCardGrid';
+import { SessionsFilterToolbar } from '../components/SessionsFilterToolbar';
+import { defaultSessionFilters, filterSessions, hasActiveSessionFilters, type SessionFilters } from '../utils/sessionFilters';
 
 const getSessionId = (session: TrainingSession) => session.id;
+
+type ViewMode = 'cards' | 'table';
 
 export function SessionsPage() {
   const { t } = useTranslation('sessions');
   const { canManageCatalog, isInstructor } = useAuth();
   const navigate = useNavigate();
   const sessionsQuery = useSessions();
-  const { trainingMap, clientMap, instructorMap } = useSessionLookups();
+  const { trainingMap, clientMap, instructorMap, instructors } = useSessionLookups();
   const modal = useDisclosure();
+
+  const [viewMode, setViewMode] = useState<ViewMode>('cards');
+  const [filters, setFilters] = useState<SessionFilters>(defaultSessionFilters);
+
+  const filteredSessions = useMemo(
+    () => filterSessions(sessionsQuery.data ?? [], filters, { trainingMap, clientMap, instructorMap }),
+    [sessionsQuery.data, filters, trainingMap, clientMap, instructorMap],
+  );
+  const filtersActive = hasActiveSessionFilters(filters);
 
   const columns = useMemo<TableColumn<TrainingSession>[]>(
     () => [
@@ -38,7 +54,14 @@ export function SessionsPage() {
       {
         key: 'client',
         header: t('SessionsPage.columnClient'),
-        render: (session) => clientMap.get(session.clientId)?.companyName ?? `#${session.clientId}`,
+        render: (session) => {
+          const client = clientMap.get(session.clientId);
+          return (
+            <span>
+              <CountryFlag code={client?.country} /> {client?.companyName ?? `#${session.clientId}`}
+            </span>
+          );
+        },
       },
       {
         key: 'locationType',
@@ -99,6 +122,28 @@ export function SessionsPage() {
     [navigate],
   );
 
+  const emptyTitle = filtersActive
+    ? t('SessionsPage.emptyTitleFiltered')
+    : isInstructor
+      ? t('SessionsPage.emptyTitleInstructor')
+      : t('SessionsPage.emptyTitleOther');
+  const emptyDescription = filtersActive
+    ? t('SessionsPage.emptyDescriptionFiltered')
+    : canManageCatalog
+      ? t('SessionsPage.emptyDescription')
+      : undefined;
+  const emptyAction = filtersActive ? (
+    <Button size="sm" variant="outline" onClick={() => setFilters(defaultSessionFilters)}>
+      {t('SessionsFilterToolbar.clearFilters')}
+    </Button>
+  ) : (
+    canManageCatalog && (
+      <Button size="sm" onClick={modal.open}>
+        {t('SessionsPage.bookSession')}
+      </Button>
+    )
+  );
+
   return (
     <div>
       <div id="tour-sessions-header">
@@ -110,34 +155,55 @@ export function SessionsPage() {
               : t('SessionsPage.descriptionOther')
           }
           actions={
-            canManageCatalog && (
-              <Button id="tour-sessions-add" leftIcon={<Plus size={16} />} onClick={modal.open}>
-                {t('SessionsPage.bookSession')}
-              </Button>
-            )
+            <>
+              <ViewToggle
+                id="tour-sessions-view-toggle"
+                aria-label={t('SessionsPage.viewToggleLabel')}
+                value={viewMode}
+                onChange={setViewMode}
+                options={[
+                  { value: 'cards', label: <><LayoutGrid size={14} /> {t('SessionsPage.viewCards')}</> },
+                  { value: 'table', label: <><List size={14} /> {t('SessionsPage.viewTable')}</> },
+                ]}
+              />
+              {canManageCatalog && (
+                <Button id="tour-sessions-add" leftIcon={<Plus size={16} />} onClick={modal.open}>
+                  {t('SessionsPage.bookSession')}
+                </Button>
+              )}
+            </>
           }
         />
       </div>
 
+      <SessionsFilterToolbar filters={filters} onChange={setFilters} instructors={instructors} showInstructorFilter={!isInstructor} />
+
       <div id="tour-sessions-table">
         {sessionsQuery.isError ? (
           <ErrorBanner error={sessionsQuery.error} onRetry={() => sessionsQuery.refetch()} />
+        ) : viewMode === 'cards' ? (
+          <SessionCardGrid
+            sessions={filteredSessions}
+            trainingMap={trainingMap}
+            clientMap={clientMap}
+            instructorMap={instructorMap}
+            showInstructor={!isInstructor}
+            onCardClick={handleRowClick}
+            isLoading={sessionsQuery.isPending}
+            emptyTitle={emptyTitle}
+            emptyDescription={emptyDescription}
+            emptyAction={emptyAction}
+          />
         ) : (
           <Table
             columns={columns}
-            data={sessionsQuery.data ?? []}
+            data={filteredSessions}
             keyExtractor={getSessionId}
             isLoading={sessionsQuery.isPending}
             onRowClick={handleRowClick}
-            emptyTitle={isInstructor ? t('SessionsPage.emptyTitleInstructor') : t('SessionsPage.emptyTitleOther')}
-            emptyDescription={canManageCatalog ? t('SessionsPage.emptyDescription') : undefined}
-            emptyAction={
-              canManageCatalog && (
-                <Button size="sm" onClick={modal.open}>
-                  {t('SessionsPage.bookSession')}
-                </Button>
-              )
-            }
+            emptyTitle={emptyTitle}
+            emptyDescription={emptyDescription}
+            emptyAction={emptyAction}
           />
         )}
       </div>

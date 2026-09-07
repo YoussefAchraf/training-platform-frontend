@@ -48,5 +48,28 @@
   },
   "PwaChatPage": {
     "back": "Retour"
+  },
+  "PwaHeader": {
+    "openMenu": "Ouvrir le menu",
+    "notifications": "Notifications",
+    "notificationsCount_one": "Notifications, {{count}} nouvelle",
+    "notificationsCount_other": "Notifications, {{count}} nouvelles"
+  },
+  "PwaNotifications": {
+    "title": "Notifications",
+    "emptyTitle": "Tout est à jour",
+    "emptyDescription": "Les nouvelles affectations et éléments en attente apparaîtront ici.",
+    "newAssignmentTitle": "Nouvelle session assignée",
+    "upcomingSessionTitle": "Bientôt",
+    "upcomingSessionDescription": "{{training}} · {{client}} · {{when}}",
+    "pendingSignupsTitle": "Inscriptions en attente",
+    "pendingSignupsDescription_one": "{{count}} compte en attente d'approbation",
+    "pendingSignupsDescription_other": "{{count}} comptes en attente d'approbation",
+    "unassignedSessionsTitle": "En attente d'un formateur",
+    "unassignedSessionsDescription_one": "{{count}} session n'a pas encore de formateur",
+    "unassignedSessionsDescription_other": "{{count}} sessions n'ont pas encore de formateur"
+  },
+  "PwaNavDrawer": {
+    "closeMenu": "Fermer le menu"
   }
 }

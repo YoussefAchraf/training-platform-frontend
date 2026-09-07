@@ -3,7 +3,8 @@ import type { ChangeEvent, FocusEvent } from 'react';
 import { AsYouType, parsePhoneNumberFromString } from 'libphonenumber-js';
 import type { CountryCode } from 'libphonenumber-js';
 import { Input } from './Input';
-import { countryCallingCode, countryFlagEmoji } from '@/shared/data/countries';
+import { CountryFlag } from './CountryFlag';
+import { countryCallingCode } from '@/shared/data/countries';
 import { cn } from '@/shared/utils/cn';
 import styles from './PhoneInput.module.css';
 
@@ -65,7 +66,7 @@ export function PhoneInput({ country, value, onChange, onBlur, id, invalid, disa
   return (
     <div className={styles.wrapper}>
       <span className={styles.prefix}>
-        <span aria-hidden="true">{countryFlagEmoji(country)}</span>
+        <CountryFlag code={country} />
         {countryCallingCode(country as CountryCode)}
       </span>
       <input

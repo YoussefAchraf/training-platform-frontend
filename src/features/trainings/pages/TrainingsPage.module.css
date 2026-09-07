@@ -8,6 +8,12 @@
   gap: var(--space-2);
 }
 
+.providerCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .notOwned {
   font-size: var(--text-xs);
   color: var(--color-text-faint);

@@ -48,5 +48,28 @@
   },
   "PwaChatPage": {
     "back": "Back"
+  },
+  "PwaHeader": {
+    "openMenu": "Open menu",
+    "notifications": "Notifications",
+    "notificationsCount_one": "Notifications, {{count}} new",
+    "notificationsCount_other": "Notifications, {{count}} new"
+  },
+  "PwaNotifications": {
+    "title": "Notifications",
+    "emptyTitle": "You're all caught up",
+    "emptyDescription": "New assignments and pending items will show up here.",
+    "newAssignmentTitle": "New session assigned",
+    "upcomingSessionTitle": "Starting soon",
+    "upcomingSessionDescription": "{{training}} · {{client}} · {{when}}",
+    "pendingSignupsTitle": "Pending signups",
+    "pendingSignupsDescription_one": "{{count}} account waiting for approval",
+    "pendingSignupsDescription_other": "{{count}} accounts waiting for approval",
+    "unassignedSessionsTitle": "Needs an instructor",
+    "unassignedSessionsDescription_one": "{{count}} session has no instructor yet",
+    "unassignedSessionsDescription_other": "{{count}} sessions have no instructor yet"
+  },
+  "PwaNavDrawer": {
+    "closeMenu": "Close menu"
   }
 }
