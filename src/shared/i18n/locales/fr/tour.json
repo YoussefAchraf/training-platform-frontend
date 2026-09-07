@@ -104,7 +104,7 @@
   },
   "instructors": {
     "header": { "title": "Formateurs", "text": "Toutes les personnes disponibles pour enseigner, avec les formations qu'elles maîtrisent." },
-    "tableEdit": { "title": "Liste des formateurs", "text": "Cliquez sur Modifier sur une ligne pour mettre à jour les compétences ou les détails d'un formateur." },
+    "tableEdit": { "title": "Liste des formateurs", "text": "Cliquez sur Modifier sur une carte pour mettre à jour les compétences ou les détails d'un formateur." },
     "tableReadOnly": { "title": "Liste des formateurs", "text": "Toutes les personnes disponibles pour enseigner, et les formations qu'elles peuvent donner." }
   },
   "myProfile": {

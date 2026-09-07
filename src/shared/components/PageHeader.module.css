@@ -18,6 +18,7 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: var(--space-2);
 }
 
@@ -28,7 +29,9 @@
     justify-content: space-between;
   }
 
+  
+  .text,
   .actions {
-    flex-shrink: 0;
+    min-width: 0;
   }
 }

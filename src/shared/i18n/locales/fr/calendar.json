@@ -5,12 +5,23 @@
     "descriptionOther": "Sessions qui vous sont assignées.",
     "heatmap": "Carte de chaleur",
     "agenda": "Agenda",
+    "myCalendar": "Mon calendrier",
+    "generalCalendar": "Calendrier général",
     "editEvent": "Modifier {{title}}",
     "deleteEvent": "Supprimer {{title}}",
     "eventDeleted": "Événement du calendrier supprimé.",
     "deleteDialogTitle": "Supprimer cet événement du calendrier ?",
     "deleteDialogDescription": "« {{title}} » sera retiré du calendrier.",
     "delete": "Supprimer"
+  },
+  "CalendarScopePicker": {
+    "roleLabel": "Affichage",
+    "personLabel": "Personne",
+    "general": "Général (tout le monde)",
+    "manager": "Managers",
+    "sales": "Ventes",
+    "instructor": "Formateurs",
+    "noPeople": "Personne dans ce rôle pour l'instant."
   },
   "EditCalendarEventModal": {
     "title": "Modifier l'événement",
@@ -41,5 +52,20 @@
     "previousMonth": "Mois précédent",
     "nextMonth": "Mois suivant",
     "today": "Aujourd'hui"
+  },
+  "PwaCalendarGrid": {
+    "hint": "Touchez un jour pour voir ses sessions"
+  },
+  "NewAssignmentsModal": {
+    "title_one": "Nouvelle session assignée",
+    "title_other": "Nouvelles sessions assignées",
+    "description_one": "Une nouvelle session vous a été assignée - voici ce qu'il faut savoir.",
+    "description_other": "{{count}} nouvelles sessions vous ont été assignées - voici ce qu'il faut savoir.",
+    "unnamedSession": "Session n° {{id}}",
+    "unknownClient": "Client inconnu",
+    "onsite": "Sur site",
+    "remote": "À distance",
+    "viewSession": "Voir la session",
+    "gotIt": "Compris"
   }
 }

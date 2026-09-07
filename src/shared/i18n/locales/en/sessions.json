@@ -18,6 +18,9 @@
     "descriptionInstructor": "Training sessions assigned to you.",
     "descriptionOther": "Training sessions booked for clients.",
     "bookSession": "Book session",
+    "viewToggleLabel": "Switch between card and table view",
+    "viewCards": "Cards",
+    "viewTable": "Table",
     "columnTraining": "Training",
     "columnClient": "Client",
     "columnLocation": "Location",
@@ -30,7 +33,27 @@
     "columnAssignment": "Assignment",
     "emptyTitleInstructor": "No sessions assigned yet",
     "emptyTitleOther": "No sessions booked yet",
-    "emptyDescription": "Book a session to get started."
+    "emptyDescription": "Book a session to get started.",
+    "emptyTitleFiltered": "No sessions match your filters",
+    "emptyDescriptionFiltered": "Try adjusting or clearing the filters above."
+  },
+  "PwaSessionsDayPage": {
+    "back": "Back to calendar",
+    "invalidDate": "Invalid date",
+    "sessionCount_one": "{{count}} session",
+    "sessionCount_other": "{{count}} sessions",
+    "emptyTitle": "Nothing scheduled this day",
+    "emptyDescription": "Pick another day on the calendar."
+  },
+  "SessionsFilterToolbar": {
+    "searchPlaceholder": "Search by training, client, or instructor…",
+    "statusLabel": "Status",
+    "allStatuses": "All statuses",
+    "locationLabel": "Location",
+    "allLocations": "All locations",
+    "instructorLabel": "Instructor",
+    "allInstructors": "All instructors",
+    "clearFilters": "Clear filters"
   },
   "SessionDetailPage": {
     "unnamedSession": "Session #{{id}}",

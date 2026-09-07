@@ -5,12 +5,23 @@
     "descriptionOther": "Sessions assigned to you.",
     "heatmap": "Heatmap",
     "agenda": "Agenda",
+    "myCalendar": "My calendar",
+    "generalCalendar": "General calendar",
     "editEvent": "Edit {{title}}",
     "deleteEvent": "Delete {{title}}",
     "eventDeleted": "Calendar event deleted.",
     "deleteDialogTitle": "Delete calendar event?",
     "deleteDialogDescription": "\"{{title}}\" will be removed from the calendar.",
     "delete": "Delete"
+  },
+  "CalendarScopePicker": {
+    "roleLabel": "Viewing",
+    "personLabel": "Person",
+    "general": "General (everyone)",
+    "manager": "Managers",
+    "sales": "Sales",
+    "instructor": "Instructors",
+    "noPeople": "No one in this role yet."
   },
   "EditCalendarEventModal": {
     "title": "Edit calendar event",
@@ -41,5 +52,20 @@
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
     "today": "Today"
+  },
+  "PwaCalendarGrid": {
+    "hint": "Tap a day to see its sessions"
+  },
+  "NewAssignmentsModal": {
+    "title_one": "New session assignment",
+    "title_other": "New session assignments",
+    "description_one": "You've been assigned to a new session - here's what you need to know.",
+    "description_other": "You've been assigned to {{count}} new sessions - here's what you need to know.",
+    "unnamedSession": "Session #{{id}}",
+    "unknownClient": "Unknown client",
+    "onsite": "On-site",
+    "remote": "Remote",
+    "viewSession": "View session",
+    "gotIt": "Got it"
   }
 }

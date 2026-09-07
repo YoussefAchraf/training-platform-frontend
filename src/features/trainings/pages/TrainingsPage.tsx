@@ -8,6 +8,7 @@ import { Table } from '@/shared/components/Table';
 import type { TableColumn } from '@/shared/components/Table';
 import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { Badge } from '@/shared/components/Badge';
+import { ProviderLogo } from '@/shared/components/ProviderLogo';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { useDisclosure } from '@/shared/hooks/useDisclosure';
 import { useToast } from '@/shared/hooks/useToast';
@@ -27,6 +28,10 @@ export function TrainingsPage() {
   const [providerFilter, setProviderFilter] = useState<string>('');
   const providersQuery = useProviders();
   const trainingsQuery = useTrainings(providerFilter ? Number(providerFilter) : undefined);
+  const providerMap = useMemo(
+    () => new Map((providersQuery.data ?? []).map((provider) => [provider.id, provider])),
+    [providersQuery.data],
+  );
   const deleteTraining = useDeleteTraining();
   const toast = useToast();
   const modal = useDisclosure();
@@ -73,7 +78,12 @@ export function TrainingsPage() {
       {
         key: 'providerName',
         header: t('TrainingsPage.columnProvider'),
-        render: (training) => <Badge tone="neutral">{training.providerName}</Badge>,
+        render: (training) => (
+          <span className={styles.providerCell}>
+            <ProviderLogo name={training.providerName} logoUrl={providerMap.get(training.providerId)?.logoUrl} size={24} />
+            <Badge tone="neutral">{training.providerName}</Badge>
+          </span>
+        ),
       },
       {
         key: 'duration',
@@ -115,7 +125,7 @@ export function TrainingsPage() {
         },
       },
     ],
-    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t],
+    [isSuperAdmin, user?.id, canManageCatalog, openEdit, openDelete, t, providerMap],
   );
 
   return (

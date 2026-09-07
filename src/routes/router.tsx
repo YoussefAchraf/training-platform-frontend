@@ -95,6 +95,19 @@ export const router = createBrowserRouter([
           { path: paths.trainings, element: lazyPage(routeModules[paths.trainings]) },
           { path: paths.sessions, element: lazyPage(routeModules[paths.sessions]) },
           {
+            
+            
+            
+            
+            
+            path: '/sessions/date/:date',
+            element: lazyPage(() =>
+              import('@/pwa/pages/PwaSessionsDayPage').then((m) => ({
+                default: m.PwaSessionsDayPage,
+              })),
+            ),
+          },
+          {
             path: '/sessions/:id',
             element: lazyPage(() =>
               import('@/features/sessions/pages/SessionDetailPage').then((m) => ({
