@@ -22,11 +22,16 @@ import styles from './AuditLogPage.module.css';
 const ENTITY_TYPES: AuditEntityType[] = ['Provider', 'Training', 'Client', 'Session', 'User'];
 const FILTERABLE_ROLES: Role[] = ['Sales', 'Manager', 'Instructor', 'SuperAdmin'];
 
-
-
-
 function entityTypeOptionsFor(isSuperAdmin: boolean): AuditEntityType[] {
   return isSuperAdmin ? ENTITY_TYPES : ENTITY_TYPES.filter((type) => type !== 'User');
+}
+
+
+
+
+
+function filterableRolesFor(isSuperAdmin: boolean): Role[] {
+  return isSuperAdmin ? FILTERABLE_ROLES : FILTERABLE_ROLES.filter((role) => role !== 'SuperAdmin');
 }
 
 const ISO_DATETIME_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
@@ -182,6 +187,7 @@ export function AuditLogPage() {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const entityTypeOptions = entityTypeOptionsFor(isSuperAdmin);
+  const roleOptions = filterableRolesFor(isSuperAdmin);
 
   const auditQuery = useAuditLog({
     entityType: entityType ? (entityType as AuditEntityType) : undefined,
@@ -215,7 +221,7 @@ export function AuditLogPage() {
         />
         <Select value={roleName} onChange={(event) => setRoleName(event.target.value)} aria-label={t('AuditLogPage.filterActorRole')}>
           <option value="">{t('AuditLogPage.allRoles')}</option>
-          {FILTERABLE_ROLES.map((role) => (
+          {roleOptions.map((role) => (
             <option key={role} value={role}>
               {t(roleMeta[role].labelKey)}
             </option>
