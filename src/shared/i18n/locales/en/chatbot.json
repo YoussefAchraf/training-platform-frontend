@@ -8,7 +8,9 @@
     "assistantImageAlt": "Image from the assistant"
   },
   "ChatWidget": {
+    "autoGreeting": "Hi {{name}}! I'm your assistant chatbot 👋",
     "openAssistant": "Open chat assistant",
+    "openAssistantUnread": "Open chat assistant - new message",
     "assistant": "Assistant",
     "startNewConversation": "Start a new conversation",
     "newConversation": "New conversation",

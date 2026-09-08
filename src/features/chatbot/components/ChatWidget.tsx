@@ -43,6 +43,7 @@ export function ChatWidget() {
   const { t } = useTranslation('chatbot');
   const { isAuthenticated } = useAuth();
   const isOpen = useChatStore((state) => state.isOpen);
+  const hasUnread = useChatStore((state) => state.hasUnread);
   const toggle = useChatStore((state) => state.toggle);
   const close = useChatStore((state) => state.close);
   const startNewConversation = useChatStore((state) => state.startNewConversation);
@@ -68,7 +69,7 @@ export function ChatWidget() {
             type="button"
             className={styles.bubble}
             onClick={toggle}
-            aria-label={t('ChatWidget.openAssistant')}
+            aria-label={hasUnread ? t('ChatWidget.openAssistantUnread') : t('ChatWidget.openAssistant')}
             variants={bubbleVariants}
             initial="hidden"
             animate="show"
@@ -77,6 +78,7 @@ export function ChatWidget() {
             whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
           >
             <MessageCircle size={24} />
+            {hasUnread && <span className={styles.unreadDot} aria-hidden="true" />}
           </motion.button>
         )}
       </AnimatePresence>

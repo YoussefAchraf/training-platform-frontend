@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +33,15 @@ import styles from './PwaChatPage.module.css';
 export function PwaChatPage() {
   const { t } = useTranslation(['pwa', 'chatbot']);
   const startNewConversation = useChatStore((state) => state.startNewConversation);
+  const markRead = useChatStore((state) => state.markRead);
   const navigate = useNavigate();
+
+  
+  
+  
+  useEffect(() => {
+    markRead();
+  }, [markRead]);
   const deviceClass = useStandaloneDeviceClass();
   const isPhone = deviceClass === 'phone';
   const isDesktop = deviceClass === 'desktop';

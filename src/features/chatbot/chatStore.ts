@@ -13,10 +13,13 @@ interface ChatState {
   isOpen: boolean;
   sessionId: string;
   messages: ChatMessage[];
+  
+  hasUnread: boolean;
   open: () => void;
   close: () => void;
   toggle: () => void;
   addMessage: (message: Omit<ChatMessage, 'id' | 'createdAt'>) => void;
+  markRead: () => void;
   startNewConversation: () => void;
   clear: () => void;
 }
@@ -27,30 +30,34 @@ export const useChatStore = create<ChatState>()(
       isOpen: false,
       sessionId: crypto.randomUUID(),
       messages: [],
-      open: () => set({ isOpen: true }),
+      hasUnread: false,
+      open: () => set({ isOpen: true, hasUnread: false }),
       close: () => set({ isOpen: false }),
-      toggle: () => set((state) => ({ isOpen: !state.isOpen })),
+      toggle: () => set((state) => ({ isOpen: !state.isOpen, hasUnread: state.isOpen ? state.hasUnread : false })),
       addMessage: (message) =>
         set((state) => ({
           messages: [
             ...state.messages,
             { ...message, id: crypto.randomUUID(), createdAt: new Date().toISOString() },
           ],
+          hasUnread: message.role === 'assistant' && !state.isOpen ? true : state.hasUnread,
         })),
-      startNewConversation: () => set({ messages: [], sessionId: crypto.randomUUID() }),
-      clear: () => set({ messages: [], sessionId: crypto.randomUUID(), isOpen: false }),
+      markRead: () => set({ hasUnread: false }),
+      startNewConversation: () => set({ messages: [], sessionId: crypto.randomUUID(), hasUnread: false }),
+      clear: () => set({ messages: [], sessionId: crypto.randomUUID(), isOpen: false, hasUnread: false }),
     }),
     {
       name: 'training-platform-chat',
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
       partialize: (state) => ({
         sessionId: state.sessionId,
         messages: state.messages.map(({ imageDataUrl: _imageDataUrl, ...rest }) => rest),
+        hasUnread: state.hasUnread,
       }),
     },
   ),
