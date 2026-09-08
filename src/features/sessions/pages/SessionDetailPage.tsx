@@ -129,12 +129,15 @@ export function SessionDetailPage() {
               >
                 {t(sessionStatusMeta[session.sessionStatus].labelKey)}
               </Badge>
-              <Badge
-                tone={assignmentStatusMeta[session.assignmentStatus].tone}
-                pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
-              >
-                {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
-              </Badge>
+              {}
+              {session.assignmentStatus !== 'accepted' && (
+                <Badge
+                  tone={assignmentStatusMeta[session.assignmentStatus].tone}
+                  pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
+                >
+                  {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
+                </Badge>
+              )}
               {canAssignInstructor && (
                 <Button
                   id="tour-session-assign"
