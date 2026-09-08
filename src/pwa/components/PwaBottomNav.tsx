@@ -7,6 +7,7 @@ import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { primaryNavItems } from '@/layouts/components/navItems';
 import { CHATBOT_WEBHOOK_URL } from '@/features/chatbot/api/chatbotClient';
+import { useChatStore } from '@/features/chatbot/chatStore';
 import { paths } from '@/routes/paths';
 import { houseSpring } from '../motion/pwaVariants';
 import styles from './PwaBottomNav.module.css';
@@ -16,6 +17,7 @@ export function PwaBottomNav() {
   const { t } = useTranslation(['pwa', 'common']);
   const { user } = useAuth();
   const prefetchRoute = usePrefetchRoute();
+  const hasUnreadChat = useChatStore((state) => state.hasUnread);
 
   const roleThirdItem = primaryNavItems(user?.role)[2];
   
@@ -53,6 +55,7 @@ export function PwaBottomNav() {
                   />
                 )}
                 <tab.icon size={22} />
+                {tab.to === paths.chat && hasUnreadChat && <span className={styles.unreadDot} aria-hidden="true" />}
               </span>
               <span className={styles.label}>{tab.label}</span>
             </>

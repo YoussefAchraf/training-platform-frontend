@@ -5,6 +5,7 @@ import { Spinner } from '@/shared/components/Spinner';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
 import { useDashboardTour } from '@/features/tour/useDashboardTour';
+import { useAutoGreeting } from '@/features/chatbot/hooks/useAutoGreeting';
 
 
 
@@ -39,6 +40,7 @@ export function DashboardPage() {
   const { user, isManager, isInstructor, isSuperAdmin } = useAuth();
   const isPwaPhone = useStandaloneDeviceClass() === 'phone';
   useDashboardTour();
+  useAutoGreeting();
 
   return (
     <div>

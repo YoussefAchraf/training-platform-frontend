@@ -58,6 +58,18 @@
   height: 28px;
 }
 
+.unreadDot {
+  position: absolute;
+  top: 0;
+  right: 6px;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-danger);
+  border: 1.5px solid var(--color-surface);
+}
+
 .activePill {
   position: absolute;
   inset: 0;
