@@ -68,11 +68,17 @@ export function SessionCard({ session, trainingName, clientName, clientCountry, 
         )}
       </div>
 
-      <div className={styles.footer}>
-        <Badge tone={assignmentMeta.tone} pulse={assignmentMeta.pulse}>
-          {t(assignmentMeta.labelKey)}
-        </Badge>
-      </div>
+      {/* "Accepted" isn't shown - assignment here is automatic (Manager/Sales
+          just pick an instructor, there's no real accept/decline step to
+          call out), so the only assignment states worth a badge are the
+          ones that actually need someone's attention. */}
+      {session.assignmentStatus !== 'accepted' && (
+        <div className={styles.footer}>
+          <Badge tone={assignmentMeta.tone} pulse={assignmentMeta.pulse}>
+            {t(assignmentMeta.labelKey)}
+          </Badge>
+        </div>
+      )}
     </Card>
   );
 }

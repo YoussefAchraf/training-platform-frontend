@@ -104,14 +104,17 @@ export function SessionsPage() {
       {
         key: 'assignment',
         header: t('SessionsPage.columnAssignment'),
-        render: (session) => (
-          <Badge
-            tone={assignmentStatusMeta[session.assignmentStatus].tone}
-            pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
-          >
-            {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
-          </Badge>
-        ),
+        // "Accepted" isn't shown - assignment is automatic, so the only
+        // states worth flagging here are ones that actually need attention.
+        render: (session) =>
+          session.assignmentStatus === 'accepted' ? null : (
+            <Badge
+              tone={assignmentStatusMeta[session.assignmentStatus].tone}
+              pulse={assignmentStatusMeta[session.assignmentStatus].pulse}
+            >
+              {t(assignmentStatusMeta[session.assignmentStatus].labelKey)}
+            </Badge>
+          ),
       },
     ],
     [isInstructor, trainingMap, clientMap, instructorMap, t],
