@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { urlBase64ToUint8Array } from '@/shared/utils/webPush';
 import { pushApi } from '../api/pushApi';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-
-
-
-
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
-}
 
 export type PushSupportStatus = 'unsupported' | 'checking' | 'subscribed' | 'unsubscribed';
 
@@ -29,10 +20,51 @@ export function usePushSubscription() {
       setStatus('unsupported');
       return;
     }
-    navigator.serviceWorker.ready
-      .then((registration) => registration.pushManager.getSubscription())
-      .then((subscription) => setStatus(subscription ? 'subscribed' : 'unsubscribed'))
-      .catch(() => setStatus('unsubscribed'));
+    let cancelled = false;
+    (async () => {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        let subscription = await registration.pushManager.getSubscription();
+
+        
+        
+        
+        
+        
+        
+        if (!subscription && Notification.permission === 'granted') {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!) as BufferSource,
+          });
+        }
+
+        if (subscription) {
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          const json = subscription.toJSON();
+          await pushApi.subscribe({
+            endpoint: json.endpoint!,
+            keys: { p256dh: json.keys!.p256dh, auth: json.keys!.auth },
+            silent: true,
+          });
+        }
+
+        if (!cancelled) setStatus(subscription ? 'subscribed' : 'unsubscribed');
+      } catch {
+        if (!cancelled) setStatus('unsubscribed');
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [isSupported]);
 
   const subscribe = async (): Promise<boolean> => {
