@@ -9,6 +9,7 @@ import { ErrorBanner } from '@/shared/components/ErrorBanner';
 import { useSessions } from '@/features/sessions/hooks/useSessions';
 import { useSessionLookups } from '@/features/sessions/hooks/useSessionLookups';
 import { useMyInstructorProfile } from '@/features/instructors/hooks/useInstructors';
+import { useAppBadge } from '@/pwa/hooks/useAppBadge';
 import { SessionTimeline } from './SessionTimeline';
 import { HeroStatCard } from './HeroStatCard';
 import { SkillChips } from './SkillChips';
@@ -21,6 +22,12 @@ export function InstructorDashboard() {
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap } = useSessionLookups();
   const profileQuery = useMyInstructorProfile();
+
+  const badgeUpcomingCount =
+    sessionsQuery.data?.filter(
+      (session) => session.assignmentStatus === 'accepted' && (session.sessionStatus === 'scheduled' || session.sessionStatus === 'ongoing'),
+    ).length ?? 0;
+  useAppBadge(badgeUpcomingCount);
 
   if (sessionsQuery.isPending) return <Spinner />;
   if (sessionsQuery.isError) {

@@ -10,5 +10,13 @@ export function useAppBadge(count: number): void {
     } else {
       navigator.clearAppBadge().catch(() => {});
     }
+
+    
+    
+    
+    
+    
+    
+    navigator.serviceWorker.controller?.postMessage({ type: 'SYNC_BADGE_COUNT', count });
   }, [count]);
 }
