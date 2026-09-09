@@ -4,8 +4,11 @@ import { NavigationRoute, registerRoute, setCatchHandler } from 'workbox-routing
 import { NetworkFirst, NetworkOnly, CacheFirst } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { urlBase64ToUint8Array } from '@/shared/utils/webPush';
 
 declare const self: ServiceWorkerGlobalScope;
+
+const VAPID_PUBLIC_KEY: string | undefined = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
 
 
@@ -82,6 +85,37 @@ setCatchHandler(async ({ request }) => {
   return Response.error();
 });
 
+// ---- App-icon badge count: the Badging API has no server-side concept of
+// "current count", so a push that arrives while every app window is closed
+// is the only thing that can see it happen - nothing else runs in the
+// background to update the home-screen badge. This cache holds this service
+// worker's own running total for exactly that case; useAppBadge.ts resyncs
+// it to the real, precisely-computed count (via SYNC_BADGE_COUNT below) the
+// moment a dashboard is actually open to compute one, so the guess below
+// never has to carry the count for long.
+const BADGE_CACHE_NAME = 'badge-count-v1';
+const BADGE_CACHE_KEY = '/__badge-count__';
+
+// Chromium exposes the Badging API on the worker's navigator, but the
+// bundled WebWorker lib types don't all declare it yet - narrow locally
+// rather than widen the ambient type or reach for `any`.
+type BadgeCapableNavigator = WorkerNavigator & {
+  setAppBadge?: (contents?: number) => Promise<void>;
+};
+
+async function readBadgeCount(): Promise<number> {
+  const cache = await caches.open(BADGE_CACHE_NAME);
+  const cached = await cache.match(BADGE_CACHE_KEY);
+  if (!cached) return 0;
+  const { count } = (await cached.json()) as { count?: number };
+  return typeof count === 'number' ? count : 0;
+}
+
+async function writeBadgeCount(count: number): Promise<void> {
+  const cache = await caches.open(BADGE_CACHE_NAME);
+  await cache.put(BADGE_CACHE_KEY, new Response(JSON.stringify({ count })));
+}
+
 // ---- Push notifications (subscribe/unsubscribe UI lands in Phase 4; the
 // service worker's receiving end is wired here since it's the same file). --
 self.addEventListener('push', (event) => {
@@ -93,17 +127,57 @@ self.addEventListener('push', (event) => {
     payload = { title: 'Training Platform', body: event.data.text() };
   }
   event.waitUntil(
-    self.registration.showNotification(payload.title ?? 'Training Platform', {
-      body: payload.body,
-      icon: '/icon-192.png',
-      // Android renders this from its alpha channel only, silhouetted and
-      // tinted by the system - a monochrome asset, not the colored icon
-      // above (see scripts/generate-notification-badge.mjs).
-      badge: '/badge-96.png',
-      data: { url: payload.url ?? '/' },
-    }),
+    (async () => {
+      await self.registration.showNotification(payload.title ?? 'Training Platform', {
+        body: payload.body,
+        icon: '/icon-192.png',
+        // Android renders this from its alpha channel only, silhouetted and
+        // tinted by the system - a monochrome asset, not the colored icon
+        // above (see scripts/generate-notification-badge.mjs).
+        badge: '/badge-96.png',
+        data: { url: payload.url ?? '/' },
+      });
+
+      const badgeNavigator = self.navigator as BadgeCapableNavigator;
+      if (badgeNavigator.setAppBadge) {
+        const next = (await readBadgeCount()) + 1;
+        await writeBadgeCount(next);
+        await badgeNavigator.setAppBadge(next).catch(() => {});
+      }
+    })(),
   );
 });
+
+// ---- Subscription rotation: browsers are free to invalidate a push
+// subscription at any time (expiry, key rotation, Android evicting it under
+// storage pressure) and fire this event instead of `push` when it happens.
+// This handler's only job is to keep a *browser-level* subscription alive -
+// a service worker has no access to `document.cookie`, so it can't attach
+// the CSRF header apiClient normally does for a POST, and the Cookie Store
+// API that could read cookies without `document` isn't supported outside
+// Chromium. Telling the backend about the new subscription is left to
+// usePushSubscription.ts's own reconcile-on-load check, which runs with the
+// full, correctly-authenticated apiClient the next time the app is open -
+// and will pick this new subscription up automatically. ----
+self.addEventListener(
+  'pushsubscriptionchange',
+  ((event: ExtendableEvent) => {
+    if (!VAPID_PUBLIC_KEY) return;
+    event.waitUntil(
+      self.registration.pushManager
+        .subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource,
+        })
+        .catch(() => {
+          // Nothing more to do here - if re-subscribing itself fails (e.g.
+          // permission was revoked at the OS level), the next app open will
+          // see no subscription and leave status as unsubscribed rather
+          // than pretending it recovered.
+        }),
+    );
+  }) as EventListener,
+);
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
@@ -124,5 +198,8 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+  if (event.data?.type === 'SYNC_BADGE_COUNT' && typeof event.data.count === 'number') {
+    event.waitUntil(writeBadgeCount(event.data.count));
   }
 });

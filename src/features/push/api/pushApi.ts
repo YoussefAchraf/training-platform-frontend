@@ -3,6 +3,10 @@ import { apiClient } from '@/shared/lib/apiClient';
 export interface SubscribePayload {
   endpoint: string;
   keys: { p256dh: string; auth: string };
+  
+  
+  
+  silent?: boolean;
 }
 
 export const pushApi = {

@@ -11,6 +11,7 @@ import { useSessionLookups } from '@/features/sessions/hooks/useSessionLookups';
 import { useProviders } from '@/features/providers/hooks/useProviders';
 import { useClients } from '@/features/clients/hooks/useClients';
 import { useTrainings } from '@/features/trainings/hooks/useTrainings';
+import { useAppBadge } from '@/pwa/hooks/useAppBadge';
 import { SessionTimeline } from '@/features/dashboard/components/SessionTimeline';
 import { HeroStatCard } from '@/features/dashboard/components/HeroStatCard';
 import { BookingTrendSparkline } from '@/features/dashboard/components/BookingTrendSparkline';
@@ -31,6 +32,9 @@ export function PwaSalesDashboard() {
   const providersQuery = useProviders();
   const trainingsQuery = useTrainings();
   const clientsQuery = useClients();
+
+  const unassignedCount = sessionsQuery.data?.filter((session) => session.assignmentStatus === 'unassigned').length ?? 0;
+  useAppBadge(unassignedCount);
 
   if (sessionsQuery.isPending) return <Spinner />;
   if (sessionsQuery.isError) {
