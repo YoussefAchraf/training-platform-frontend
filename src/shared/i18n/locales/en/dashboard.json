@@ -3,6 +3,10 @@
     "unnamedSession": "Session #{{id}}",
     "unknownClient": "Unknown client"
   },
+  "SkillChips": {
+    "certificateExpiringSoon": "Certificate expiring soon",
+    "certificateExpired": "Certificate expired"
+  },
   "DashboardPage": {
     "welcomeBack": "Welcome back, {{name}}",
     "descriptionSuperAdmin": "Platform-wide oversight: users, sessions, and the audit trail.",

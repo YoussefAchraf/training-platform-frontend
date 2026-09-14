@@ -122,3 +122,43 @@ export function useDeleteAttendee() {
     },
   });
 }
+
+export function useSessionNotes(sessionId: number, options: { enabled?: boolean } = {}) {
+  return useQuery({
+    queryKey: queryKeys.sessions.notes(sessionId),
+    queryFn: () => sessionsApi.listNotes(sessionId),
+    enabled: options.enabled ?? true,
+  });
+}
+
+export function useAddSessionNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, body }: { sessionId: number; body: string }) => sessionsApi.addNote(sessionId, body),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.notes(sessionId) });
+    },
+  });
+}
+
+export function useUpdateSessionNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, noteId, body }: { sessionId: number; noteId: number; body: string }) =>
+      sessionsApi.updateNote(sessionId, noteId, body),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.notes(sessionId) });
+    },
+  });
+}
+
+export function useDeleteSessionNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, noteId }: { sessionId: number; noteId: number }) =>
+      sessionsApi.deleteNote(sessionId, noteId),
+    onSuccess: (_data, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.notes(sessionId) });
+    },
+  });
+}

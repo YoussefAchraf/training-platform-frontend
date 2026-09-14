@@ -159,6 +159,12 @@
   background-color: var(--color-primary-light);
 }
 
+.navDot {
+  position: relative;
+  z-index: 1;
+  margin-left: var(--space-1);
+}
+
 .navBadge {
   position: relative;
   z-index: 1;

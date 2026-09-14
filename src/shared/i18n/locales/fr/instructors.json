@@ -25,15 +25,27 @@
   },
   "InstructorProfileForm": {
     "saveChanges": "Enregistrer les modifications",
+    "tabsLabel": "Sections du profil",
+    "bioTab": "Bio",
+    "trainingsTab_one": "Formations ({{count}})",
+    "trainingsTab_other": "Formations ({{count}})",
     "bioLabel": "Bio",
     "bioHint": "Visible par les managers lors de l'assignation des sessions",
     "bioPlaceholder": "Parlez-nous de votre expérience d'enseignement…",
-    "trainingsLabel": "Formations que je peux dispenser",
-    "noTrainings": "Aucune formation n'existe encore - un manager doit d'abord en ajouter."
+    "trainingsHint": "Ajoutez la date d'expiration du certificat pour chaque formation dont vous détenez une certification - un certificat expiré devra être renouvelé avant de pouvoir être réassigné à cette formation.",
+    "noTrainings": "Aucune formation n'existe encore - un manager doit d'abord en ajouter.",
+    "certificateIdLabel": "Identifiant du certificat",
+    "certificateIdPlaceholder": "ex. RH12345678",
+    "certificateExpiresLabel": "Expire le",
+    "certificateOk": "Qualifié",
+    "certificateExpiringSoon": "Expire bientôt",
+    "certificateExpired": "Expiré"
   },
   "MyInstructorProfilePage": {
     "title": "Mon profil de formateur",
     "description": "Votre bio et les formations que vous êtes qualifié pour dispenser.",
-    "profileUpdated": "Votre profil a été mis à jour."
+    "profileUpdated": "Votre profil a été mis à jour.",
+    "statQualified": "Formations qualifiées",
+    "statExpiring": "Expirent bientôt"
   }
 }

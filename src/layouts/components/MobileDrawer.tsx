@@ -12,6 +12,8 @@ import { useUiStore } from '@/shared/store/uiStore';
 import { cn } from '@/shared/utils/cn';
 import { easeOut } from '@/shared/motion/variants';
 import { usePrefetchRoute } from '@/routes/routeModules';
+import { useNavAttentionDots } from '@/shared/hooks/useNavAttentionDots';
+import { AttentionDot } from '@/shared/components/AttentionDot';
 import { Badge } from '@/shared/components/Badge';
 import { roleMeta } from '@/shared/utils/statusMeta';
 import { paths } from '@/routes/paths';
@@ -55,6 +57,7 @@ export function MobileDrawer({ roleInsteadOfBrand = false }: MobileDrawerProps) 
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
   };
+  const navAttentionDots = useNavAttentionDots();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -121,6 +124,12 @@ export function MobileDrawer({ roleInsteadOfBrand = false }: MobileDrawerProps) 
                       <span className={styles.navContent}>
                         <item.icon size={19} />
                         <span>{t(item.labelKey)}</span>
+                        {navAttentionDots[item.to] && (
+                          <>
+                            <AttentionDot className={styles.navDot} />
+                            <span className="visually-hidden">, {t('Nav.attentionBadge')}</span>
+                          </>
+                        )}
                       </span>
                       {navBadgeCounts[item.to] > 0 && (
                         <span

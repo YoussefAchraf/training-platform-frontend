@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Instructor } from '@/shared/types/domain';
+import type { Instructor, InstructorSkill } from '@/shared/types/domain';
 import { defaultInstructorFilters, filterInstructors, hasActiveInstructorFilters } from './instructorFilters';
 
 function makeInstructor(overrides: Partial<Instructor> = {}): Instructor {
@@ -15,6 +15,10 @@ function makeInstructor(overrides: Partial<Instructor> = {}): Instructor {
   };
 }
 
+function makeSkill(overrides: Pick<InstructorSkill, 'trainingId' | 'trainingName'>): InstructorSkill {
+  return { certificateId: null, certificateExpiresAt: null, ...overrides };
+}
+
 describe('filterInstructors', () => {
   it('returns every instructor when no filters are active', () => {
     const instructors = [makeInstructor({ id: 1 }), makeInstructor({ id: 2 })];
@@ -23,8 +27,8 @@ describe('filterInstructors', () => {
 
   it('filters by training id (skills)', () => {
     const instructors = [
-      makeInstructor({ id: 1, skills: [{ trainingId: 10, trainingName: 'RHCE' }] }),
-      makeInstructor({ id: 2, skills: [{ trainingId: 20, trainingName: 'CompTIA' }] }),
+      makeInstructor({ id: 1, skills: [makeSkill({ trainingId: 10, trainingName: 'RHCE' })] }),
+      makeInstructor({ id: 2, skills: [makeSkill({ trainingId: 20, trainingName: 'CompTIA' })] }),
     ];
     const result = filterInstructors(instructors, { ...defaultInstructorFilters, trainingId: 10 });
     expect(result.map((i) => i.id)).toEqual([1]);
@@ -47,8 +51,8 @@ describe('filterInstructors', () => {
 
   it('combines search and training filter with AND semantics', () => {
     const instructors = [
-      makeInstructor({ id: 1, firstname: 'Jane', skills: [{ trainingId: 10, trainingName: 'RHCE' }] }),
-      makeInstructor({ id: 2, firstname: 'Jane', skills: [{ trainingId: 20, trainingName: 'CompTIA' }] }),
+      makeInstructor({ id: 1, firstname: 'Jane', skills: [makeSkill({ trainingId: 10, trainingName: 'RHCE' })] }),
+      makeInstructor({ id: 2, firstname: 'Jane', skills: [makeSkill({ trainingId: 20, trainingName: 'CompTIA' })] }),
     ];
     const result = filterInstructors(instructors, { ...defaultInstructorFilters, search: 'jane', trainingId: 10 });
     expect(result.map((i) => i.id)).toEqual([1]);

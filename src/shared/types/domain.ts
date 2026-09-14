@@ -106,6 +106,15 @@ export interface SessionAttendee {
   attendanceStatus: AttendanceStatus;
 }
 
+export interface SessionNote {
+  id: number;
+  sessionId: number;
+  instructorId: number;
+  body: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BulkImportResult {
   importedCount: number;
   skippedCount: number;
@@ -116,6 +125,8 @@ export interface BulkImportResult {
 export interface InstructorSkill {
   trainingId: number;
   trainingName: string;
+  certificateId: string | null;
+  certificateExpiresAt: string | null;
 }
 
 export interface Instructor {

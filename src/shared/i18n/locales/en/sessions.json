@@ -82,6 +82,7 @@
     "attendeesCardTitle": "Attendees",
     "attendeesLocked": "The instructor has started marking attendance, so the attendee list is now locked - no more adding or editing.",
     "reportCardTitle": "Report",
+    "notesCardTitle": "Notes",
     "cancelDialogTitle": "Cancel this session?",
     "cancelDialogDescription": "Attendees and the assigned instructor will keep their records, but the session will be marked cancelled.",
     "cancelSession": "Cancel session"
@@ -194,5 +195,30 @@
     "selectInstructor": "Select an instructor",
     "noQualifiedAvailable": "No qualified instructors available",
     "instructorAssigned": "Instructor assigned."
+  },
+  "SessionNotesSection": {
+    "addNote": "Add note",
+    "emptyTitle": "No notes yet",
+    "emptyDescriptionWriter": "Leave a note about this session - it'll be visible to Sales and Managers too.",
+    "emptyDescriptionReader": "The assigned instructor hasn't left any notes for this session yet.",
+    "editNote": "Edit note",
+    "deleteNote": "Delete note",
+    "editedAt": "Edited {{time}}",
+    "noteDeleted": "Note deleted.",
+    "deleteDialogTitle": "Delete this note?",
+    "deleteDialogDescription": "This can't be undone."
+  },
+  "SessionNoteFormModal": {
+    "addTitle": "Add a note",
+    "editTitle": "Edit note",
+    "description": "Visible to Sales, Managers, and SuperAdmins - only you can edit or delete it.",
+    "cancel": "Cancel",
+    "addNote": "Add note",
+    "saveChanges": "Save changes",
+    "bodyLabel": "Note",
+    "bodyPlaceholder": "e.g. Group struggled with chapter 3, plan a recap next session…",
+    "charCount": "{{count}} / {{max}}",
+    "noteAdded": "Note added.",
+    "noteUpdated": "Note updated."
   }
 }

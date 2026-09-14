@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CalendarCheck2, CalendarClock, ClipboardCheck, UserCog } from 'lucide-react';
+import { CalendarCheck2, CalendarClock, ClipboardCheck, UserCog, ShieldAlert } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useSessions } from '@/features/sessions/hooks/useSessions';
 import { useSessionLookups } from '@/features/sessions/hooks/useSessionLookups';
 import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
+import { useMyInstructorProfile } from '@/features/instructors/hooks/useInstructors';
+import { getCertificationExpiryStatus } from '@/shared/utils/certificationExpiry';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import { paths } from '@/routes/paths';
 import type { Tone } from '@/shared/utils/statusMeta';
@@ -37,11 +39,9 @@ export function useNotifications() {
 
   const { newAssignments, markSeen } = useNewAssignments({ enabled: isInstructor });
   const pendingUsersQuery = usePendingUsers({ enabled: isManager || isSuperAdmin });
-  
-  
-  
+  const myProfileQuery = useMyInstructorProfile({ enabled: isInstructor });
   const sessionsQuery = useSessions({ enabled: canManageCatalog || isInstructor });
-  const { trainingMap, clientMap } = useSessionLookups();
+  const { trainingMap, clientMap, instructors } = useSessionLookups();
 
   const canSeePendingSignups = isManager || isSuperAdmin;
   const pendingCount = canSeePendingSignups ? pendingUsersQuery.data?.length ?? 0 : 0;
@@ -59,6 +59,30 @@ export function useNotifications() {
       })
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   }, [isInstructor, sessionsQuery.data]);
+
+  
+  
+  
+  
+  const expiringCertifications = useMemo(() => {
+    if (isInstructor) {
+      return (myProfileQuery.data?.skills ?? [])
+        .map((skill) => ({ instructorName: null as string | null, trainingName: skill.trainingName, status: getCertificationExpiryStatus(skill.certificateExpiresAt) }))
+        .filter((entry) => entry.status !== 'none');
+    }
+    if (canManageCatalog) {
+      return instructors.flatMap((instructor) =>
+        instructor.skills
+          .map((skill) => ({
+            instructorName: `${instructor.firstname} ${instructor.lastname}`,
+            trainingName: skill.trainingName,
+            status: getCertificationExpiryStatus(skill.certificateExpiresAt),
+          }))
+          .filter((entry) => entry.status !== 'none'),
+      );
+    }
+    return [];
+  }, [isInstructor, myProfileQuery.data, canManageCatalog, instructors]);
 
   const notifications = useMemo<AppNotification[]>(() => {
     const items: AppNotification[] = [];
@@ -115,12 +139,40 @@ export function useNotifications() {
       });
     }
 
+    expiringCertifications.forEach((entry, index) => {
+      items.push({
+        id: `certification-${index}`,
+        icon: ShieldAlert,
+        tone: entry.status === 'expired' ? 'danger' : 'warning',
+        title:
+          entry.status === 'expired'
+            ? t('PwaNotifications.certificationExpiredTitle')
+            : t('PwaNotifications.certificationExpiringTitle'),
+        description: entry.instructorName
+          ? t('PwaNotifications.certificationDescriptionOther', { instructor: entry.instructorName, training: entry.trainingName })
+          : t('PwaNotifications.certificationDescriptionOwn', { training: entry.trainingName }),
+        to: entry.instructorName ? paths.instructors : paths.myInstructorProfile,
+      });
+    });
+
     return items;
-  }, [newAssignments, upcomingForInstructor, trainingMap, clientMap, canSeePendingSignups, pendingCount, canManageCatalog, unassignedSessions.length, t]);
+  }, [
+    newAssignments,
+    upcomingForInstructor,
+    trainingMap,
+    clientMap,
+    canSeePendingSignups,
+    pendingCount,
+    canManageCatalog,
+    unassignedSessions.length,
+    expiringCertifications,
+    t,
+  ]);
 
   // Bell badge counts individual actionable items, not notification cards -
   // "5" waiting instructors feels more native/useful than "1" grouped card.
-  const totalCount = newAssignments.length + upcomingForInstructor.length + pendingCount + unassignedSessions.length;
+  const totalCount =
+    newAssignments.length + upcomingForInstructor.length + pendingCount + unassignedSessions.length + expiringCertifications.length;
 
   return { notifications, totalCount, markAssignmentsSeen: markSeen };
 }

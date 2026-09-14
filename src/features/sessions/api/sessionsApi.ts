@@ -1,5 +1,11 @@
 import { apiClient } from '@/shared/lib/apiClient';
-import type { BulkImportResult, SessionAttendee, SessionLocationType, TrainingSession } from '@/shared/types/domain';
+import type {
+  BulkImportResult,
+  SessionAttendee,
+  SessionLocationType,
+  SessionNote,
+  TrainingSession,
+} from '@/shared/types/domain';
 
 export interface CreateSessionPayload {
   trainingId: number;
@@ -71,4 +77,16 @@ export const sessionsApi = {
 
   deleteAttendee: (sessionId: number, attendeeId: number) =>
     apiClient.delete<void>(`/sessions/${sessionId}/attendees/${attendeeId}`).then(() => undefined),
+
+  listNotes: (sessionId: number) =>
+    apiClient.get<SessionNote[]>(`/sessions/${sessionId}/notes`).then((res) => res.data),
+
+  addNote: (sessionId: number, body: string) =>
+    apiClient.post<SessionNote>(`/sessions/${sessionId}/notes`, { body }).then((res) => res.data),
+
+  updateNote: (sessionId: number, noteId: number, body: string) =>
+    apiClient.patch<SessionNote>(`/sessions/${sessionId}/notes/${noteId}`, { body }).then((res) => res.data),
+
+  deleteNote: (sessionId: number, noteId: number) =>
+    apiClient.delete<void>(`/sessions/${sessionId}/notes/${noteId}`).then(() => undefined),
 };
