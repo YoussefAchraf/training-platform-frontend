@@ -58,7 +58,11 @@ export function usePushSubscription() {
         }
 
         if (!cancelled) setStatus(subscription ? 'subscribed' : 'unsubscribed');
-      } catch {
+      } catch (err) {
+        
+        
+        
+        console.error('[usePushSubscription] Failed to reconcile push subscription:', err);
         if (!cancelled) setStatus('unsubscribed');
       }
     })();
