@@ -1,9 +1,18 @@
-import type { Client, Instructor, SessionLocationType, SessionStatus, Training, TrainingSession } from '@/shared/types/domain';
+import type {
+  Client,
+  Instructor,
+  SessionLocationType,
+  SessionStatus,
+  SessionTeachingLanguage,
+  Training,
+  TrainingSession,
+} from '@/shared/types/domain';
 
 export interface SessionFilters {
   search: string;
   status: SessionStatus | 'all';
   location: SessionLocationType | 'all';
+  language: SessionTeachingLanguage | 'all';
   instructorId: number | 'all';
 }
 
@@ -11,11 +20,18 @@ export const defaultSessionFilters: SessionFilters = {
   search: '',
   status: 'all',
   location: 'all',
+  language: 'all',
   instructorId: 'all',
 };
 
 export function hasActiveSessionFilters(filters: SessionFilters): boolean {
-  return filters.search.trim() !== '' || filters.status !== 'all' || filters.location !== 'all' || filters.instructorId !== 'all';
+  return (
+    filters.search.trim() !== '' ||
+    filters.status !== 'all' ||
+    filters.location !== 'all' ||
+    filters.language !== 'all' ||
+    filters.instructorId !== 'all'
+  );
 }
 
 interface SessionLookups {
@@ -34,6 +50,7 @@ export function filterSessions(sessions: TrainingSession[], filters: SessionFilt
   return sessions.filter((session) => {
     if (filters.status !== 'all' && session.sessionStatus !== filters.status) return false;
     if (filters.location !== 'all' && session.locationType !== filters.location) return false;
+    if (filters.language !== 'all' && session.teachingLanguage !== filters.language) return false;
     if (filters.instructorId !== 'all' && session.instructorId !== filters.instructorId) return false;
 
     if (search) {

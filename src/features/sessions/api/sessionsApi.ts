@@ -4,6 +4,7 @@ import type {
   SessionAttendee,
   SessionLocationType,
   SessionNote,
+  SessionTeachingLanguage,
   TrainingSession,
 } from '@/shared/types/domain';
 
@@ -14,6 +15,7 @@ export interface CreateSessionPayload {
   endDate: string;
   includeWeekends?: boolean;
   locationType?: SessionLocationType;
+  teachingLanguage?: SessionTeachingLanguage;
 }
 
 export interface AddAttendeePayload {
@@ -31,6 +33,7 @@ export interface UpdateSessionPayload {
   endDate: string;
   includeWeekends?: boolean;
   locationType?: SessionLocationType;
+  teachingLanguage?: SessionTeachingLanguage;
 }
 
 export const sessionsApi = {

@@ -72,6 +72,11 @@ export function SessionsPage() {
           </Badge>
         ),
       },
+      {
+        key: 'teachingLanguage',
+        header: t('SessionsPage.columnLanguage'),
+        render: (session) => t(`SessionsPage.${session.teachingLanguage}`),
+      },
       ...(!isInstructor
         ? [
             {

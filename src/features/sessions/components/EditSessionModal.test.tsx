@@ -33,6 +33,7 @@ const session: TrainingSession = {
   assignmentStatus: 'unassigned',
   includeWeekends: true,
   locationType: 'onsite',
+  teachingLanguage: 'french',
   createdBy: 1,
   createdAt: '2026-09-01T00:00:00.000Z',
 }

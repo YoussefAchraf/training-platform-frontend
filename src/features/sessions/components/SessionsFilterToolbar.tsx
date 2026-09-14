@@ -4,12 +4,13 @@ import { Input } from '@/shared/components/Input';
 import { Select } from '@/shared/components/Select';
 import { Button } from '@/shared/components/Button';
 import { sessionStatusMeta } from '@/shared/utils/statusMeta';
-import type { Instructor, SessionLocationType, SessionStatus } from '@/shared/types/domain';
+import type { Instructor, SessionLocationType, SessionStatus, SessionTeachingLanguage } from '@/shared/types/domain';
 import { defaultSessionFilters, hasActiveSessionFilters, type SessionFilters } from '../utils/sessionFilters';
 import styles from './SessionsFilterToolbar.module.css';
 
 const SESSION_STATUSES: SessionStatus[] = ['scheduled', 'ongoing', 'completed', 'cancelled'];
 const LOCATION_TYPES: SessionLocationType[] = ['onsite', 'remote'];
+const TEACHING_LANGUAGES: SessionTeachingLanguage[] = ['french', 'english'];
 
 interface SessionsFilterToolbarProps {
   filters: SessionFilters;
@@ -64,6 +65,20 @@ export function SessionsFilterToolbar({ filters, onChange, instructors, showInst
         {LOCATION_TYPES.map((location) => (
           <option key={location} value={location}>
             {t(`SessionsPage.${location}`)}
+          </option>
+        ))}
+      </Select>
+
+      <Select
+        value={filters.language}
+        onChange={(event) => set('language', event.target.value as SessionFilters['language'])}
+        aria-label={t('SessionsFilterToolbar.languageLabel')}
+        className={styles.select}
+      >
+        <option value="all">{t('SessionsFilterToolbar.allLanguages')}</option>
+        {TEACHING_LANGUAGES.map((language) => (
+          <option key={language} value={language}>
+            {t(`SessionsPage.${language}`)}
           </option>
         ))}
       </Select>
