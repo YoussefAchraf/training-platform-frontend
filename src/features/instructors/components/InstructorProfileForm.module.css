@@ -1,29 +1,129 @@
-.skillsLabel {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  margin-bottom: var(--space-2);
+.tabDot {
+  margin-left: var(--space-1);
+  vertical-align: middle;
 }
 
-.skillsGrid {
+.panel {
+  animation: panelFadeIn 0.18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.skillsHint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-3);
+}
+
+.skillsList {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  max-height: 260px;
+  max-height: 420px;
   overflow-y: auto;
   padding: var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
+.skillRow {
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skillRow:last-child {
+  border-bottom: none;
+}
+
+.skillRowHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.providerLogo {
+  flex-shrink: 0;
+}
+
+.skillCheckbox {
+  flex: 1;
+  min-width: 0;
+}
+
+.skillLabelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.skillName {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.skillProvider {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+.certFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  
+  margin: var(--space-2) 0 0 calc(32px + var(--space-3) + var(--space-8));
+}
+
 @media (--sm) {
-  .skillsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .certFields {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
   }
+
+  .certField {
+    flex: 1 1 160px;
+    min-width: 140px;
+  }
+}
+
+.certField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  max-width: 240px;
+}
+
+.certFieldLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.certStatusPill {
+  align-self: flex-start;
 }
 
 .skillsEmpty {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+}
+
+.submitButton {
+  margin-top: var(--space-5);
 }

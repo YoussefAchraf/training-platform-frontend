@@ -25,15 +25,27 @@
   },
   "InstructorProfileForm": {
     "saveChanges": "Save changes",
+    "tabsLabel": "Profile sections",
+    "bioTab": "Bio",
+    "trainingsTab_one": "Trainings ({{count}})",
+    "trainingsTab_other": "Trainings ({{count}})",
     "bioLabel": "Bio",
     "bioHint": "Shown to Managers when assigning sessions",
     "bioPlaceholder": "Tell us about your teaching experience…",
-    "trainingsLabel": "Trainings I can deliver",
-    "noTrainings": "No trainings exist yet - a Manager needs to add some first."
+    "trainingsHint": "Add the certificate expiry date for any training you hold a certification for - an expired certificate will need renewing before you can be assigned to deliver it again.",
+    "noTrainings": "No trainings exist yet - a Manager needs to add some first.",
+    "certificateIdLabel": "Certificate ID",
+    "certificateIdPlaceholder": "e.g. RH12345678",
+    "certificateExpiresLabel": "Expires on",
+    "certificateOk": "Qualified",
+    "certificateExpiringSoon": "Expiring soon",
+    "certificateExpired": "Expired"
   },
   "MyInstructorProfilePage": {
     "title": "My instructor profile",
     "description": "Your bio and the trainings you're qualified to deliver.",
-    "profileUpdated": "Your profile was updated."
+    "profileUpdated": "Your profile was updated.",
+    "statQualified": "Qualified trainings",
+    "statExpiring": "Expiring soon"
   }
 }

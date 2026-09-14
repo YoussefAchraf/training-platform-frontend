@@ -3,6 +3,10 @@
     "unnamedSession": "Session n° {{id}}",
     "unknownClient": "Client inconnu"
   },
+  "SkillChips": {
+    "certificateExpiringSoon": "Certificat expire bientôt",
+    "certificateExpired": "Certificat expiré"
+  },
   "DashboardPage": {
     "welcomeBack": "Content de vous revoir, {{name}}",
     "descriptionSuperAdmin": "Supervision de la plateforme : utilisateurs, sessions et journal d'audit.",

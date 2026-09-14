@@ -37,7 +37,8 @@
     "pendingApprovalsBadge_one": "{{count}} account waiting for approval",
     "pendingApprovalsBadge_other": "{{count}} accounts waiting for approval",
     "newAssignmentsBadge_one": "{{count}} new session assignment",
-    "newAssignmentsBadge_other": "{{count}} new session assignments"
+    "newAssignmentsBadge_other": "{{count}} new session assignments",
+    "attentionBadge": "needs attention"
   },
   "Topbar": {
     "openMenu": "Open navigation menu"

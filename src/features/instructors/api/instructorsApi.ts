@@ -1,9 +1,15 @@
 import { apiClient } from '@/shared/lib/apiClient';
 import type { Instructor } from '@/shared/types/domain';
 
+export interface UpdateInstructorSkillPayload {
+  trainingId: number;
+  certificateId?: string;
+  certificateExpiresAt?: string;
+}
+
 export interface UpdateInstructorPayload {
   bio?: string;
-  trainingIds?: number[];
+  skills?: UpdateInstructorSkillPayload[];
 }
 
 export const instructorsApi = {

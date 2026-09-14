@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Ban, Globe2, Pencil, QrCode, UserCog, UserPlus } from 'lucide-react';
+import { Ban, Globe2, NotebookPen, Pencil, QrCode, UserCog, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { Card } from '@/shared/components/Card';
 import { Badge } from '@/shared/components/Badge';
@@ -22,6 +22,8 @@ import { formatFullDateTimeInZone } from '@/shared/utils/timezoneConversion';
 import { getPrimaryTimezone, REFERENCE_TIMEZONE } from '@/shared/data/countryTimezones';
 import { formatWeekendDays } from '@/shared/data/countryWeekends';
 import { assignmentStatusMeta, sessionStatusMeta } from '@/shared/utils/statusMeta';
+import { useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
+import { PwaSessionNotesSection } from '@/pwa/components/PwaSessionNotesSection';
 import { useSessionLookups } from '../hooks/useSessionLookups';
 import { useCancelSession, useSessionAttendees, useSessions } from '../hooks/useSessions';
 import { AssignInstructorModal } from '../components/AssignInstructorModal';
@@ -29,6 +31,7 @@ import { EditSessionModal } from '../components/EditSessionModal';
 import { AddAttendeeForm } from '../components/AddAttendeeForm';
 import { AttendeeImportForm } from '../components/AttendeeImportForm';
 import { AttendeeList } from '../components/AttendeeList';
+import { SessionNotesSection } from '../components/SessionNotesSection';
 import styles from './SessionDetailPage.module.css';
 
 export function SessionDetailPage() {
@@ -37,6 +40,7 @@ export function SessionDetailPage() {
   const sessionId = Number(id);
   const { user, isManager, isInstructor, isSuperAdmin, canManageCatalog } = useAuth();
   const canAssignInstructor = isManager || isSuperAdmin;
+  const isPwaPhone = useStandaloneDeviceClass() === 'phone';
 
   const sessionsQuery = useSessions();
   const { trainingMap, clientMap, instructorMap } = useSessionLookups();
@@ -238,6 +242,19 @@ export function SessionDetailPage() {
           <ReportView sessionId={session.id} canGenerate={canManageCatalog} />
         </Card>
       </div>
+
+      {(canManageCatalog || isSuperAdmin || isMySession) && (
+        <Card id="tour-session-notes" className={styles.section}>
+          <h3 className={styles.cardTitle}>
+            <NotebookPen size={16} /> {t('SessionDetailPage.notesCardTitle')}
+          </h3>
+          {isPwaPhone ? (
+            <PwaSessionNotesSection sessionId={session.id} canWrite={isMySession} />
+          ) : (
+            <SessionNotesSection sessionId={session.id} canWrite={isMySession} />
+          )}
+        </Card>
+      )}
 
       {canAssignInstructor && (
         <AssignInstructorModal

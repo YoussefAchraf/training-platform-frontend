@@ -5,6 +5,8 @@ import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
+import { useNavAttentionDots } from '@/shared/hooks/useNavAttentionDots';
+import { AttentionDot } from '@/shared/components/AttentionDot';
 import { groupedNavItems } from '@/layouts/components/navItems';
 import type { NavItem } from '@/layouts/components/navItems';
 import { paths } from '@/routes/paths';
@@ -39,6 +41,7 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
   };
+  const navAttentionDots = useNavAttentionDots();
 
   const allGroups =
     extraItems && extraItems.length > 0 ? [...groups, { group: null, items: extraItems }] : groups;
@@ -72,11 +75,13 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
                         {navBadgeCounts[item.to] > 9 ? '9+' : navBadgeCounts[item.to]}
                       </span>
                     )}
+                    {navAttentionDots[item.to] && <AttentionDot className={styles.railDot} />}
                   </span>
                   <span className={styles.srLabel}>
                     {t(item.labelKey)}
                     {navBadgeCounts[item.to] > 0 &&
                       `, ${t(item.to === paths.pendingApprovals ? 'Nav.pendingApprovalsBadge' : 'Nav.newAssignmentsBadge', { count: navBadgeCounts[item.to] })}`}
+                    {navAttentionDots[item.to] && `, ${t('Nav.attentionBadge')}`}
                   </span>
                 </>
               )}

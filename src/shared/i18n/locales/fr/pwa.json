@@ -67,7 +67,11 @@
     "pendingSignupsDescription_other": "{{count}} comptes en attente d'approbation",
     "unassignedSessionsTitle": "En attente d'un formateur",
     "unassignedSessionsDescription_one": "{{count}} session n'a pas encore de formateur",
-    "unassignedSessionsDescription_other": "{{count}} sessions n'ont pas encore de formateur"
+    "unassignedSessionsDescription_other": "{{count}} sessions n'ont pas encore de formateur",
+    "certificationExpiringTitle": "Certificat expire bientôt",
+    "certificationExpiredTitle": "Certificat expiré",
+    "certificationDescriptionOwn": "Votre certificat {{training}} nécessite votre attention",
+    "certificationDescriptionOther": "Le certificat {{training}} de {{instructor}} nécessite votre attention"
   },
   "PwaNavDrawer": {
     "closeMenu": "Fermer le menu"

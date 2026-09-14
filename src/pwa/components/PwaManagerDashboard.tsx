@@ -12,6 +12,7 @@ import { useSessions } from '@/features/sessions/hooks/useSessions';
 import { useSessionLookups } from '@/features/sessions/hooks/useSessionLookups';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useAppBadge } from '@/pwa/hooks/useAppBadge';
+import { getCertificationExpiryStatus } from '@/shared/utils/certificationExpiry';
 import { SessionTimeline } from '@/features/dashboard/components/SessionTimeline';
 import { HeroStatCard } from '@/features/dashboard/components/HeroStatCard';
 import { SessionStatusDonut } from '@/features/dashboard/components/charts/SessionStatusDonut';
@@ -42,7 +43,12 @@ export function PwaManagerDashboard() {
 
   const unassignedCount =
     sessionsQuery.data?.filter((session) => session.assignmentStatus === 'unassigned').length ?? 0;
-  useAppBadge(unassignedCount + (pendingUsersQuery.data?.length ?? 0));
+  const expiringCertsCount = instructors.reduce(
+    (count, instructor) =>
+      count + instructor.skills.filter((skill) => getCertificationExpiryStatus(skill.certificateExpiresAt) !== 'none').length,
+    0,
+  );
+  useAppBadge(unassignedCount + (pendingUsersQuery.data?.length ?? 0) + expiringCertsCount);
 
   if (sessionsQuery.isPending) return <Spinner />;
   if (sessionsQuery.isError) {

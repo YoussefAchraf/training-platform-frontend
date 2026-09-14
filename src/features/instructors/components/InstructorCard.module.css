@@ -30,6 +30,11 @@
   overflow-wrap: anywhere;
 }
 
+.nameDot {
+  margin-left: var(--space-2);
+  vertical-align: middle;
+}
+
 .email {
   display: flex;
   align-items: center;
