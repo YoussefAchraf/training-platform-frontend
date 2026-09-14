@@ -82,6 +82,7 @@
     "attendeesCardTitle": "Participants",
     "attendeesLocked": "Le formateur a commencé à pointer les présences, la liste des participants est donc désormais verrouillée - plus d'ajout ni de modification possible.",
     "reportCardTitle": "Rapport",
+    "notesCardTitle": "Notes",
     "cancelDialogTitle": "Annuler cette session ?",
     "cancelDialogDescription": "Les participants et le formateur assigné conserveront leurs enregistrements, mais la session sera marquée comme annulée.",
     "cancelSession": "Annuler la session"
@@ -194,5 +195,30 @@
     "selectInstructor": "Sélectionnez un formateur",
     "noQualifiedAvailable": "Aucun formateur qualifié disponible",
     "instructorAssigned": "Formateur assigné."
+  },
+  "SessionNotesSection": {
+    "addNote": "Ajouter une note",
+    "emptyTitle": "Aucune note pour l'instant",
+    "emptyDescriptionWriter": "Laissez une note à propos de cette session - elle sera aussi visible par les commerciaux et les managers.",
+    "emptyDescriptionReader": "Le formateur assigné n'a pas encore laissé de note pour cette session.",
+    "editNote": "Modifier la note",
+    "deleteNote": "Supprimer la note",
+    "editedAt": "Modifiée {{time}}",
+    "noteDeleted": "Note supprimée.",
+    "deleteDialogTitle": "Supprimer cette note ?",
+    "deleteDialogDescription": "Cette action est irréversible."
+  },
+  "SessionNoteFormModal": {
+    "addTitle": "Ajouter une note",
+    "editTitle": "Modifier la note",
+    "description": "Visible par les commerciaux, les managers et les super-administrateurs - vous seul pouvez la modifier ou la supprimer.",
+    "cancel": "Annuler",
+    "addNote": "Ajouter la note",
+    "saveChanges": "Enregistrer les modifications",
+    "bodyLabel": "Note",
+    "bodyPlaceholder": "ex. Le groupe a eu du mal avec le chapitre 3, prévoir un rappel à la prochaine session…",
+    "charCount": "{{count}} / {{max}}",
+    "noteAdded": "Note ajoutée.",
+    "noteUpdated": "Note mise à jour."
   }
 }

@@ -67,7 +67,11 @@
     "pendingSignupsDescription_other": "{{count}} accounts waiting for approval",
     "unassignedSessionsTitle": "Needs an instructor",
     "unassignedSessionsDescription_one": "{{count}} session has no instructor yet",
-    "unassignedSessionsDescription_other": "{{count}} sessions have no instructor yet"
+    "unassignedSessionsDescription_other": "{{count}} sessions have no instructor yet",
+    "certificationExpiringTitle": "Certification expiring soon",
+    "certificationExpiredTitle": "Certification expired",
+    "certificationDescriptionOwn": "Your {{training}} certification needs attention",
+    "certificationDescriptionOther": "{{instructor}}'s {{training}} certification needs attention"
   },
   "PwaNavDrawer": {
     "closeMenu": "Close menu"

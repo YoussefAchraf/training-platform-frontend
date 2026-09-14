@@ -55,6 +55,13 @@
   line-height: 1;
 }
 
+.railDot {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  border: 1.5px solid var(--color-surface);
+}
+
 .activePill {
   position: absolute;
   inset: 0;

@@ -24,3 +24,18 @@ export const splashExit: Variants = {
   show: { opacity: 1 },
   exit: { opacity: 0, transition: { duration: 0.3, ease: easeOut } },
 };
+
+
+export const bottomNavContainer: Variants = {
+  hidden: { y: 40, opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { ...houseSpring, delay: 0.55, when: 'beforeChildren', delayChildren: 0.1, staggerChildren: 0.06 },
+  },
+};
+
+export const bottomNavItem: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: easeOut } },
+};

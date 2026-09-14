@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/shared/components/Card';
 import { Avatar } from '@/shared/components/Avatar';
 import { Button } from '@/shared/components/Button';
+import { AttentionDot } from '@/shared/components/AttentionDot';
 import { SkillChips } from '@/features/dashboard/components/SkillChips';
+import { getWorstCertificationStatus } from '@/shared/utils/certificationExpiry';
 import { fadeInUp } from '@/shared/motion/variants';
 import type { Instructor } from '@/shared/types/domain';
 import styles from './InstructorCard.module.css';
@@ -17,6 +19,7 @@ interface InstructorCardProps {
 export function InstructorCard({ instructor, canEdit, onEdit }: InstructorCardProps) {
   const { t } = useTranslation('instructors');
   const fullName = `${instructor.firstname} ${instructor.lastname}`;
+  const hasExpiringCertificate = getWorstCertificationStatus(instructor.skills) !== 'none';
 
   return (
     <Card className={styles.card} variants={fadeInUp}>
@@ -35,7 +38,15 @@ export function InstructorCard({ instructor, canEdit, onEdit }: InstructorCardPr
       <div className={styles.header}>
         <Avatar firstname={instructor.firstname} lastname={instructor.lastname} size={56} />
         <div className={styles.identity}>
-          <h3 className={styles.name}>{fullName}</h3>
+          <h3 className={styles.name}>
+            {fullName}
+            {hasExpiringCertificate && (
+              <>
+                <AttentionDot className={styles.nameDot} />
+                <span className="visually-hidden">, {t('common:Nav.attentionBadge')}</span>
+              </>
+            )}
+          </h3>
           <p className={styles.email}>
             <Mail size={12} aria-hidden="true" />
             <span className={styles.emailText}>{instructor.email}</span>

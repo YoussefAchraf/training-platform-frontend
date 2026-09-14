@@ -8,6 +8,8 @@ import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
 import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { useIsSidebarCollapsed } from '@/shared/hooks/useMediaQuery';
+import { useNavAttentionDots } from '@/shared/hooks/useNavAttentionDots';
+import { AttentionDot } from '@/shared/components/AttentionDot';
 import { IconRailNav } from '@/pwa/components/IconRailNav';
 import { TourButton } from '@/features/tour/TourButton';
 import { paths } from '@/routes/paths';
@@ -40,6 +42,7 @@ export function Sidebar() {
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
   };
+  const navAttentionDots = useNavAttentionDots();
 
   return (
     <aside className={cn(styles.sidebar, collapsed && styles.collapsed, isSuperAdmin && styles.superAdmin)}>
@@ -77,6 +80,12 @@ export function Sidebar() {
                       <span className={styles.navContent}>
                         <item.icon size={19} />
                         <span>{t(item.labelKey)}</span>
+                        {navAttentionDots[item.to] && (
+                          <>
+                            <AttentionDot className={styles.navDot} />
+                            <span className="visually-hidden">, {t('Nav.attentionBadge')}</span>
+                          </>
+                        )}
                       </span>
                       {navBadgeCounts[item.to] > 0 && (
                         <span
