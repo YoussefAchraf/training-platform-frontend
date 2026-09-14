@@ -34,6 +34,8 @@ export type AssignmentStatus = 'unassigned' | 'pending' | 'accepted' | 'refused'
 
 export type SessionLocationType = 'onsite' | 'remote';
 
+export type SessionTeachingLanguage = 'french' | 'english';
+
 export type AttendanceStatus = 'pending' | 'present' | 'absent';
 
 export type TrainingDurationUnit = 'days' | 'hours';
@@ -93,6 +95,7 @@ export interface TrainingSession {
   assignmentStatus: AssignmentStatus;
   includeWeekends: boolean;
   locationType: SessionLocationType;
+  teachingLanguage: SessionTeachingLanguage;
   createdBy: number | null;
   createdAt: string;
 }

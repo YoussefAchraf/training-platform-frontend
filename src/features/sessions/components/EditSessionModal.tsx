@@ -42,6 +42,7 @@ function buildEditSessionSchema(t: TFunction<'sessions'>) {
       dailyEndTime: z.string().min(1, t('EditSessionModal.errors.dailyEndTimeRequired')),
       endDate: z.string().min(1, t('EditSessionModal.errors.endDateRequired')),
       locationType: z.enum(['onsite', 'remote']),
+      teachingLanguage: z.enum(['french', 'english']),
     })
     .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
       message: t('EditSessionModal.errors.dailyEndTimeAfterStart'),
@@ -112,6 +113,7 @@ export function EditSessionModal({ session, training, client, onClose }: EditSes
             ? utcIsoToZonedParts(session.endDate, clientTimeZone).date
             : format(parseISO(session.endDate), 'yyyy-MM-dd'),
           locationType: session.locationType,
+          teachingLanguage: session.teachingLanguage,
         }
       : undefined,
   });
@@ -168,6 +170,7 @@ export function EditSessionModal({ session, training, client, onClose }: EditSes
           endDate: endUtc,
           includeWeekends,
           locationType: values.locationType,
+          teachingLanguage: values.teachingLanguage,
         },
       },
       {
@@ -203,6 +206,15 @@ export function EditSessionModal({ session, training, client, onClose }: EditSes
             <Select {...fieldProps} {...register('locationType')}>
               <option value="onsite">{t('EditSessionModal.onsite')}</option>
               <option value="remote">{t('EditSessionModal.remote')}</option>
+            </Select>
+          )}
+        </FormField>
+
+        <FormField label={t('EditSessionModal.teachingLanguageLabel')} error={errors.teachingLanguage?.message} required>
+          {(fieldProps) => (
+            <Select {...fieldProps} {...register('teachingLanguage')}>
+              <option value="french">{t('EditSessionModal.french')}</option>
+              <option value="english">{t('EditSessionModal.english')}</option>
             </Select>
           )}
         </FormField>

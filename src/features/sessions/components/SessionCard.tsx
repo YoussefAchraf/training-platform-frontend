@@ -1,4 +1,4 @@
-import { CalendarClock, MapPin, UserCog, Video } from 'lucide-react';
+import { CalendarClock, Languages, MapPin, UserCog, Video } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/shared/components/Card';
 import { Badge } from '@/shared/components/Badge';
@@ -59,6 +59,10 @@ export function SessionCard({ session, trainingName, clientName, clientCountry, 
         <span className={styles.metaItem}>
           <CalendarClock size={14} aria-hidden="true" />
           {formatDateTime(session.startDate)}
+        </span>
+        <span className={styles.metaItem}>
+          <Languages size={14} aria-hidden="true" />
+          {t(`SessionsPage.${session.teachingLanguage}`)}
         </span>
         {showInstructor && (
           <span className={styles.metaItem}>

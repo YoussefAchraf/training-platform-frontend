@@ -24,6 +24,7 @@ function makeSession(overrides: Partial<TrainingSession> = {}): TrainingSession 
     assignmentStatus: 'unassigned',
     includeWeekends: false,
     locationType: 'onsite',
+    teachingLanguage: 'french',
     createdBy: 1,
     createdAt: '2026-08-01T00:00:00.000Z',
     ...overrides,
