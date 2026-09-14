@@ -193,6 +193,10 @@ export function SessionDetailPage() {
             <dd>{t(`SessionDetailPage.${session.locationType}`)}</dd>
           </div>
           <div>
+            <dt>{t('SessionDetailPage.teachingLanguage')}</dt>
+            <dd>{t(`SessionDetailPage.${session.teachingLanguage}`)}</dd>
+          </div>
+          <div>
             <dt>{t('SessionDetailPage.starts')}</dt>
             <dd>{renderSessionMoment(session.startDate)}</dd>
           </div>

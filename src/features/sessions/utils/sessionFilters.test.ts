@@ -14,6 +14,7 @@ function makeSession(overrides: Partial<TrainingSession> = {}): TrainingSession 
     assignmentStatus: 'unassigned',
     includeWeekends: false,
     locationType: 'onsite',
+    teachingLanguage: 'french',
     createdBy: 1,
     createdAt: '2026-09-01T00:00:00.000Z',
     ...overrides,
@@ -48,6 +49,12 @@ describe('filterSessions', () => {
   it('filters by location type', () => {
     const sessions = [makeSession({ id: 1, locationType: 'onsite' }), makeSession({ id: 2, locationType: 'remote' })];
     const result = filterSessions(sessions, { ...defaultSessionFilters, location: 'remote' }, lookups);
+    expect(result.map((s) => s.id)).toEqual([2]);
+  });
+
+  it('filters by teaching language', () => {
+    const sessions = [makeSession({ id: 1, teachingLanguage: 'french' }), makeSession({ id: 2, teachingLanguage: 'english' })];
+    const result = filterSessions(sessions, { ...defaultSessionFilters, language: 'english' }, lookups);
     expect(result.map((s) => s.id)).toEqual([2]);
   });
 
@@ -99,6 +106,7 @@ describe('hasActiveSessionFilters', () => {
   it('is true when any select filter is non-default', () => {
     expect(hasActiveSessionFilters({ ...defaultSessionFilters, status: 'completed' })).toBe(true);
     expect(hasActiveSessionFilters({ ...defaultSessionFilters, location: 'remote' })).toBe(true);
+    expect(hasActiveSessionFilters({ ...defaultSessionFilters, language: 'english' })).toBe(true);
     expect(hasActiveSessionFilters({ ...defaultSessionFilters, instructorId: 1 })).toBe(true);
   });
 });

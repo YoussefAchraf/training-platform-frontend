@@ -43,6 +43,7 @@ function buildSessionSchema(t: TFunction<'sessions'>) {
       dailyEndTime: z.string().min(1, t('SessionFormModal.errors.dailyEndTimeRequired')),
       endDate: z.string().min(1, t('SessionFormModal.errors.endDateRequired')),
       locationType: z.enum(['onsite', 'remote']),
+      teachingLanguage: z.enum(['french', 'english']),
     })
     .refine((data) => hoursBetweenTimes(data.startTime, data.dailyEndTime) !== null, {
       message: t('SessionFormModal.errors.dailyEndTimeAfterStart'),
@@ -96,7 +97,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
     
     
     
-    defaultValues: { startTime: '09:00', dailyEndTime: '17:00', locationType: 'onsite', endDate: '' },
+    defaultValues: { startTime: '09:00', dailyEndTime: '17:00', locationType: 'onsite', teachingLanguage: 'french', endDate: '' },
   });
 
   const trainingId = watch('trainingId');
@@ -167,6 +168,7 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
         endDate: endUtc,
         includeWeekends,
         locationType: values.locationType,
+        teachingLanguage: values.teachingLanguage,
       },
       {
         onSuccess: () => {
@@ -232,6 +234,15 @@ export function SessionFormModal({ isOpen, onClose }: SessionFormModalProps) {
             <Select {...fieldProps} {...register('locationType')}>
               <option value="onsite">{t('SessionFormModal.onsite')}</option>
               <option value="remote">{t('SessionFormModal.remote')}</option>
+            </Select>
+          )}
+        </FormField>
+
+        <FormField label={t('SessionFormModal.teachingLanguageLabel')} error={errors.teachingLanguage?.message} required>
+          {(fieldProps) => (
+            <Select {...fieldProps} {...register('teachingLanguage')}>
+              <option value="french">{t('SessionFormModal.french')}</option>
+              <option value="english">{t('SessionFormModal.english')}</option>
             </Select>
           )}
         </FormField>
