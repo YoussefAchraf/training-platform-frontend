@@ -434,6 +434,22 @@
   opacity: 0.5;
 }
 
+.actionsPopoverItemDanger {
+  color: var(--color-danger);
+}
+
+.actionsPopoverItemDanger:hover {
+  background-color: var(--color-danger-bg);
+}
+
+.deletedBody {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-style: italic;
+  opacity: 0.75;
+}
+
 .composerIconButton {
   display: inline-flex;
   align-items: center;

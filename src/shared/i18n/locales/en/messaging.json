@@ -46,7 +46,11 @@
     "edit": "Edit",
     "editingMessage": "Editing message",
     "cancelEdit": "Cancel edit",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete",
+    "deleteForMe": "Delete for me",
+    "deleteForEveryone": "Delete for everyone",
+    "cancelDelete": "Cancel"
   },
   "MessageBubble": {
     "sending": "Sending...",
@@ -54,7 +58,8 @@
     "imageLabel": "Photo",
     "voiceLabel": "Voice message",
     "fileLabel": "File",
-    "edited": "(edited)"
+    "edited": "(edited)",
+    "deletedForEveryone": "This message was deleted"
   },
   "ConversationInfoPanel": {
     "title": "Group info",
