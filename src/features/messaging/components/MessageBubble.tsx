@@ -1,16 +1,19 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
+import { Check, CheckCheck, Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { messagingApi } from '../api/messagingApi';
 import { useMessagingUiStore } from '../messagingUiStore';
-import type { Message } from '../types';
+import type { ConversationParticipant, Message } from '../types';
 import type { OptimisticMessage } from '../hooks/useSendMessage';
 import { MessageActionsPopover } from './MessageActionsPopover';
+import { MessageInfoPopover } from './MessageInfoPopover';
 import styles from './MessageThread.module.css';
 
 interface MessageBubbleProps {
   message: Message | OptimisticMessage;
   isOwn: boolean;
+  participants: ConversationParticipant[];
   repliedToMessage: Message | OptimisticMessage | undefined;
   onReply: () => void;
   onForward: () => void;
@@ -35,7 +38,7 @@ function attachmentSrc(message: Message | OptimisticMessage): string {
   return optimistic.localPreviewUrl ?? '';
 }
 
-export function MessageBubble({ message, isOwn, repliedToMessage, onReply, onForward }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwn, participants, repliedToMessage, onReply, onForward }: MessageBubbleProps) {
   const { t } = useTranslation('messaging');
   const pending = 'pending' in message && message.pending;
   const failed = 'failed' in message && message.failed;
@@ -43,6 +46,7 @@ export function MessageBubble({ message, isOwn, repliedToMessage, onReply, onFor
   const setOpenActionsMessageId = useMessagingUiStore((state) => state.setOpenActionsMessageId);
   const translatedText = useMessagingUiStore((state) => state.translations[message.id]);
   const isActionsOpen = openActionsMessageId === message.id;
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const canOpenActions = message.id > 0 && !failed;
 
@@ -50,6 +54,11 @@ export function MessageBubble({ message, isOwn, repliedToMessage, onReply, onFor
     if (!canOpenActions) return;
     setOpenActionsMessageId(isActionsOpen ? null : message.id);
   };
+
+  const others = participants.filter((participant) => participant.userId !== message.senderId);
+  const showTicks = isOwn && message.id > 0 && !pending && !failed && others.length > 0;
+  const deliveredToAll = showTicks && others.every((p) => (p.lastDeliveredMessageId ?? 0) >= message.id);
+  const readByAll = showTicks && others.every((p) => (p.lastReadMessageId ?? 0) >= message.id);
 
   return (
     <div className={cn(styles.messageRow, isOwn ? styles.messageRowOwn : styles.messageRowOther)}>
@@ -134,8 +143,38 @@ export function MessageBubble({ message, isOwn, repliedToMessage, onReply, onFor
             {pending && <Clock size={11} />}
             {failed && <TriangleAlert size={11} />}
             <span>{failed ? t('MessageBubble.failed') : formatTime(message.createdAt)}</span>
+            {showTicks && (
+              <span
+                className={styles.messageTickButton}
+                role="button"
+                tabIndex={0}
+                aria-label={t('MessageInfoPopover.title')}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setInfoOpen((open) => !open);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== 'Enter' && event.key !== ' ') return;
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setInfoOpen((open) => !open);
+                }}
+              >
+                {readByAll ? (
+                  <CheckCheck size={13} className={styles.messageTickRead} />
+                ) : deliveredToAll ? (
+                  <CheckCheck size={13} />
+                ) : (
+                  <Check size={13} />
+                )}
+              </span>
+            )}
           </span>
         </button>
+
+        {infoOpen && (
+          <MessageInfoPopover message={message as Message} participants={participants} onClose={() => setInfoOpen(false)} />
+        )}
       </div>
     </div>
   );
