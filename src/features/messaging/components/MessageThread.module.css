@@ -147,6 +147,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+.editedLabel {
+  font-style: italic;
+}
+
 .messageTickButton {
   display: inline-flex;
   align-items: center;

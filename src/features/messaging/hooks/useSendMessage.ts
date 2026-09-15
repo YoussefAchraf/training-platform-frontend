@@ -40,6 +40,7 @@ export function useSendMessage(conversationId: number) {
         attachmentDurationSeconds: null,
         replyToMessageId: replyToMessageId ?? null,
         createdAt: new Date().toISOString(),
+        editedAt: null,
         pending: true,
       };
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) => [

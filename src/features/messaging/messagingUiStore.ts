@@ -8,6 +8,11 @@ interface ReplyTarget {
   preview: string;
 }
 
+interface EditTarget {
+  messageId: number;
+  body: string;
+}
+
 interface MessagingUiState {
   selectedConversationId: number | null;
   activeTab: MessagingTab;
@@ -15,6 +20,7 @@ interface MessagingUiState {
   translations: Record<number, string>;
   openActionsMessageId: number | null;
   replyTargetByConversation: Record<number, ReplyTarget | null>;
+  editTargetByConversation: Record<number, EditTarget | null>;
   forwardMessageId: number | null;
   groupModalOpen: boolean;
   conversationInfoOpen: boolean;
@@ -25,6 +31,7 @@ interface MessagingUiState {
   setTranslation: (messageId: number, text: string) => void;
   setOpenActionsMessageId: (messageId: number | null) => void;
   setReplyTarget: (conversationId: number, target: ReplyTarget | null) => void;
+  setEditTarget: (conversationId: number, target: EditTarget | null) => void;
   setForwardMessageId: (messageId: number | null) => void;
   setGroupModalOpen: (open: boolean) => void;
   setConversationInfoOpen: (open: boolean) => void;
@@ -37,6 +44,7 @@ export const useMessagingUiStore = create<MessagingUiState>()((set) => ({
   translations: {},
   openActionsMessageId: null,
   replyTargetByConversation: {},
+  editTargetByConversation: {},
   forwardMessageId: null,
   groupModalOpen: false,
   conversationInfoOpen: false,
@@ -55,6 +63,10 @@ export const useMessagingUiStore = create<MessagingUiState>()((set) => ({
   setReplyTarget: (conversationId, target) =>
     set((state) => ({
       replyTargetByConversation: { ...state.replyTargetByConversation, [conversationId]: target },
+    })),
+  setEditTarget: (conversationId, target) =>
+    set((state) => ({
+      editTargetByConversation: { ...state.editTargetByConversation, [conversationId]: target },
     })),
   setForwardMessageId: (messageId) => set({ forwardMessageId: messageId }),
   setGroupModalOpen: (open) => set({ groupModalOpen: open }),

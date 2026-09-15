@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image as ImageIcon, Mic, Paperclip, Send, X } from 'lucide-react';
+import { Check, Image as ImageIcon, Mic, Paperclip, Send, X } from 'lucide-react';
 import { useSendMessage } from '../hooks/useSendMessage';
 import { useSendAttachmentMessage } from '../hooks/useSendAttachmentMessage';
+import { useEditMessage } from '../hooks/useEditMessage';
 import { useTypingBroadcast } from '../hooks/useTypingBroadcast';
 import { useRecordingBroadcast } from '../hooks/useRecordingBroadcast';
 import { useVoiceRecorder } from '../hooks/useVoiceRecorder';
@@ -23,9 +24,12 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
   const setDraft = useMessagingUiStore((state) => state.setDraft);
   const replyTarget = useMessagingUiStore((state) => state.replyTargetByConversation[conversationId] ?? null);
   const setReplyTarget = useMessagingUiStore((state) => state.setReplyTarget);
+  const editTarget = useMessagingUiStore((state) => state.editTargetByConversation[conversationId] ?? null);
+  const setEditTarget = useMessagingUiStore((state) => state.setEditTarget);
 
   const sendMessage = useSendMessage(conversationId);
   const sendAttachment = useSendAttachmentMessage(conversationId);
+  const editMessage = useEditMessage();
   const { notifyTyping, stopTyping } = useTypingBroadcast(conversationId);
   const { notifyRecordingStart, notifyRecordingStop } = useRecordingBroadcast(conversationId);
   const voiceRecorder = useVoiceRecorder();
@@ -33,10 +37,31 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (editTarget) {
+      setDraft(conversationId, editTarget.body);
+    }
+  }, [editTarget?.messageId]);
+
+  const handleCancelEdit = () => {
+    setEditTarget(conversationId, null);
+    setDraft(conversationId, '');
+  };
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     const trimmed = draft.trim();
-    if (!trimmed || sendMessage.isPending) return;
+    if (!trimmed) return;
+
+    if (editTarget) {
+      if (editMessage.isPending) return;
+      editMessage.mutate({ messageId: editTarget.messageId, body: trimmed });
+      setDraft(conversationId, '');
+      setEditTarget(conversationId, null);
+      return;
+    }
+
+    if (sendMessage.isPending) return;
     setDraft(conversationId, '');
     stopTyping();
     sendMessage.mutate({ body: trimmed, replyToMessageId: replyTarget?.messageId, clientId: crypto.randomUUID() });
@@ -121,6 +146,22 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
           </button>
         </div>
       )}
+      {editTarget && (
+        <div className={styles.replyPreview}>
+          <div className={styles.replyPreviewBar} />
+          <div className={styles.replyPreviewContent}>
+            <span className={styles.replyPreviewName}>{t('MessageThread.editingMessage')}</span>
+          </div>
+          <button
+            type="button"
+            className={styles.replyPreviewClose}
+            onClick={handleCancelEdit}
+            aria-label={t('MessageThread.cancelEdit')}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <form className={styles.composer} onSubmit={handleSubmit}>
         <EmojiPickerButton onSelect={(emoji) => setDraft(conversationId, draft + emoji)} />
         <button
@@ -157,10 +198,10 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
           <button
             type="submit"
             className={styles.sendButton}
-            disabled={sendMessage.isPending}
-            aria-label={t('MessageThread.send')}
+            disabled={editTarget ? editMessage.isPending : sendMessage.isPending}
+            aria-label={editTarget ? t('MessageThread.save') : t('MessageThread.send')}
           >
-            <Send size={16} />
+            {editTarget ? <Check size={16} /> : <Send size={16} />}
           </button>
         ) : (
           <button

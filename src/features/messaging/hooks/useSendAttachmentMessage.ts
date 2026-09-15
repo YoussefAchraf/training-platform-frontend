@@ -38,6 +38,7 @@ export function useSendAttachmentMessage(conversationId: number) {
         attachmentDurationSeconds: durationSeconds ?? null,
         replyToMessageId: null,
         createdAt: new Date().toISOString(),
+        editedAt: null,
         pending: true,
         localPreviewUrl: previewUrl,
       };

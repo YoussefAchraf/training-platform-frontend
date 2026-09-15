@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Forward, Languages, Reply } from 'lucide-react';
+import { Forward, Languages, Pencil, Reply } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useTranslateMessage } from '../hooks/useTranslateMessage';
 import { useMessagingUiStore } from '../messagingUiStore';
@@ -13,9 +13,10 @@ interface MessageActionsPopoverProps {
   onClose: () => void;
   onReply: () => void;
   onForward: () => void;
+  onEdit: () => void;
 }
 
-export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForward }: MessageActionsPopoverProps) {
+export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForward, onEdit }: MessageActionsPopoverProps) {
   const { t, i18n } = useTranslation('messaging');
   const translateMessage = useTranslateMessage();
   const translations = useMessagingUiStore((state) => state.translations);
@@ -43,6 +44,7 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
 
   const canTranslate = message.type === 'text' && Boolean(message.body);
   const alreadyTranslated = Boolean(translations[message.id]);
+  const canEdit = isOwn && message.type === 'text';
 
   return (
     <div
@@ -78,6 +80,19 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
         <Reply size={15} />
         {t('MessageThread.reply')}
       </button>
+      {canEdit && (
+        <button
+          type="button"
+          className={styles.actionsPopoverItem}
+          onClick={() => {
+            onEdit();
+            onClose();
+          }}
+        >
+          <Pencil size={15} />
+          {t('MessageThread.edit')}
+        </button>
+      )}
       <button
         type="button"
         className={styles.actionsPopoverItem}
