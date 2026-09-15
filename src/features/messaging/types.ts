@@ -23,6 +23,7 @@ export interface MessagePreview {
   body: string | null;
   senderId: number | null;
   createdAt: string;
+  deletedAt: string | null;
 }
 
 export interface Conversation {
@@ -51,6 +52,7 @@ export interface Message {
   replyToMessageId: number | null;
   createdAt: string;
   editedAt: string | null;
+  deletedAt: string | null;
 }
 
 export interface DirectoryPerson {

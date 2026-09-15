@@ -39,6 +39,7 @@ export function useSendAttachmentMessage(conversationId: number) {
         replyToMessageId: null,
         createdAt: new Date().toISOString(),
         editedAt: null,
+        deletedAt: null,
         pending: true,
         localPreviewUrl: previewUrl,
       };

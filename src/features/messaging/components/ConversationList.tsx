@@ -33,9 +33,11 @@ export function ConversationList() {
         const isUnread = conversation.unreadCount > 0;
         const lastMessage = conversation.lastMessage;
         const preview = lastMessage
-          ? lastMessage.type === 'text'
-            ? lastMessage.body
-            : t(`MessageBubble.${lastMessage.type}Label` as 'MessageBubble.imageLabel')
+          ? lastMessage.deletedAt
+            ? t('MessageBubble.deletedForEveryone')
+            : lastMessage.type === 'text'
+              ? lastMessage.body
+              : t(`MessageBubble.${lastMessage.type}Label` as 'MessageBubble.imageLabel')
           : t('ConversationList.noMessagesYet');
 
         return (

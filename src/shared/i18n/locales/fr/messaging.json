@@ -46,7 +46,11 @@
     "edit": "Modifier",
     "editingMessage": "Modification du message",
     "cancelEdit": "Annuler la modification",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "deleteForMe": "Supprimer pour moi",
+    "deleteForEveryone": "Supprimer pour tout le monde",
+    "cancelDelete": "Annuler"
   },
   "MessageBubble": {
     "sending": "Envoi...",
@@ -54,7 +58,8 @@
     "imageLabel": "Photo",
     "voiceLabel": "Message vocal",
     "fileLabel": "Fichier",
-    "edited": "(modifie)"
+    "edited": "(modifie)",
+    "deletedForEveryone": "Ce message a ete supprime"
   },
   "ConversationInfoPanel": {
     "title": "Infos du groupe",

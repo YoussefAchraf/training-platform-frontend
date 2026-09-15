@@ -41,6 +41,7 @@ export function useSendMessage(conversationId: number) {
         replyToMessageId: replyToMessageId ?? null,
         createdAt: new Date().toISOString(),
         editedAt: null,
+        deletedAt: null,
         pending: true,
       };
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) => [
