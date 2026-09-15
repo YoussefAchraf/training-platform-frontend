@@ -1,0 +1,35 @@
+{
+  "MessagingPage": {
+    "title": "Messages",
+    "tabConversations": "Discussions",
+    "tabDirectory": "Personnes",
+    "selectConversationPrompt": "Selectionnez une conversation pour commencer a discuter"
+  },
+  "ConversationList": {
+    "emptyState": "Aucune conversation pour le moment",
+    "emptyStateHint": "Demarrez-en une depuis l'onglet Personnes",
+    "you": "Vous",
+    "noMessagesYet": "Aucun message pour le moment"
+  },
+  "PeopleDirectory": {
+    "searchPlaceholder": "Rechercher par nom ou email",
+    "emptyState": "Personne trouve",
+    "loading": "Chargement..."
+  },
+  "MessageThread": {
+    "placeholder": "Ecrire un message",
+    "send": "Envoyer",
+    "emptyState": "Aucun message pour le moment - dites bonjour",
+    "loading": "Chargement des messages...",
+    "sendFailed": "Echec de l'envoi",
+    "typingOne": "{{name}} est en train d'ecrire...",
+    "typingMany": "Plusieurs personnes sont en train d'ecrire..."
+  },
+  "MessageBubble": {
+    "sending": "Envoi...",
+    "failed": "Echec de l'envoi",
+    "imageLabel": "Photo",
+    "voiceLabel": "Message vocal",
+    "fileLabel": "Fichier"
+  }
+}

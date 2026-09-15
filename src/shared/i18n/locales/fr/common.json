@@ -27,6 +27,7 @@
       "sessionsOverview": "Aperçu des sessions",
       "auditLog": "Journal d'audit",
       "chat": "Discussion",
+      "messages": "Messagerie",
       "feedback": "Retours"
     },
     "groups": {
@@ -38,6 +39,8 @@
     "pendingApprovalsBadge_other": "{{count}} comptes en attente d'approbation",
     "newAssignmentsBadge_one": "{{count}} nouvelle session assignée",
     "newAssignmentsBadge_other": "{{count}} nouvelles sessions assignées",
+    "unreadMessagesBadge_one": "{{count}} message non lu",
+    "unreadMessagesBadge_other": "{{count}} messages non lus",
     "attentionBadge": "nécessite votre attention"
   },
   "Topbar": {

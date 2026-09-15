@@ -8,6 +8,7 @@ import {
   History,
   LayoutDashboard,
   MessageSquareHeart,
+  MessagesSquare,
   UserCog,
   Users,
   Users2,
@@ -29,6 +30,12 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { labelKey: 'common:Nav.items.dashboard', to: paths.dashboard, icon: LayoutDashboard, primary: true },
   { labelKey: 'common:Nav.items.calendar', to: paths.calendar, icon: CalendarDays, primary: true },
+  {
+    labelKey: 'common:Nav.items.messages',
+    to: paths.messages,
+    icon: MessagesSquare,
+    roles: ['Manager', 'Instructor'],
+  },
   { labelKey: 'common:Nav.items.providers', to: paths.providers, icon: Building2, group: 'Catalog' },
   { labelKey: 'common:Nav.items.trainings', to: paths.trainings, icon: GraduationCap, group: 'Catalog' },
   { labelKey: 'common:Nav.items.clients', to: paths.clients, icon: Users, group: 'Catalog' },

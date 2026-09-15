@@ -146,5 +146,9 @@
   "feedback": {
     "header": { "title": "Envoyer un retour", "text": "Signalez un bug, suggérez une amélioration, ou envoyez un message directement au développeur." },
     "form": { "title": "Votre message", "text": "Choisissez une catégorie et décrivez ce que vous avez en tête, puis envoyez-le." }
+  },
+  "messaging": {
+    "header": { "title": "Messagerie", "text": "Discutez avec les Managers et les Formateurs en temps reel, avec indicateur de frappe et livraison instantanee." },
+    "list": { "title": "Conversations et personnes", "text": "Basculez entre vos discussions existantes et l'onglet Personnes pour demarrer une nouvelle conversation." }
   }
 }

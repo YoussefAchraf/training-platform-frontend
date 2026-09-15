@@ -8,6 +8,7 @@ import { GraduationCap, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
+import { useUnreadMessagingCount } from '@/features/messaging/hooks/useUnreadMessagingCount';
 import { useUiStore } from '@/shared/store/uiStore';
 import { cn } from '@/shared/utils/cn';
 import { easeOut } from '@/shared/motion/variants';
@@ -18,6 +19,7 @@ import { Badge } from '@/shared/components/Badge';
 import { roleMeta } from '@/shared/utils/statusMeta';
 import { paths } from '@/routes/paths';
 import { visibleNavItems } from './navItems';
+import { navBadgeLabelKey } from './navBadgeLabelKey';
 import styles from './MobileDrawer.module.css';
 
 const overlayVariants: Variants = {
@@ -53,9 +55,11 @@ export function MobileDrawer({ roleInsteadOfBrand = false }: MobileDrawerProps) 
   const canSeePendingApprovals = isManager || isSuperAdmin;
   const pendingUsersQuery = usePendingUsers({ enabled: canSeePendingApprovals });
   const { newAssignments } = useNewAssignments({ enabled: isInstructor });
+  const unreadMessagingCount = useUnreadMessagingCount();
   const navBadgeCounts: Record<string, number> = {
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
+    [paths.messages]: unreadMessagingCount,
   };
   const navAttentionDots = useNavAttentionDots();
 
@@ -134,10 +138,7 @@ export function MobileDrawer({ roleInsteadOfBrand = false }: MobileDrawerProps) 
                       {navBadgeCounts[item.to] > 0 && (
                         <span
                           className={styles.navBadge}
-                          aria-label={t(
-                            item.to === paths.pendingApprovals ? 'Nav.pendingApprovalsBadge' : 'Nav.newAssignmentsBadge',
-                            { count: navBadgeCounts[item.to] },
-                          )}
+                          aria-label={t(navBadgeLabelKey(item.to), { count: navBadgeCounts[item.to] })}
                         >
                           {navBadgeCounts[item.to]}
                         </span>
