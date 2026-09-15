@@ -41,7 +41,8 @@
     "translated": "Translated",
     "reply": "Reply",
     "forward": "Forward",
-    "forwardTo": "Forward to..."
+    "forwardTo": "Forward to...",
+    "groupInfo": "Group info"
   },
   "MessageBubble": {
     "sending": "Sending...",
@@ -49,5 +50,15 @@
     "imageLabel": "Photo",
     "voiceLabel": "Voice message",
     "fileLabel": "File"
+  },
+  "ConversationInfoPanel": {
+    "title": "Group info",
+    "membersCount": "{{count}} members",
+    "addMember": "Add",
+    "backToMembers": "Back to members",
+    "owner": "Owner",
+    "removeMember": "Remove",
+    "removeMemberConfirmTitle": "Remove member?",
+    "removeMemberConfirmDescription": "{{name}} will no longer be able to see this group's messages."
   }
 }
