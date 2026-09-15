@@ -26,6 +26,12 @@ interface ConversationDeliveredPayload {
   lastDeliveredAt: string;
 }
 
+interface MessageDeletedPayload {
+  conversationId: number;
+  messageId: number;
+  scope: 'me' | 'everyone';
+}
+
 export function useMessagingSocket(): void {
   const { user, isAuthenticated } = useAuth();
   const canUseMessaging = useCanUseMessaging();
@@ -65,6 +71,7 @@ export function useMessagingSocket(): void {
                     body: message.body,
                     senderId: message.senderId,
                     createdAt: message.createdAt,
+                    deletedAt: null,
                   },
                   unreadCount: isMine ? conversation.unreadCount : conversation.unreadCount + 1,
                 }
@@ -86,6 +93,35 @@ export function useMessagingSocket(): void {
       queryClient.setQueryData<Message[]>(queryKeys.messaging.messages(message.conversationId), (existing) =>
         existing?.map((item) => (item.id === message.id ? message : item)),
       );
+    }
+
+    function handleMessageDeleted({ conversationId, messageId, scope }: MessageDeletedPayload) {
+      queryClient.setQueryData<Message[]>(queryKeys.messaging.messages(conversationId), (existing) => {
+        if (!existing) return existing;
+        if (scope === 'me') {
+          return existing.filter((item) => item.id !== messageId);
+        }
+        return existing.map((item) =>
+          item.id === messageId
+            ? {
+                ...item,
+                body: null,
+                attachmentKey: null,
+                attachmentOriginalName: null,
+                attachmentMime: null,
+                attachmentSizeBytes: null,
+                attachmentDurationSeconds: null,
+                deletedAt: item.deletedAt ?? new Date().toISOString(),
+              }
+            : item,
+        );
+      });
+
+      const conversations = queryClient.getQueryData<Conversation[]>(queryKeys.messaging.conversations());
+      const affected = conversations?.find((conversation) => conversation.id === conversationId);
+      if (affected?.lastMessage?.id === messageId) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.messaging.conversations() });
+      }
     }
 
     function updateParticipantMarker(
@@ -150,6 +186,7 @@ export function useMessagingSocket(): void {
 
     socket.on('message:new', handleMessageNew);
     socket.on('message:updated', handleMessageUpdated);
+    socket.on('message:deleted', handleMessageDeleted);
     socket.on('conversation:new', handleConversationsChanged);
     socket.on('participant:added', handleConversationsChanged);
     socket.on('participant:removed', handleConversationsChanged);
@@ -163,6 +200,7 @@ export function useMessagingSocket(): void {
     return () => {
       socket.off('message:new', handleMessageNew);
       socket.off('message:updated', handleMessageUpdated);
+      socket.off('message:deleted', handleMessageDeleted);
       socket.off('conversation:new', handleConversationsChanged);
       socket.off('participant:added', handleConversationsChanged);
       socket.off('participant:removed', handleConversationsChanged);

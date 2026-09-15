@@ -77,5 +77,8 @@ export const messagingApi = {
   editMessage: (messageId: number, body: string) =>
     apiClient.patch<Message>(`/messaging/messages/${messageId}`, { body }).then((res) => res.data),
 
+  deleteMessage: (messageId: number, scope: 'me' | 'everyone') =>
+    apiClient.delete(`/messaging/messages/${messageId}`, { data: { scope } }).then((res) => res.data),
+
   attachmentUrl,
 };

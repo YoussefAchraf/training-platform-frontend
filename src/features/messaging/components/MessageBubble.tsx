@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, CheckCheck, Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
+import { Ban, Check, CheckCheck, Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { messagingApi } from '../api/messagingApi';
 import { useMessagingUiStore } from '../messagingUiStore';
@@ -48,8 +48,9 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
   const translatedText = useMessagingUiStore((state) => state.translations[message.id]);
   const isActionsOpen = openActionsMessageId === message.id;
   const [infoOpen, setInfoOpen] = useState(false);
+  const isDeleted = Boolean(message.deletedAt);
 
-  const canOpenActions = message.id > 0 && !failed;
+  const canOpenActions = message.id > 0 && !failed && !isDeleted;
 
   const handleBubbleClick = () => {
     if (!canOpenActions) return;
@@ -57,7 +58,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
   };
 
   const others = participants.filter((participant) => participant.userId !== message.senderId);
-  const showTicks = isOwn && message.id > 0 && !pending && !failed && others.length > 0;
+  const showTicks = isOwn && message.id > 0 && !pending && !failed && !isDeleted && others.length > 0;
   const deliveredToAll = showTicks && others.every((p) => (p.lastDeliveredMessageId ?? 0) >= message.id);
   const readByAll = showTicks && others.every((p) => (p.lastReadMessageId ?? 0) >= message.id);
 
@@ -84,7 +85,14 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           onClick={handleBubbleClick}
           disabled={!canOpenActions}
         >
-          {repliedToMessage && (
+          {isDeleted && (
+            <span className={styles.deletedBody}>
+              <Ban size={14} />
+              {t('MessageBubble.deletedForEveryone')}
+            </span>
+          )}
+
+          {!isDeleted && repliedToMessage && (
             <div className={styles.quotedReply}>
               <span className={styles.quotedReplyName}>{repliedToMessage.senderName ?? ''}</span>
               <span className={styles.quotedReplyText}>
@@ -93,9 +101,9 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             </div>
           )}
 
-          {message.type === 'text' && <span className={styles.messageBody}>{message.body}</span>}
+          {!isDeleted && message.type === 'text' && <span className={styles.messageBody}>{message.body}</span>}
 
-          {message.type === 'image' && (
+          {!isDeleted && message.type === 'image' && (
             <img
               src={attachmentSrc(message)}
               alt={message.attachmentOriginalName ?? t('MessageBubble.imageLabel')}
@@ -107,7 +115,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             />
           )}
 
-          {message.type === 'voice' && (
+          {!isDeleted && message.type === 'voice' && (
             <audio
               controls
               src={attachmentSrc(message)}
@@ -116,7 +124,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             />
           )}
 
-          {message.type === 'file' && (
+          {!isDeleted && message.type === 'file' && (
             <a
               href={attachmentSrc(message)}
               target="_blank"
@@ -134,7 +142,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             </a>
           )}
 
-          {translatedText && (
+          {!isDeleted && translatedText && (
             <div className={styles.translatedText}>
               <span className={styles.translatedTextLabel}>{t('MessageThread.translated')}</span>
               {translatedText}
@@ -144,7 +152,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           <span className={styles.messageMeta}>
             {pending && <Clock size={11} />}
             {failed && <TriangleAlert size={11} />}
-            {message.editedAt && !pending && !failed && (
+            {message.editedAt && !pending && !failed && !isDeleted && (
               <span className={styles.editedLabel}>{t('MessageBubble.edited')}</span>
             )}
             <span>{failed ? t('MessageBubble.failed') : formatTime(message.createdAt)}</span>
