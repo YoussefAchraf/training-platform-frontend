@@ -74,5 +74,8 @@ export const messagingApi = {
       .post<Message>(`/messaging/messages/${messageId}/forward`, { targetConversationId })
       .then((res) => res.data),
 
+  editMessage: (messageId: number, body: string) =>
+    apiClient.patch<Message>(`/messaging/messages/${messageId}`, { body }).then((res) => res.data),
+
   attachmentUrl,
 };
