@@ -16,6 +16,7 @@ import enAdmin from './locales/en/admin.json';
 import enReports from './locales/en/reports.json';
 import enSurvey from './locales/en/survey.json';
 import enChatbot from './locales/en/chatbot.json';
+import enMessaging from './locales/en/messaging.json';
 import enPwa from './locales/en/pwa.json';
 import enTour from './locales/en/tour.json';
 import enFeedback from './locales/en/feedback.json';
@@ -35,6 +36,7 @@ import frAdmin from './locales/fr/admin.json';
 import frReports from './locales/fr/reports.json';
 import frSurvey from './locales/fr/survey.json';
 import frChatbot from './locales/fr/chatbot.json';
+import frMessaging from './locales/fr/messaging.json';
 import frPwa from './locales/fr/pwa.json';
 import frTour from './locales/fr/tour.json';
 import frFeedback from './locales/fr/feedback.json';
@@ -58,6 +60,7 @@ export const resources = {
     reports: enReports,
     survey: enSurvey,
     chatbot: enChatbot,
+    messaging: enMessaging,
     pwa: enPwa,
     tour: enTour,
     feedback: enFeedback,
@@ -78,6 +81,7 @@ export const resources = {
     reports: frReports,
     survey: frSurvey,
     chatbot: frChatbot,
+    messaging: frMessaging,
     pwa: frPwa,
     tour: frTour,
     feedback: frFeedback,

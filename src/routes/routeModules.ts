@@ -16,6 +16,8 @@ export const routeModules: Record<string, PageModule> = {
     import('@/features/auth/pages/PendingApprovalPage').then((m) => ({ default: m.PendingApprovalPage })),
   [paths.account]: () => import('@/features/auth/pages/AccountPage').then((m) => ({ default: m.AccountPage })),
   [paths.chat]: () => import('@/pwa/pages/PwaChatPage').then((m) => ({ default: m.PwaChatPage })),
+  [paths.messages]: () =>
+    import('@/features/messaging/pages/MessagingPage').then((m) => ({ default: m.MessagingPage })),
   [paths.pwaProfile]: () => import('@/pwa/pages/PwaProfilePage').then((m) => ({ default: m.PwaProfilePage })),
   [paths.providers]: () =>
     import('@/features/providers/pages/ProvidersPage').then((m) => ({ default: m.ProvidersPage })),

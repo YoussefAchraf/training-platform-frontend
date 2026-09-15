@@ -1,0 +1,35 @@
+{
+  "MessagingPage": {
+    "title": "Messages",
+    "tabConversations": "Chats",
+    "tabDirectory": "People",
+    "selectConversationPrompt": "Select a conversation to start chatting"
+  },
+  "ConversationList": {
+    "emptyState": "No conversations yet",
+    "emptyStateHint": "Start one from the People tab",
+    "you": "You",
+    "noMessagesYet": "No messages yet"
+  },
+  "PeopleDirectory": {
+    "searchPlaceholder": "Search by name or email",
+    "emptyState": "No one found",
+    "loading": "Loading..."
+  },
+  "MessageThread": {
+    "placeholder": "Write a message",
+    "send": "Send",
+    "emptyState": "No messages yet - say hello",
+    "loading": "Loading messages...",
+    "sendFailed": "Failed to send",
+    "typingOne": "{{name}} is typing...",
+    "typingMany": "Several people are typing..."
+  },
+  "MessageBubble": {
+    "sending": "Sending...",
+    "failed": "Failed to send",
+    "imageLabel": "Photo",
+    "voiceLabel": "Voice message",
+    "fileLabel": "File"
+  }
+}

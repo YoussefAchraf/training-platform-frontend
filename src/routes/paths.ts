@@ -7,6 +7,7 @@ export const paths = {
   dashboard: '/dashboard',
   account: '/account',
   chat: '/chat',
+  messages: '/messages',
   pwaProfile: '/profile',
   providers: '/providers',
   trainings: '/trainings',
