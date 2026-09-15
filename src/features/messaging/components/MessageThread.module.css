@@ -70,16 +70,30 @@
   justify-content: flex-start;
 }
 
-.messageBubble {
+.messageBubbleWrap {
+  position: relative;
   max-width: 78%;
+}
+
+.messageBubble {
+  max-width: 100%;
   padding: var(--space-2) var(--space-3);
+  border: none;
   border-radius: var(--radius-lg);
+  font: inherit;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   word-break: break-word;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.messageBubble:disabled {
+  cursor: default;
 }
 
 .messageBubbleOwn {
@@ -105,6 +119,7 @@
 }
 
 .messageMeta {
+  align-self: flex-end;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -198,4 +213,310 @@
 
 .sendButton:disabled {
   opacity: 0.5;
+}
+
+.quotedReply {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border-left: 3px solid currentColor;
+  border-radius: var(--radius-sm);
+  background-color: rgb(0 0 0 / 8%);
+  opacity: 0.85;
+  font-size: 12px;
+}
+
+.messageBubbleOther .quotedReply {
+  background-color: rgb(0 0 0 / 4%);
+}
+
+.quotedReplyName {
+  font-weight: var(--font-weight-semibold);
+}
+
+.quotedReplyText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.messageImage {
+  display: block;
+  max-width: 100%;
+  width: 220px;
+  height: auto;
+  border-radius: var(--radius-md);
+  cursor: zoom-in;
+}
+
+.messageAudio {
+  max-width: 240px;
+  width: 100%;
+  height: 40px;
+}
+
+.messageFile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.messageFileDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.messageFileName {
+  font-weight: var(--font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+.messageFileSize {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.translatedText {
+  width: 100%;
+  padding-top: var(--space-1);
+  margin-top: 2px;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.translatedTextLabel {
+  display: block;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.actionsPopover {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 8px;
+  z-index: var(--z-popover);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.actionsPopoverBelow {
+  bottom: auto;
+  top: 100%;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+
+.actionsPopoverOwn {
+  right: 0;
+}
+
+.actionsPopoverOther {
+  left: 0;
+}
+
+.actionsPopoverItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-align: left;
+}
+
+.actionsPopoverItem:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.actionsPopoverItem:disabled {
+  opacity: 0.5;
+}
+
+.composerIconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+}
+
+.composerIconButton:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.emojiWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.emojiPopover {
+  position: absolute;
+  bottom: calc(100% + var(--space-2));
+  left: 0;
+  z-index: var(--z-popover);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.emojiLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 360px;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.recorderError {
+  padding: 0 var(--space-3) var(--space-2);
+  color: var(--color-danger);
+  font-size: 12px;
+}
+
+.recordingBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.recordingCancelButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: var(--color-danger);
+}
+
+.recordingCancelButton:hover {
+  background-color: var(--color-danger-bg);
+}
+
+.recordingIndicator {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+}
+
+.recordingDot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-danger);
+  animation: messagingRecordingPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes messagingRecordingPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+.recordingTimer {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.recordingLabelInline {
+  margin-left: var(--space-2);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.replyPreview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-subtle);
+}
+
+.replyPreviewBar {
+  width: 3px;
+  align-self: stretch;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+}
+
+.replyPreviewContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.replyPreviewName {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.replyPreviewText {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.replyPreviewClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+}
+
+.replyPreviewClose:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
 }

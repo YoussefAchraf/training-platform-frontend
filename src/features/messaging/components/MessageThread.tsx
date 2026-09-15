@@ -1,28 +1,23 @@
-import { useEffect, useRef } from 'react';
-import type { FormEvent } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIsDesktop } from '@/shared/hooks/useMediaQuery';
 import { cn } from '@/shared/utils/cn';
 import { listItem, staggerContainer } from '@/shared/motion/variants';
 import { useConversations } from '../hooks/useConversations';
 import { useMessages } from '../hooks/useMessages';
-import { useSendMessage } from '../hooks/useSendMessage';
 import { useMarkConversationRead } from '../hooks/useMarkConversationRead';
-import { useTypingBroadcast } from '../hooks/useTypingBroadcast';
-import { useTypingUsers } from '../messagingRealtimeStore';
+import { useTypingUsers, useRecordingUsers } from '../messagingRealtimeStore';
 import { useMessagingUiStore } from '../messagingUiStore';
-import type { Conversation } from '../types';
+import { conversationDisplayName } from '../utils';
+import type { Message } from '../types';
+import type { OptimisticMessage } from '../hooks/useSendMessage';
 import { MessageBubble } from './MessageBubble';
+import { MessageComposer } from './MessageComposer';
+import { ForwardMessageModal } from './ForwardMessageModal';
 import styles from './MessageThread.module.css';
-
-function conversationDisplayName(conversation: Conversation, currentUserId: number | undefined): string {
-  if (conversation.type === 'group') return conversation.name || '';
-  const other = conversation.participants.find((participant) => participant.userId !== currentUserId);
-  return other ? `${other.firstname ?? ''} ${other.lastname ?? ''}`.trim() : '';
-}
 
 interface MessageThreadProps {
   conversationId: number;
@@ -35,22 +30,29 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   const { data: conversations } = useConversations();
   const conversation = conversations?.find((item) => item.id === conversationId);
   const { data: messages, isLoading } = useMessages(conversationId);
-  const sendMessage = useSendMessage(conversationId);
   const markRead = useMarkConversationRead();
-  const { notifyTyping, stopTyping } = useTypingBroadcast(conversationId);
   const typingUserIdsRaw = useTypingUsers(conversationId);
   const typingUserIds = typingUserIdsRaw.filter((id) => id !== user?.id);
+  const recordingUserIdsRaw = useRecordingUsers(conversationId);
+  const recordingUserIds = recordingUserIdsRaw.filter((id) => id !== user?.id);
   const selectConversation = useMessagingUiStore((state) => state.selectConversation);
-  const setDraft = useMessagingUiStore((state) => state.setDraft);
-  const draft = useMessagingUiStore((state) => state.drafts[conversationId] ?? '');
+  const setReplyTarget = useMessagingUiStore((state) => state.setReplyTarget);
+  const forwardMessageId = useMessagingUiStore((state) => state.forwardMessageId);
+  const setForwardMessageId = useMessagingUiStore((state) => state.setForwardMessageId);
 
   const listRef = useRef<HTMLDivElement>(null);
   const lastMessageId = messages && messages.length > 0 ? messages[messages.length - 1].id : undefined;
 
+  const messagesById = useMemo(() => {
+    const map = new Map<number, Message | OptimisticMessage>();
+    messages?.forEach((message) => map.set(message.id, message));
+    return map;
+  }, [messages]);
+
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, typingUserIds.length]);
+  }, [messages, typingUserIds.length, recordingUserIds.length]);
 
   useEffect(() => {
     if (lastMessageId == null || lastMessageId < 0) return;
@@ -58,17 +60,16 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   }, [conversationId, lastMessageId]);
 
   const name = conversation ? conversationDisplayName(conversation, user?.id) : '';
-
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    const trimmed = draft.trim();
-    if (!trimmed || sendMessage.isPending) return;
-    setDraft(conversationId, '');
-    stopTyping();
-    sendMessage.mutate({ body: trimmed, clientId: crypto.randomUUID() });
-  };
-
   const otherTyping = typingUserIds.length > 0;
+  const otherRecording = !otherTyping && recordingUserIds.length > 0;
+
+  const handleReply = (message: Message | OptimisticMessage) => {
+    setReplyTarget(conversationId, {
+      messageId: message.id,
+      senderName: message.senderName ?? '',
+      preview: message.type === 'text' ? (message.body ?? '') : t(`MessageBubble.${message.type}Label` as 'MessageBubble.imageLabel'),
+    });
+  };
 
   return (
     <div className={styles.thread}>
@@ -94,43 +95,33 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
         <motion.div variants={staggerContainer(0.03)} initial="hidden" animate="show">
           {messages?.map((message) => (
             <motion.div key={message.id < 0 ? `pending-${message.id}` : message.id} variants={listItem}>
-              <MessageBubble message={message} isOwn={message.senderId === user?.id} />
+              <MessageBubble
+                message={message}
+                isOwn={message.senderId === user?.id}
+                repliedToMessage={message.replyToMessageId ? messagesById.get(message.replyToMessageId) : undefined}
+                onReply={() => handleReply(message)}
+                onForward={() => setForwardMessageId(message.id)}
+              />
             </motion.div>
           ))}
         </motion.div>
-        {otherTyping && (
+        {(otherTyping || otherRecording) && (
           <div className={cn(styles.messageRow, styles.messageRowOther)}>
             <div className={styles.typingBubble}>
               <span className={styles.typingDot} />
               <span className={styles.typingDot} />
               <span className={styles.typingDot} />
+              {otherRecording && <span className={styles.recordingLabelInline}>{t('MessageThread.recordingLabel')}</span>}
             </div>
           </div>
         )}
       </div>
 
-      <form className={styles.composer} onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder={t('MessageThread.placeholder')}
-          value={draft}
-          onChange={(event) => {
-            setDraft(conversationId, event.target.value);
-            if (event.target.value.trim()) notifyTyping();
-            else stopTyping();
-          }}
-          aria-label={t('MessageThread.placeholder')}
-        />
-        <button
-          type="submit"
-          className={styles.sendButton}
-          disabled={!draft.trim() || sendMessage.isPending}
-          aria-label={t('MessageThread.send')}
-        >
-          <Send size={16} />
-        </button>
-      </form>
+      <MessageComposer conversationId={conversationId} />
+
+      {forwardMessageId != null && (
+        <ForwardMessageModal messageId={forwardMessageId} onClose={() => setForwardMessageId(null)} />
+      )}
     </div>
   );
 }

@@ -32,6 +32,7 @@
     "countries-and-timezones": "^3.10.0",
     "date-fns": "^4.4.0",
     "driver.js": "^1.8.0",
+    "emoji-picker-react": "^4.22.2",
     "flag-icons": "^7.5.0",
     "i18next": "^26.4.0",
     "i18next-browser-languagedetector": "^8.2.1",
