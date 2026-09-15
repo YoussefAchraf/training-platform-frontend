@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/shared/lib/queryKeys';
+import { getApiErrorMessage } from '@/shared/lib/apiClient';
+import { useToast } from '@/shared/hooks/useToast';
 import { messagingApi } from '../api/messagingApi';
 import type { Conversation } from '../types';
 
 export function useCreateGroupConversation() {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: ({ name, memberUserIds }: { name: string; memberUserIds: number[] }) =>
@@ -16,5 +19,6 @@ export function useCreateGroupConversation() {
       });
       queryClient.invalidateQueries({ queryKey: queryKeys.messaging.conversations() });
     },
+    onError: (error) => toast.error(getApiErrorMessage(error)),
   });
 }

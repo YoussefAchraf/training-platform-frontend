@@ -59,7 +59,7 @@ export const messagingApi = {
 
     return apiClient
       .post<Message>(`/messaging/conversations/${conversationId}/messages`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': undefined },
       })
       .then((res) => res.data);
   },
