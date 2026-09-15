@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, MessageSquareText, Users } from 'lucide-react';
+import { ArrowLeft, MessageSquareText, UserPlus, Users } from 'lucide-react';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { cn } from '@/shared/utils/cn';
 import { useMessagingUiStore } from '../messagingUiStore';
 import { ConversationList } from './ConversationList';
 import { PeopleDirectory } from './PeopleDirectory';
+import { GroupCreateModal } from './GroupCreateModal';
 import styles from './ConversationsPane.module.css';
 
 interface ConversationsPaneProps {
@@ -13,8 +15,11 @@ interface ConversationsPaneProps {
 
 export function ConversationsPane({ onBack }: ConversationsPaneProps) {
   const { t } = useTranslation('messaging');
+  const { isManager } = useAuth();
   const activeTab = useMessagingUiStore((state) => state.activeTab);
   const setActiveTab = useMessagingUiStore((state) => state.setActiveTab);
+  const groupModalOpen = useMessagingUiStore((state) => state.groupModalOpen);
+  const setGroupModalOpen = useMessagingUiStore((state) => state.setGroupModalOpen);
   const [search, setSearch] = useState('');
 
   return (
@@ -28,6 +33,17 @@ export function ConversationsPane({ onBack }: ConversationsPaneProps) {
         <h1 id="tour-messages-header" className={styles.title}>
           {t('MessagingPage.title')}
         </h1>
+        {isManager && (
+          <button
+            type="button"
+            className={styles.newGroupButton}
+            onClick={() => setGroupModalOpen(true)}
+            aria-label={t('MessagingPage.createGroup')}
+            title={t('MessagingPage.createGroup')}
+          >
+            <UserPlus size={18} />
+          </button>
+        )}
       </div>
 
       <div id="tour-messages-list" className={styles.tabs} role="tablist">
@@ -68,6 +84,8 @@ export function ConversationsPane({ onBack }: ConversationsPaneProps) {
       <div className={styles.body}>
         {activeTab === 'conversations' ? <ConversationList /> : <PeopleDirectory search={search} />}
       </div>
+
+      {groupModalOpen && <GroupCreateModal onClose={() => setGroupModalOpen(false)} />}
     </div>
   );
 }
