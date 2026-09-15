@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIsDesktop } from '@/shared/hooks/useMediaQuery';
 import { cn } from '@/shared/utils/cn';
@@ -17,6 +17,7 @@ import type { OptimisticMessage } from '../hooks/useSendMessage';
 import { MessageBubble } from './MessageBubble';
 import { MessageComposer } from './MessageComposer';
 import { ForwardMessageModal } from './ForwardMessageModal';
+import { ConversationInfoPanel } from './ConversationInfoPanel';
 import styles from './MessageThread.module.css';
 
 interface MessageThreadProps {
@@ -39,6 +40,8 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   const setReplyTarget = useMessagingUiStore((state) => state.setReplyTarget);
   const forwardMessageId = useMessagingUiStore((state) => state.forwardMessageId);
   const setForwardMessageId = useMessagingUiStore((state) => state.setForwardMessageId);
+  const conversationInfoOpen = useMessagingUiStore((state) => state.conversationInfoOpen);
+  const setConversationInfoOpen = useMessagingUiStore((state) => state.setConversationInfoOpen);
 
   const listRef = useRef<HTMLDivElement>(null);
   const lastMessageId = messages && messages.length > 0 ? messages[messages.length - 1].id : undefined;
@@ -85,6 +88,16 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
           </button>
         )}
         <span className={styles.headerName}>{name}</span>
+        {conversation?.type === 'group' && (
+          <button
+            type="button"
+            className={styles.infoButton}
+            onClick={() => setConversationInfoOpen(true)}
+            aria-label={t('MessageThread.groupInfo')}
+          >
+            <Info size={18} />
+          </button>
+        )}
       </div>
 
       <div className={styles.messages} ref={listRef}>
@@ -121,6 +134,10 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
 
       {forwardMessageId != null && (
         <ForwardMessageModal messageId={forwardMessageId} onClose={() => setForwardMessageId(null)} />
+      )}
+
+      {conversationInfoOpen && conversation && (
+        <ConversationInfoPanel conversation={conversation} onClose={() => setConversationInfoOpen(false)} />
       )}
     </div>
   );
