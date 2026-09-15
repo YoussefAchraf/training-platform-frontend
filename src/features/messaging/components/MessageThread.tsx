@@ -111,6 +111,7 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
               <MessageBubble
                 message={message}
                 isOwn={message.senderId === user?.id}
+                participants={conversation?.participants ?? []}
                 repliedToMessage={message.replyToMessageId ? messagesById.get(message.replyToMessageId) : undefined}
                 onReply={() => handleReply(message)}
                 onForward={() => setForwardMessageId(message.id)}

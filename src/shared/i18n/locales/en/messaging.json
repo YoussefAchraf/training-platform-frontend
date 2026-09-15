@@ -60,5 +60,11 @@
     "removeMember": "Remove",
     "removeMemberConfirmTitle": "Remove member?",
     "removeMemberConfirmDescription": "{{name}} will no longer be able to see this group's messages."
+  },
+  "MessageInfoPopover": {
+    "title": "Message info",
+    "sent": "Sent",
+    "deliveredAt": "Delivered {{time}}",
+    "readAt": "Read {{time}}"
   }
 }

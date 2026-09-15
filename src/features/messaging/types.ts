@@ -9,6 +9,8 @@ export interface ConversationParticipant {
   joinedAt: string;
   lastReadMessageId: number | null;
   lastReadAt: string | null;
+  lastDeliveredMessageId: number | null;
+  lastDeliveredAt: string | null;
   firstname: string | null;
   lastname: string | null;
   email: string | null;
