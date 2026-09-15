@@ -42,14 +42,19 @@
     "reply": "Repondre",
     "forward": "Transferer",
     "forwardTo": "Transferer vers...",
-    "groupInfo": "Infos du groupe"
+    "groupInfo": "Infos du groupe",
+    "edit": "Modifier",
+    "editingMessage": "Modification du message",
+    "cancelEdit": "Annuler la modification",
+    "save": "Enregistrer"
   },
   "MessageBubble": {
     "sending": "Envoi...",
     "failed": "Echec de l'envoi",
     "imageLabel": "Photo",
     "voiceLabel": "Message vocal",
-    "fileLabel": "Fichier"
+    "fileLabel": "Fichier",
+    "edited": "(modifie)"
   },
   "ConversationInfoPanel": {
     "title": "Infos du groupe",

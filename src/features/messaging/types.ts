@@ -50,6 +50,7 @@ export interface Message {
   attachmentDurationSeconds: number | null;
   replyToMessageId: number | null;
   createdAt: string;
+  editedAt: string | null;
 }
 
 export interface DirectoryPerson {
