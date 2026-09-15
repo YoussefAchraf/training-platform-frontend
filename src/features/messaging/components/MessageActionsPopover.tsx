@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Forward, Languages, Reply } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -20,6 +20,16 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
   const translateMessage = useTranslateMessage();
   const translations = useMessagingUiStore((state) => state.translations);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [placement, setPlacement] = useState<'above' | 'below'>('above');
+
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < 0) {
+      setPlacement('below');
+    }
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -37,7 +47,11 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
   return (
     <div
       ref={containerRef}
-      className={cn(styles.actionsPopover, isOwn ? styles.actionsPopoverOwn : styles.actionsPopoverOther)}
+      className={cn(
+        styles.actionsPopover,
+        isOwn ? styles.actionsPopoverOwn : styles.actionsPopoverOther,
+        placement === 'below' && styles.actionsPopoverBelow,
+      )}
     >
       {canTranslate && (
         <button

@@ -307,7 +307,8 @@
 
 .actionsPopover {
   position: absolute;
-  top: -8px;
+  bottom: 100%;
+  margin-bottom: 8px;
   z-index: var(--z-popover);
   display: flex;
   flex-direction: column;
@@ -317,7 +318,13 @@
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
   box-shadow: var(--shadow-lg);
-  transform: translateY(-100%);
+}
+
+.actionsPopoverBelow {
+  bottom: auto;
+  top: 100%;
+  margin-bottom: 0;
+  margin-top: 8px;
 }
 
 .actionsPopoverOwn {
