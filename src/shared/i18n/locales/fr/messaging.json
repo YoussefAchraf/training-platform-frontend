@@ -3,7 +3,10 @@
     "title": "Messages",
     "tabConversations": "Discussions",
     "tabDirectory": "Personnes",
-    "selectConversationPrompt": "Selectionnez une conversation pour commencer a discuter"
+    "selectConversationPrompt": "Selectionnez une conversation pour commencer a discuter",
+    "createGroup": "Nouveau groupe",
+    "createGroupSubmit": "Creer le groupe",
+    "groupNamePlaceholder": "Nom du groupe"
   },
   "ConversationList": {
     "emptyState": "Aucune conversation pour le moment",
@@ -23,7 +26,22 @@
     "loading": "Chargement des messages...",
     "sendFailed": "Echec de l'envoi",
     "typingOne": "{{name}} est en train d'ecrire...",
-    "typingMany": "Plusieurs personnes sont en train d'ecrire..."
+    "typingMany": "Plusieurs personnes sont en train d'ecrire...",
+    "recordingLabel": "Enregistrement d'un message vocal...",
+    "emoji": "Ajouter un emoji",
+    "attachImage": "Joindre une photo",
+    "attachFile": "Joindre un fichier",
+    "recordVoice": "Enregistrer un message vocal",
+    "cancelRecording": "Annuler l'enregistrement",
+    "voiceUnsupported": "L'enregistrement vocal n'est pas pris en charge par ce navigateur",
+    "micPermissionDenied": "L'acces au microphone a ete refuse - verifiez les autorisations de votre navigateur",
+    "cancelReply": "Annuler la reponse",
+    "translate": "Traduire",
+    "translateAgain": "Traduire a nouveau",
+    "translated": "Traduit",
+    "reply": "Repondre",
+    "forward": "Transferer",
+    "forwardTo": "Transferer vers..."
   },
   "MessageBubble": {
     "sending": "Envoi...",

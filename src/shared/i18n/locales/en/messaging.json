@@ -3,7 +3,10 @@
     "title": "Messages",
     "tabConversations": "Chats",
     "tabDirectory": "People",
-    "selectConversationPrompt": "Select a conversation to start chatting"
+    "selectConversationPrompt": "Select a conversation to start chatting",
+    "createGroup": "New group",
+    "createGroupSubmit": "Create group",
+    "groupNamePlaceholder": "Group name"
   },
   "ConversationList": {
     "emptyState": "No conversations yet",
@@ -23,7 +26,22 @@
     "loading": "Loading messages...",
     "sendFailed": "Failed to send",
     "typingOne": "{{name}} is typing...",
-    "typingMany": "Several people are typing..."
+    "typingMany": "Several people are typing...",
+    "recordingLabel": "Recording voice message...",
+    "emoji": "Add emoji",
+    "attachImage": "Attach a photo",
+    "attachFile": "Attach a file",
+    "recordVoice": "Record a voice message",
+    "cancelRecording": "Cancel recording",
+    "voiceUnsupported": "Voice recording isn't supported on this browser",
+    "micPermissionDenied": "Microphone access was denied - check your browser permissions",
+    "cancelReply": "Cancel reply",
+    "translate": "Translate",
+    "translateAgain": "Translate again",
+    "translated": "Translated",
+    "reply": "Reply",
+    "forward": "Forward",
+    "forwardTo": "Forward to..."
   },
   "MessageBubble": {
     "sending": "Sending...",

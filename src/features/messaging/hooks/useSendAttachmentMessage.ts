@@ -2,45 +2,44 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { messagingApi } from '../api/messagingApi';
-import type { Message } from '../types';
+import type { MessageType } from '../types';
+import type { OptimisticMessage } from './useSendMessage';
 
-export interface OptimisticMessage extends Message {
-  clientId: string;
-  pending?: boolean;
-  failed?: boolean;
-  localPreviewUrl?: string;
-}
-
-interface SendMessageVariables {
-  body: string;
-  replyToMessageId?: number;
+interface SendAttachmentVariables {
+  type: MessageType;
+  file: File | Blob;
+  filename: string;
+  previewUrl?: string;
+  durationSeconds?: number;
+  sizeBytes?: number;
   clientId: string;
 }
 
-export function useSendMessage(conversationId: number) {
+export function useSendAttachmentMessage(conversationId: number) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: ({ body, replyToMessageId }: SendMessageVariables) =>
-      messagingApi.sendTextMessage(conversationId, body, replyToMessageId),
-    onMutate: ({ body, replyToMessageId, clientId }: SendMessageVariables) => {
+    mutationFn: ({ type, file, filename }: SendAttachmentVariables) =>
+      messagingApi.sendAttachmentMessage(conversationId, type, file, filename),
+    onMutate: ({ type, filename, previewUrl, durationSeconds, sizeBytes, clientId }: SendAttachmentVariables) => {
       const optimisticMessage: OptimisticMessage = {
         id: -Date.now(),
         clientId,
         conversationId,
         senderId: user?.id ?? null,
         senderName: user ? `${user.firstname} ${user.lastname}` : null,
-        type: 'text',
-        body,
+        type,
+        body: null,
         attachmentKey: null,
-        attachmentOriginalName: null,
+        attachmentOriginalName: filename,
         attachmentMime: null,
-        attachmentSizeBytes: null,
-        attachmentDurationSeconds: null,
-        replyToMessageId: replyToMessageId ?? null,
+        attachmentSizeBytes: sizeBytes ?? null,
+        attachmentDurationSeconds: durationSeconds ?? null,
+        replyToMessageId: null,
         createdAt: new Date().toISOString(),
         pending: true,
+        localPreviewUrl: previewUrl,
       };
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) => [
         ...(existing ?? []),
@@ -48,11 +47,11 @@ export function useSendMessage(conversationId: number) {
       ]);
       return { clientId };
     },
-    onSuccess: (message, _variables, context) => {
+    onSuccess: (message, variables, context) => {
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) =>
         (existing ?? [])
           .filter((item) => item.clientId !== context?.clientId && item.id !== message.id)
-          .concat({ ...message, clientId: context?.clientId ?? '' })
+          .concat({ ...message, clientId: context?.clientId ?? '', localPreviewUrl: variables.previewUrl })
           .sort((a, b) => a.id - b.id),
       );
     },

@@ -3,23 +3,8 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { cn } from '@/shared/utils/cn';
 import { useConversations } from '../hooks/useConversations';
 import { useMessagingUiStore } from '../messagingUiStore';
-import type { Conversation } from '../types';
+import { conversationDisplayName, initialsFromName } from '../utils';
 import styles from './ConversationsPane.module.css';
-
-function conversationDisplayName(conversation: Conversation, currentUserId: number | undefined): string {
-  if (conversation.type === 'group') return conversation.name || '';
-  const other = conversation.participants.find((participant) => participant.userId !== currentUserId);
-  return other ? `${other.firstname ?? ''} ${other.lastname ?? ''}`.trim() : '';
-}
-
-function initials(name: string): string {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('');
-}
 
 export function ConversationList() {
   const { t } = useTranslation(['messaging', 'common']);
@@ -64,7 +49,7 @@ export function ConversationList() {
               )}
               onClick={() => selectConversation(conversation.id)}
             >
-              <span className={styles.avatar}>{initials(name)}</span>
+              <span className={styles.avatar}>{initialsFromName(name)}</span>
               <span className={styles.conversationDetails}>
                 <span className={styles.conversationName}>{name}</span>
                 <span className={styles.conversationPreview}>{preview}</span>
