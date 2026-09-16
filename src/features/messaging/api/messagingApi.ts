@@ -1,5 +1,10 @@
 import { apiClient } from '@/shared/lib/apiClient';
-import type { Conversation, ConversationParticipant, DirectoryPerson, Message } from '../types';
+import type { Conversation, ConversationParticipant, DirectoryPerson, Message, MessageType } from '../types';
+
+function attachmentUrl(messageId: number): string {
+  const apiUrl = (import.meta.env.VITE_API_URL as string) || '';
+  return `${apiUrl}/messaging/attachments/${messageId}`;
+}
 
 export const messagingApi = {
   listDirectory: (search?: string) =>
@@ -39,4 +44,35 @@ export const messagingApi = {
         replyToMessageId,
       })
       .then((res) => res.data),
+
+  sendAttachmentMessage: (
+    conversationId: number,
+    type: MessageType,
+    file: File | Blob,
+    filename: string,
+    replyToMessageId?: number,
+  ) => {
+    const formData = new FormData();
+    formData.append('type', type);
+    formData.append('file', file, filename);
+    if (replyToMessageId) formData.append('replyToMessageId', String(replyToMessageId));
+
+    return apiClient
+      .post<Message>(`/messaging/conversations/${conversationId}/messages`, formData, {
+        headers: { 'Content-Type': undefined },
+      })
+      .then((res) => res.data);
+  },
+
+  translateMessage: (messageId: number, targetLanguage: string) =>
+    apiClient
+      .post<{ translatedText: string }>(`/messaging/messages/${messageId}/translate`, { targetLanguage })
+      .then((res) => res.data),
+
+  forwardMessage: (messageId: number, targetConversationId: number) =>
+    apiClient
+      .post<Message>(`/messaging/messages/${messageId}/forward`, { targetConversationId })
+      .then((res) => res.data),
+
+  attachmentUrl,
 };

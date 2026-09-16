@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { PageTransition } from '@/shared/components/PageTransition';
 import { OfflineBanner } from '@/shared/components/OfflineBanner';
 import { ChatWidget } from '@/features/chatbot/components/ChatWidget';
@@ -5,6 +6,7 @@ import { InstallBanner } from '@/pwa/components/InstallBanner';
 import { IOSInstallBanner } from '@/pwa/components/IOSInstallBanner';
 import { FirefoxInstallBanner } from '@/pwa/components/FirefoxInstallBanner';
 import { useIdlePrefetch } from '@/routes/useIdlePrefetch';
+import { paths } from '@/routes/paths';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
 import { MobileDrawer } from './components/MobileDrawer';
@@ -12,6 +14,8 @@ import styles from './AppLayout.module.css';
 
 export function AppLayout() {
   useIdlePrefetch();
+  const location = useLocation();
+  const isMessagingPage = location.pathname === paths.messages;
 
   return (
     <div className={styles.wrapper}>
@@ -26,7 +30,7 @@ export function AppLayout() {
           </div>
         </main>
       </div>
-      <ChatWidget />
+      {!isMessagingPage && <ChatWidget />}
       {}
       <InstallBanner />
       <IOSInstallBanner />
