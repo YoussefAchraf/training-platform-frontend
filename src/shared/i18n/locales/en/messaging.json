@@ -12,7 +12,13 @@
     "emptyState": "No conversations yet",
     "emptyStateHint": "Start one from the People tab",
     "you": "You",
-    "noMessagesYet": "No messages yet"
+    "noMessagesYet": "No messages yet",
+    "moreOptions": "More options",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "deleteConversation": "Delete conversation",
+    "deleteConversationConfirmTitle": "Delete this conversation?",
+    "deleteConversationConfirmDescription": "This only removes it from your own list. The other participant(s) keep their full history, and it reappears if they message you again."
   },
   "PeopleDirectory": {
     "searchPlaceholder": "Search by name or email",

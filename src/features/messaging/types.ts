@@ -11,6 +11,8 @@ export interface ConversationParticipant {
   lastReadAt: string | null;
   lastDeliveredMessageId: number | null;
   lastDeliveredAt: string | null;
+  hiddenAt: string | null;
+  mutedAt: string | null;
   firstname: string | null;
   lastname: string | null;
   email: string | null;
