@@ -56,7 +56,11 @@
     "delete": "Supprimer",
     "deleteForMe": "Supprimer pour moi",
     "deleteForEveryone": "Supprimer pour tout le monde",
-    "cancelDelete": "Annuler"
+    "cancelDelete": "Annuler",
+    "search": "Rechercher des messages",
+    "searchPlaceholder": "Rechercher dans cette conversation",
+    "cancelSearch": "Fermer la recherche",
+    "noSearchResults": "Aucun message correspondant"
   },
   "MessageBubble": {
     "sending": "Envoi...",
@@ -75,7 +79,12 @@
     "owner": "Proprietaire",
     "removeMember": "Retirer",
     "removeMemberConfirmTitle": "Retirer ce membre ?",
-    "removeMemberConfirmDescription": "{{name}} ne pourra plus voir les messages de ce groupe."
+    "removeMemberConfirmDescription": "{{name}} ne pourra plus voir les messages de ce groupe.",
+    "tabMembers": "Membres",
+    "tabMedia": "Medias",
+    "tabFiles": "Fichiers",
+    "tabLinks": "Liens",
+    "emptyMedia": "Rien ici pour le moment"
   },
   "MessageInfoPopover": {
     "title": "Infos du message",

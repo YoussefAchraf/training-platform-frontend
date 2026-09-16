@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { ArrowLeft, Info, Search, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIsDesktop } from '@/shared/hooks/useMediaQuery';
 import { cn } from '@/shared/utils/cn';
@@ -9,6 +9,7 @@ import { listItem, staggerContainer } from '@/shared/motion/variants';
 import { useConversations } from '../hooks/useConversations';
 import { useMessages } from '../hooks/useMessages';
 import { useMarkConversationRead } from '../hooks/useMarkConversationRead';
+import { useMessageSearch } from '../hooks/useMessageSearch';
 import { useTypingUsers, useRecordingUsers } from '../messagingRealtimeStore';
 import { useMessagingUiStore } from '../messagingUiStore';
 import { conversationDisplayName } from '../utils';
@@ -19,6 +20,12 @@ import { MessageComposer } from './MessageComposer';
 import { ForwardMessageModal } from './ForwardMessageModal';
 import { ConversationInfoPanel } from './ConversationInfoPanel';
 import styles from './MessageThread.module.css';
+
+function formatSearchTime(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
 
 interface MessageThreadProps {
   conversationId: number;
@@ -43,6 +50,10 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   const setForwardMessageId = useMessagingUiStore((state) => state.setForwardMessageId);
   const conversationInfoOpen = useMessagingUiStore((state) => state.conversationInfoOpen);
   const setConversationInfoOpen = useMessagingUiStore((state) => state.setConversationInfoOpen);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [highlightedMessageId, setHighlightedMessageId] = useState<number | null>(null);
+  const { data: searchResults, isFetching: searchFetching } = useMessageSearch(conversationId, searchTerm);
 
   const listRef = useRef<HTMLDivElement>(null);
   const lastMessageId = messages && messages.length > 0 ? messages[messages.length - 1].id : undefined;
@@ -81,6 +92,22 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
     setEditTarget(conversationId, { messageId: message.id, body: message.body ?? '' });
   };
 
+  const handleSearchResultClick = (messageId: number) => {
+    const element = document.getElementById(`message-${messageId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setHighlightedMessageId(messageId);
+      window.setTimeout(() => setHighlightedMessageId(null), 2000);
+      setSearchOpen(false);
+      setSearchTerm('');
+    }
+  };
+
+  const handleCloseSearch = () => {
+    setSearchOpen(false);
+    setSearchTerm('');
+  };
+
   return (
     <div className={styles.thread}>
       <div className={styles.header}>
@@ -95,7 +122,15 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
           </button>
         )}
         <span className={styles.headerName}>{name}</span>
-        {conversation?.type === 'group' && (
+        <button
+          type="button"
+          className={styles.infoButton}
+          onClick={() => setSearchOpen((open) => !open)}
+          aria-label={t('MessageThread.search')}
+        >
+          <Search size={18} />
+        </button>
+        {conversation && (
           <button
             type="button"
             className={styles.infoButton}
@@ -107,6 +142,46 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
         )}
       </div>
 
+      {searchOpen && (
+        <div className={styles.searchBar}>
+          <div className={styles.searchInputRow}>
+            <Search size={16} className={styles.searchIcon} />
+            <input
+              type="text"
+              className={styles.searchInputField}
+              placeholder={t('MessageThread.searchPlaceholder')}
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              autoFocus
+            />
+            <button type="button" className={styles.searchCloseButton} onClick={handleCloseSearch} aria-label={t('MessageThread.cancelSearch')}>
+              <X size={16} />
+            </button>
+          </div>
+          {searchTerm.trim() && (
+            <div className={styles.searchResults}>
+              {searchFetching && <p className={styles.statusText}>{t('PeopleDirectory.loading')}</p>}
+              {!searchFetching && (!searchResults || searchResults.length === 0) && (
+                <p className={styles.statusText}>{t('MessageThread.noSearchResults')}</p>
+              )}
+              {!searchFetching &&
+                searchResults?.map((message) => (
+                  <button
+                    key={message.id}
+                    type="button"
+                    className={styles.searchResultItem}
+                    onClick={() => handleSearchResultClick(message.id)}
+                  >
+                    <span className={styles.searchResultSender}>{message.senderName ?? ''}</span>
+                    <span className={styles.searchResultBody}>{message.body}</span>
+                    <span className={styles.searchResultTime}>{formatSearchTime(message.createdAt)}</span>
+                  </button>
+                ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className={styles.messages} ref={listRef}>
         {isLoading && <p className={styles.statusText}>{t('MessageThread.loading')}</p>}
         {!isLoading && (!messages || messages.length === 0) && (
@@ -114,7 +189,12 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
         )}
         <motion.div variants={staggerContainer(0.03)} initial="hidden" animate="show">
           {messages?.map((message) => (
-            <motion.div key={message.id < 0 ? `pending-${message.id}` : message.id} variants={listItem}>
+            <motion.div
+              key={message.id < 0 ? `pending-${message.id}` : message.id}
+              id={`message-${message.id}`}
+              variants={listItem}
+              className={cn(highlightedMessageId === message.id && styles.messageHighlighted)}
+            >
               <MessageBubble
                 message={message}
                 isOwn={message.senderId === user?.id}

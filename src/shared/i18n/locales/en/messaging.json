@@ -56,7 +56,11 @@
     "delete": "Delete",
     "deleteForMe": "Delete for me",
     "deleteForEveryone": "Delete for everyone",
-    "cancelDelete": "Cancel"
+    "cancelDelete": "Cancel",
+    "search": "Search messages",
+    "searchPlaceholder": "Search in this conversation",
+    "cancelSearch": "Close search",
+    "noSearchResults": "No matching messages"
   },
   "MessageBubble": {
     "sending": "Sending...",
@@ -75,7 +79,12 @@
     "owner": "Owner",
     "removeMember": "Remove",
     "removeMemberConfirmTitle": "Remove member?",
-    "removeMemberConfirmDescription": "{{name}} will no longer be able to see this group's messages."
+    "removeMemberConfirmDescription": "{{name}} will no longer be able to see this group's messages.",
+    "tabMembers": "Members",
+    "tabMedia": "Media",
+    "tabFiles": "Files",
+    "tabLinks": "Links",
+    "emptyMedia": "Nothing here yet"
   },
   "MessageInfoPopover": {
     "title": "Message info",
