@@ -73,7 +73,9 @@
     "deletedForEveryone": "Ce message a ete supprime",
     "uploadingPercent": "Envoi... {{percent}}%",
     "uploadPaused": "En attente de connexion...",
-    "uploadCompleting": "Presque termine..."
+    "uploadCompleting": "Presque termine...",
+    "playVoice": "Lire le message vocal",
+    "pauseVoice": "Mettre en pause le message vocal"
   },
   "ConversationInfoPanel": {
     "title": "Infos du groupe",

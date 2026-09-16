@@ -425,10 +425,65 @@
   cursor: zoom-in;
 }
 
-.messageAudio {
-  max-width: 240px;
-  width: 100%;
-  height: 40px;
+.voicePlayer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 220px;
+  max-width: 100%;
+  padding: 2px 0;
+}
+
+.voicePlayerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: inherit;
+}
+
+.voicePlayerOwn .voicePlayerButton {
+  background-color: rgb(255 255 255 / 25%);
+}
+
+.voicePlayerOther .voicePlayerButton {
+  background-color: rgb(0 0 0 / 8%);
+}
+
+.voiceWaveform {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.voiceWaveformBar {
+  flex: 1 0 2px;
+  max-width: 3px;
+  min-height: 3px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+  opacity: 0.35;
+  transition: opacity 100ms ease-out;
+}
+
+.voiceWaveformBarPlayed {
+  opacity: 1;
+}
+
+.voiceDuration {
+  flex-shrink: 0;
+  min-width: 34px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+  text-align: right;
 }
 
 .messageFile {
@@ -660,9 +715,28 @@
 .recordingDot {
   width: 10px;
   height: 10px;
+  flex-shrink: 0;
   border-radius: var(--radius-full);
   background-color: var(--color-danger);
   animation: messagingRecordingPulse 1.2s ease-in-out infinite;
+}
+
+.recordingWaveform {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  min-width: 0;
+}
+
+.recordingWaveformBar {
+  flex: 1 0 2px;
+  max-width: 3px;
+  min-height: 2px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-danger);
+  transition: height 90ms ease-out;
 }
 
 @keyframes messagingRecordingPulse {

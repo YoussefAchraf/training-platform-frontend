@@ -73,7 +73,9 @@
     "deletedForEveryone": "This message was deleted",
     "uploadingPercent": "Sending... {{percent}}%",
     "uploadPaused": "Waiting for connection...",
-    "uploadCompleting": "Almost done..."
+    "uploadCompleting": "Almost done...",
+    "playVoice": "Play voice message",
+    "pauseVoice": "Pause voice message"
   },
   "ConversationInfoPanel": {
     "title": "Group info",
