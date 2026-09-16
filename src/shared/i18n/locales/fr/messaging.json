@@ -12,7 +12,13 @@
     "emptyState": "Aucune conversation pour le moment",
     "emptyStateHint": "Demarrez-en une depuis l'onglet Personnes",
     "you": "Vous",
-    "noMessagesYet": "Aucun message pour le moment"
+    "noMessagesYet": "Aucun message pour le moment",
+    "moreOptions": "Plus d'options",
+    "mute": "Muet",
+    "unmute": "Reactiver le son",
+    "deleteConversation": "Supprimer la conversation",
+    "deleteConversationConfirmTitle": "Supprimer cette conversation ?",
+    "deleteConversationConfirmDescription": "Cela ne la retire que de votre propre liste. Les autres participants conservent tout leur historique, et elle reapparait s'ils vous ecrivent a nouveau."
   },
   "PeopleDirectory": {
     "searchPlaceholder": "Rechercher par nom ou email",

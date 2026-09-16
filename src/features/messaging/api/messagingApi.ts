@@ -80,5 +80,11 @@ export const messagingApi = {
   deleteMessage: (messageId: number, scope: 'me' | 'everyone') =>
     apiClient.delete(`/messaging/messages/${messageId}`, { data: { scope } }).then((res) => res.data),
 
+  hideConversation: (conversationId: number) =>
+    apiClient.post(`/messaging/conversations/${conversationId}/hide`).then((res) => res.data),
+
+  setConversationMuted: (conversationId: number, muted: boolean) =>
+    apiClient.post(`/messaging/conversations/${conversationId}/mute`, { muted }).then((res) => res.data),
+
   attachmentUrl,
 };

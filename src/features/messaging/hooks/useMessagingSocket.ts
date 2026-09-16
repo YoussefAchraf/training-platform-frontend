@@ -4,6 +4,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { connectMessagingSocket, disconnectMessagingSocket, getMessagingSocket } from '../api/socket';
 import { useMessagingRealtimeStore } from '../messagingRealtimeStore';
+import { useMessagingUiStore } from '../messagingUiStore';
 import { useCanUseMessaging } from './useConversations';
 import type { Conversation, Message } from '../types';
 
@@ -32,12 +33,23 @@ interface MessageDeletedPayload {
   scope: 'me' | 'everyone';
 }
 
+interface ConversationHiddenPayload {
+  conversationId: number;
+}
+
+interface ConversationMutedPayload {
+  conversationId: number;
+  muted: boolean;
+}
+
 export function useMessagingSocket(): void {
   const { user, isAuthenticated } = useAuth();
   const canUseMessaging = useCanUseMessaging();
   const queryClient = useQueryClient();
   const setTyping = useMessagingRealtimeStore((state) => state.setTyping);
   const setRecording = useMessagingRealtimeStore((state) => state.setRecording);
+  const selectedConversationId = useMessagingUiStore((state) => state.selectedConversationId);
+  const selectConversation = useMessagingUiStore((state) => state.selectConversation);
 
   const eligible = isAuthenticated && canUseMessaging;
 
@@ -61,22 +73,24 @@ export function useMessagingSocket(): void {
         if (!existing) return existing;
         const isMine = message.senderId === currentUserId;
         return existing
-          .map((conversation) =>
-            conversation.id === message.conversationId
-              ? {
-                  ...conversation,
-                  lastMessage: {
-                    id: message.id,
-                    type: message.type,
-                    body: message.body,
-                    senderId: message.senderId,
-                    createdAt: message.createdAt,
-                    deletedAt: null,
-                  },
-                  unreadCount: isMine ? conversation.unreadCount : conversation.unreadCount + 1,
-                }
-              : conversation,
-          )
+          .map((conversation) => {
+            if (conversation.id !== message.conversationId) return conversation;
+            const isMuted = Boolean(
+              conversation.participants.find((participant) => participant.userId === currentUserId)?.mutedAt,
+            );
+            return {
+              ...conversation,
+              lastMessage: {
+                id: message.id,
+                type: message.type,
+                body: message.body,
+                senderId: message.senderId,
+                createdAt: message.createdAt,
+                deletedAt: null,
+              },
+              unreadCount: isMine || isMuted ? conversation.unreadCount : conversation.unreadCount + 1,
+            };
+          })
           .sort((a, b) => (b.lastMessage?.id ?? 0) - (a.lastMessage?.id ?? 0));
       });
 
@@ -168,6 +182,32 @@ export function useMessagingSocket(): void {
       );
     }
 
+    function handleConversationHidden({ conversationId }: ConversationHiddenPayload) {
+      queryClient.setQueryData<Conversation[]>(queryKeys.messaging.conversations(), (existing) =>
+        existing?.filter((conversation) => conversation.id !== conversationId),
+      );
+      if (selectedConversationId === conversationId) {
+        selectConversation(null);
+      }
+    }
+
+    function handleConversationMuted({ conversationId, muted }: ConversationMutedPayload) {
+      queryClient.setQueryData<Conversation[]>(queryKeys.messaging.conversations(), (existing) =>
+        existing?.map((conversation) =>
+          conversation.id === conversationId
+            ? {
+                ...conversation,
+                participants: conversation.participants.map((participant) =>
+                  participant.userId === currentUserId
+                    ? { ...participant, mutedAt: muted ? new Date().toISOString() : null }
+                    : participant,
+                ),
+              }
+            : conversation,
+        ),
+      );
+    }
+
     function handleTypingStart({ conversationId, userId }: TypingOrRecordingPayload) {
       setTyping(conversationId, userId, true);
     }
@@ -192,6 +232,8 @@ export function useMessagingSocket(): void {
     socket.on('participant:removed', handleConversationsChanged);
     socket.on('conversation:read', handleConversationRead);
     socket.on('conversation:delivered', handleConversationDelivered);
+    socket.on('conversation:hidden', handleConversationHidden);
+    socket.on('conversation:muted', handleConversationMuted);
     socket.on('typing:start', handleTypingStart);
     socket.on('typing:stop', handleTypingStop);
     socket.on('recording:start', handleRecordingStart);
@@ -206,10 +248,12 @@ export function useMessagingSocket(): void {
       socket.off('participant:removed', handleConversationsChanged);
       socket.off('conversation:read', handleConversationRead);
       socket.off('conversation:delivered', handleConversationDelivered);
+      socket.off('conversation:hidden', handleConversationHidden);
+      socket.off('conversation:muted', handleConversationMuted);
       socket.off('typing:start', handleTypingStart);
       socket.off('typing:stop', handleTypingStop);
       socket.off('recording:start', handleRecordingStart);
       socket.off('recording:stop', handleRecordingStop);
     };
-  }, [eligible, user, queryClient, setTyping, setRecording]);
+  }, [eligible, user, queryClient, setTyping, setRecording, selectedConversationId, selectConversation]);
 }
