@@ -41,7 +41,8 @@
     "translated": "Traduit",
     "reply": "Repondre",
     "forward": "Transferer",
-    "forwardTo": "Transferer vers..."
+    "forwardTo": "Transferer vers...",
+    "groupInfo": "Infos du groupe"
   },
   "MessageBubble": {
     "sending": "Envoi...",
@@ -49,5 +50,15 @@
     "imageLabel": "Photo",
     "voiceLabel": "Message vocal",
     "fileLabel": "Fichier"
+  },
+  "ConversationInfoPanel": {
+    "title": "Infos du groupe",
+    "membersCount": "{{count}} membres",
+    "addMember": "Ajouter",
+    "backToMembers": "Retour aux membres",
+    "owner": "Proprietaire",
+    "removeMember": "Retirer",
+    "removeMemberConfirmTitle": "Retirer ce membre ?",
+    "removeMemberConfirmDescription": "{{name}} ne pourra plus voir les messages de ce groupe."
   }
 }

@@ -17,6 +17,7 @@ interface MessagingUiState {
   replyTargetByConversation: Record<number, ReplyTarget | null>;
   forwardMessageId: number | null;
   groupModalOpen: boolean;
+  conversationInfoOpen: boolean;
   selectConversation: (conversationId: number | null) => void;
   setActiveTab: (tab: MessagingTab) => void;
   setDraft: (conversationId: number, text: string) => void;
@@ -26,6 +27,7 @@ interface MessagingUiState {
   setReplyTarget: (conversationId: number, target: ReplyTarget | null) => void;
   setForwardMessageId: (messageId: number | null) => void;
   setGroupModalOpen: (open: boolean) => void;
+  setConversationInfoOpen: (open: boolean) => void;
 }
 
 export const useMessagingUiStore = create<MessagingUiState>()((set) => ({
@@ -37,6 +39,7 @@ export const useMessagingUiStore = create<MessagingUiState>()((set) => ({
   replyTargetByConversation: {},
   forwardMessageId: null,
   groupModalOpen: false,
+  conversationInfoOpen: false,
   selectConversation: (conversationId) => set({ selectedConversationId: conversationId }),
   setActiveTab: (tab) => set({ activeTab: tab }),
   setDraft: (conversationId, text) =>
@@ -55,4 +58,5 @@ export const useMessagingUiStore = create<MessagingUiState>()((set) => ({
     })),
   setForwardMessageId: (messageId) => set({ forwardMessageId: messageId }),
   setGroupModalOpen: (open) => set({ groupModalOpen: open }),
+  setConversationInfoOpen: (open) => set({ conversationInfoOpen: open }),
 }));
