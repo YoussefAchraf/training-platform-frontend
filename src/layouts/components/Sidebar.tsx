@@ -5,6 +5,7 @@ import { GraduationCap } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
+import { useUnreadMessagingCount } from '@/features/messaging/hooks/useUnreadMessagingCount';
 import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { useIsSidebarCollapsed } from '@/shared/hooks/useMediaQuery';
@@ -14,6 +15,7 @@ import { IconRailNav } from '@/pwa/components/IconRailNav';
 import { TourButton } from '@/features/tour/TourButton';
 import { paths } from '@/routes/paths';
 import { groupedNavItems } from './navItems';
+import { navBadgeLabelKey } from './navBadgeLabelKey';
 import { UserMenu } from './UserMenu';
 import styles from './Sidebar.module.css';
 
@@ -37,10 +39,12 @@ export function Sidebar() {
   
   
   const { newAssignments } = useNewAssignments({ enabled: isInstructor });
+  const unreadMessagingCount = useUnreadMessagingCount();
 
   const navBadgeCounts: Record<string, number> = {
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
+    [paths.messages]: unreadMessagingCount,
   };
   const navAttentionDots = useNavAttentionDots();
 
@@ -90,10 +94,7 @@ export function Sidebar() {
                       {navBadgeCounts[item.to] > 0 && (
                         <span
                           className={styles.navBadge}
-                          aria-label={t(
-                            item.to === paths.pendingApprovals ? 'Nav.pendingApprovalsBadge' : 'Nav.newAssignmentsBadge',
-                            { count: navBadgeCounts[item.to] },
-                          )}
+                          aria-label={t(navBadgeLabelKey(item.to), { count: navBadgeCounts[item.to] })}
                         >
                           {navBadgeCounts[item.to]}
                         </span>

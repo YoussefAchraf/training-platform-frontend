@@ -5,9 +5,11 @@ import { cn } from '@/shared/utils/cn';
 import { usePrefetchRoute } from '@/routes/routeModules';
 import { usePendingUsers } from '@/features/auth/hooks/usePendingUsers';
 import { useNewAssignments } from '@/features/calendar/hooks/useNewAssignments';
+import { useUnreadMessagingCount } from '@/features/messaging/hooks/useUnreadMessagingCount';
 import { useNavAttentionDots } from '@/shared/hooks/useNavAttentionDots';
 import { AttentionDot } from '@/shared/components/AttentionDot';
 import { groupedNavItems } from '@/layouts/components/navItems';
+import { navBadgeLabelKey } from '@/layouts/components/navBadgeLabelKey';
 import type { NavItem } from '@/layouts/components/navItems';
 import { paths } from '@/routes/paths';
 import type { Role } from '@/shared/types/domain';
@@ -36,10 +38,12 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
   const canSeePendingApprovals = role === 'Manager' || role === 'SuperAdmin';
   const pendingUsersQuery = usePendingUsers({ enabled: canSeePendingApprovals });
   const { newAssignments } = useNewAssignments({ enabled: role === 'Instructor' });
+  const unreadMessagingCount = useUnreadMessagingCount();
 
   const navBadgeCounts: Record<string, number> = {
     [paths.pendingApprovals]: canSeePendingApprovals ? (pendingUsersQuery.data?.length ?? 0) : 0,
     [paths.calendar]: newAssignments.length,
+    [paths.messages]: unreadMessagingCount,
   };
   const navAttentionDots = useNavAttentionDots();
 
@@ -80,7 +84,7 @@ export function IconRailNav({ role, layoutId, className, extraItems }: IconRailN
                   <span className={styles.srLabel}>
                     {t(item.labelKey)}
                     {navBadgeCounts[item.to] > 0 &&
-                      `, ${t(item.to === paths.pendingApprovals ? 'Nav.pendingApprovalsBadge' : 'Nav.newAssignmentsBadge', { count: navBadgeCounts[item.to] })}`}
+                      `, ${t(navBadgeLabelKey(item.to), { count: navBadgeCounts[item.to] })}`}
                     {navAttentionDots[item.to] && `, ${t('Nav.attentionBadge')}`}
                   </span>
                 </>

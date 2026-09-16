@@ -1,5 +1,7 @@
 import { useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
 import { useAutoEnableNotifications } from '@/features/push/hooks/useAutoEnableNotifications';
+import { useMessagingSocket } from '@/features/messaging/hooks/useMessagingSocket';
+import { useOutboxSync } from '@/features/messaging/hooks/useOutboxSync';
 import { FeatureAnnouncementPopup } from '@/features/announcements/components/FeatureAnnouncementPopup';
 import { IOSNotificationsNudge } from '@/pwa/components/IOSNotificationsNudge';
 import { AppLayout } from '@/layouts/AppLayout';
@@ -22,6 +24,8 @@ import { PwaDesktopLayout } from '@/pwa/layouts/PwaDesktopLayout';
 export function ShellRouter() {
   const deviceClass = useStandaloneDeviceClass();
   useAutoEnableNotifications();
+  useMessagingSocket();
+  useOutboxSync();
 
   let layout;
   switch (deviceClass) {

@@ -64,4 +64,14 @@ export const queryKeys = {
     list: () => [...queryKeys.announcements.all, 'list'] as const,
     mine: () => [...queryKeys.announcements.all, 'mine'] as const,
   },
+  messaging: {
+    all: ['messaging'] as const,
+    conversations: () => [...queryKeys.messaging.all, 'conversations'] as const,
+    messages: (conversationId: number) => [...queryKeys.messaging.all, 'messages', conversationId] as const,
+    directory: (search?: string) => [...queryKeys.messaging.all, 'directory', search ?? ''] as const,
+    media: (conversationId: number, filter: 'media' | 'files' | 'links') =>
+      [...queryKeys.messaging.all, 'media', conversationId, filter] as const,
+    messageSearch: (conversationId: number, term: string) =>
+      [...queryKeys.messaging.all, 'messageSearch', conversationId, term] as const,
+  },
 } as const;

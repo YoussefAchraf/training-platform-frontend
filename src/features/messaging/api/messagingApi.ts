@@ -1,0 +1,109 @@
+import type { AxiosProgressEvent } from 'axios';
+import { apiClient } from '@/shared/lib/apiClient';
+import type { Conversation, ConversationParticipant, DirectoryPerson, Message, MessageType } from '../types';
+
+function attachmentUrl(messageId: number): string {
+  const apiUrl = (import.meta.env.VITE_API_URL as string) || '';
+  return `${apiUrl}/messaging/attachments/${messageId}`;
+}
+
+export const messagingApi = {
+  listDirectory: (search?: string) =>
+    apiClient
+      .get<DirectoryPerson[]>('/messaging/directory', { params: search ? { search } : undefined })
+      .then((res) => res.data),
+
+  listConversations: () => apiClient.get<Conversation[]>('/messaging/conversations').then((res) => res.data),
+
+  createDirectConversation: (targetUserId: number) =>
+    apiClient.post<Conversation>('/messaging/conversations/direct', { targetUserId }).then((res) => res.data),
+
+  createGroupConversation: (name: string, memberUserIds: number[]) =>
+    apiClient.post<Conversation>('/messaging/conversations/group', { name, memberUserIds }).then((res) => res.data),
+
+  addParticipant: (conversationId: number, userId: number) =>
+    apiClient
+      .post<ConversationParticipant>(`/messaging/conversations/${conversationId}/participants`, { userId })
+      .then((res) => res.data),
+
+  removeParticipant: (conversationId: number, userId: number) =>
+    apiClient.delete(`/messaging/conversations/${conversationId}/participants/${userId}`),
+
+  markRead: (conversationId: number, messageId: number) =>
+    apiClient
+      .post<ConversationParticipant>(`/messaging/conversations/${conversationId}/read`, { messageId })
+      .then((res) => res.data),
+
+  listMessages: (conversationId: number, params?: { cursor?: number; limit?: number; search?: string }) =>
+    apiClient.get<Message[]>(`/messaging/conversations/${conversationId}/messages`, { params }).then((res) => res.data),
+
+  listConversationMedia: (
+    conversationId: number,
+    filter: 'media' | 'files' | 'links',
+    params?: { cursor?: number; limit?: number },
+  ) =>
+    apiClient
+      .get<Message[]>(`/messaging/conversations/${conversationId}/media`, { params: { filter, ...params } })
+      .then((res) => res.data),
+
+  sendTextMessage: (conversationId: number, body: string, replyToMessageId?: number) =>
+    apiClient
+      .post<Message>(`/messaging/conversations/${conversationId}/messages`, {
+        type: 'text',
+        body,
+        replyToMessageId,
+      })
+      .then((res) => res.data),
+
+  translateMessage: (messageId: number, targetLanguage: string) =>
+    apiClient
+      .post<{ translatedText: string }>(`/messaging/messages/${messageId}/translate`, { targetLanguage })
+      .then((res) => res.data),
+
+  forwardMessage: (messageId: number, targetConversationId: number) =>
+    apiClient
+      .post<Message>(`/messaging/messages/${messageId}/forward`, { targetConversationId })
+      .then((res) => res.data),
+
+  editMessage: (messageId: number, body: string) =>
+    apiClient.patch<Message>(`/messaging/messages/${messageId}`, { body }).then((res) => res.data),
+
+  deleteMessage: (messageId: number, scope: 'me' | 'everyone') =>
+    apiClient.delete(`/messaging/messages/${messageId}`, { data: { scope } }).then((res) => res.data),
+
+  hideConversation: (conversationId: number) =>
+    apiClient.post(`/messaging/conversations/${conversationId}/hide`).then((res) => res.data),
+
+  setConversationMuted: (conversationId: number, muted: boolean) =>
+    apiClient.post(`/messaging/conversations/${conversationId}/mute`, { muted }).then((res) => res.data),
+
+  initiateUpload: (conversationId: number, type: MessageType, originalName: string, sizeBytes: number) =>
+    apiClient
+      .post<{ uploadId: string; chunkSize: number; chunkCount: number }>(
+        `/messaging/conversations/${conversationId}/uploads`,
+        { type, originalName, sizeBytes },
+      )
+      .then((res) => res.data),
+
+  uploadChunk: (uploadId: string, index: number, chunk: Blob, onUploadProgress?: (event: AxiosProgressEvent) => void) =>
+    apiClient
+      .put<{ receivedIndexes: number[]; chunkCount: number }>(`/messaging/uploads/${uploadId}/chunks/${index}`, chunk, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+        onUploadProgress,
+      })
+      .then((res) => res.data),
+
+  completeUpload: (uploadId: string, replyToMessageId?: number) =>
+    apiClient
+      .post<Message>(`/messaging/uploads/${uploadId}/complete`, replyToMessageId ? { replyToMessageId } : {})
+      .then((res) => res.data),
+
+  abortUpload: (uploadId: string) => apiClient.delete(`/messaging/uploads/${uploadId}`).then((res) => res.data),
+
+  uploadStatus: (uploadId: string) =>
+    apiClient
+      .get<{ receivedIndexes: number[]; chunkCount: number; chunkSize: number }>(`/messaging/uploads/${uploadId}/status`)
+      .then((res) => res.data),
+
+  attachmentUrl,
+};

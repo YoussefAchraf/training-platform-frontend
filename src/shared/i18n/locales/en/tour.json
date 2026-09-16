@@ -146,5 +146,9 @@
   "feedback": {
     "header": { "title": "Send feedback", "text": "Report a bug, suggest an improvement, or send a message straight to the developer." },
     "form": { "title": "Your message", "text": "Pick a category and describe what's on your mind, then send it." }
+  },
+  "messaging": {
+    "header": { "title": "Messages", "text": "Chat with Managers and Instructors in real time, with typing indicators and instant delivery." },
+    "list": { "title": "Conversations & people", "text": "Switch between your existing chats and the People tab to start a new conversation." }
   }
 }

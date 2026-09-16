@@ -234,6 +234,11 @@ export default defineConfig(({ mode }) => {
           target: chatbotUpstream,
           changeOrigin: true,
         },
+        '/socket.io': {
+          target: backendUpstream,
+          changeOrigin: true,
+          ws: true,
+        },
       },
     },
     preview: {
@@ -248,6 +253,11 @@ export default defineConfig(({ mode }) => {
         '/webhook/chatbot/message': {
           target: chatbotUpstream,
           changeOrigin: true,
+        },
+        '/socket.io': {
+          target: backendUpstream,
+          changeOrigin: true,
+          ws: true,
         },
       },
     },

@@ -10,6 +10,7 @@ import { useSessions } from '@/features/sessions/hooks/useSessions';
 import { useSessionLookups } from '@/features/sessions/hooks/useSessionLookups';
 import { useMyInstructorProfile } from '@/features/instructors/hooks/useInstructors';
 import { useAppBadge } from '@/pwa/hooks/useAppBadge';
+import { useUnreadMessagingCount } from '@/features/messaging/hooks/useUnreadMessagingCount';
 import { getCertificationExpiryStatus } from '@/shared/utils/certificationExpiry';
 import { SessionTimeline } from '@/features/dashboard/components/SessionTimeline';
 import { HeroStatCard } from '@/features/dashboard/components/HeroStatCard';
@@ -36,7 +37,8 @@ export function PwaInstructorDashboard() {
   const badgeExpiringCertsCount = (profileQuery.data?.skills ?? []).filter(
     (skill) => getCertificationExpiryStatus(skill.certificateExpiresAt) !== 'none',
   ).length;
-  useAppBadge(badgeUpcomingCount + badgeExpiringCertsCount);
+  const unreadMessagingCount = useUnreadMessagingCount();
+  useAppBadge(badgeUpcomingCount + badgeExpiringCertsCount + unreadMessagingCount);
 
   if (sessionsQuery.isPending) return <Spinner />;
   if (sessionsQuery.isError) {
