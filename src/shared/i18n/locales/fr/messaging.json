@@ -69,7 +69,10 @@
     "voiceLabel": "Message vocal",
     "fileLabel": "Fichier",
     "edited": "(modifie)",
-    "deletedForEveryone": "Ce message a ete supprime"
+    "deletedForEveryone": "Ce message a ete supprime",
+    "uploadingPercent": "Envoi... {{percent}}%",
+    "uploadPaused": "En attente de connexion...",
+    "uploadCompleting": "Presque termine..."
   },
   "ConversationInfoPanel": {
     "title": "Infos du groupe",

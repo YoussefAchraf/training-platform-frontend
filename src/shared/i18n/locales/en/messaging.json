@@ -69,7 +69,10 @@
     "voiceLabel": "Voice message",
     "fileLabel": "File",
     "edited": "(edited)",
-    "deletedForEveryone": "This message was deleted"
+    "deletedForEveryone": "This message was deleted",
+    "uploadingPercent": "Sending... {{percent}}%",
+    "uploadPaused": "Waiting for connection...",
+    "uploadCompleting": "Almost done..."
   },
   "ConversationInfoPanel": {
     "title": "Group info",

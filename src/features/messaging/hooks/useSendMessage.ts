@@ -3,12 +3,15 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { messagingApi } from '../api/messagingApi';
 import type { Message } from '../types';
+import type { ChunkedUploadStatus } from '../upload/chunkedUploader';
 
 export interface OptimisticMessage extends Message {
   clientId: string;
   pending?: boolean;
   failed?: boolean;
   localPreviewUrl?: string;
+  uploadProgress?: number;
+  uploadStatus?: ChunkedUploadStatus;
 }
 
 interface SendMessageVariables {

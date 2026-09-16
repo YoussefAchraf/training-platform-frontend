@@ -43,6 +43,9 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
   const { t } = useTranslation('messaging');
   const pending = 'pending' in message && message.pending;
   const failed = 'failed' in message && message.failed;
+  const uploadProgress = 'uploadProgress' in message ? message.uploadProgress : undefined;
+  const uploadStatus = 'uploadStatus' in message ? message.uploadStatus : undefined;
+  const showUploadBar = pending && message.type !== 'text' && uploadProgress !== undefined;
   const openActionsMessageId = useMessagingUiStore((state) => state.openActionsMessageId);
   const setOpenActionsMessageId = useMessagingUiStore((state) => state.setOpenActionsMessageId);
   const translatedText = useMessagingUiStore((state) => state.translations[message.id]);
@@ -140,6 +143,21 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
                 )}
               </span>
             </a>
+          )}
+
+          {!isDeleted && showUploadBar && (
+            <div className={styles.uploadProgress}>
+              <div className={styles.uploadProgressTrack}>
+                <div className={styles.uploadProgressFill} style={{ width: `${Math.round((uploadProgress ?? 0) * 100)}%` }} />
+              </div>
+              <span className={styles.uploadProgressLabel}>
+                {uploadStatus === 'paused'
+                  ? t('MessageBubble.uploadPaused')
+                  : uploadStatus === 'completing'
+                    ? t('MessageBubble.uploadCompleting')
+                    : t('MessageBubble.uploadingPercent', { percent: Math.round((uploadProgress ?? 0) * 100) })}
+              </span>
+            </div>
           )}
 
           {!isDeleted && translatedText && (

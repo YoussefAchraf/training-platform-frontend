@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
-import { messagingApi } from '../api/messagingApi';
+import { uploadFileInChunks } from '../upload/chunkedUploader';
 import type { MessageType } from '../types';
 import type { OptimisticMessage } from './useSendMessage';
 
@@ -13,15 +13,28 @@ interface SendAttachmentVariables {
   durationSeconds?: number;
   sizeBytes?: number;
   clientId: string;
+  replyToMessageId?: number;
 }
 
 export function useSendAttachmentMessage(conversationId: number) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
+  function patchOptimisticMessage(clientId: string, patch: Partial<OptimisticMessage>) {
+    queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) =>
+      existing?.map((item) => (item.clientId === clientId ? { ...item, ...patch } : item)),
+    );
+  }
+
   return useMutation({
-    mutationFn: ({ type, file, filename }: SendAttachmentVariables) =>
-      messagingApi.sendAttachmentMessage(conversationId, type, file, filename),
+    mutationFn: ({ type, file, filename, replyToMessageId, clientId }: SendAttachmentVariables) =>
+      uploadFileInChunks(
+        { conversationId, type, file, originalName: filename, replyToMessageId },
+        {
+          onProgress: (uploadProgress) => patchOptimisticMessage(clientId, { uploadProgress }),
+          onStatusChange: (uploadStatus) => patchOptimisticMessage(clientId, { uploadStatus }),
+        },
+      ),
     onMutate: ({ type, filename, previewUrl, durationSeconds, sizeBytes, clientId }: SendAttachmentVariables) => {
       const optimisticMessage: OptimisticMessage = {
         id: -Date.now(),
@@ -42,6 +55,8 @@ export function useSendAttachmentMessage(conversationId: number) {
         deletedAt: null,
         pending: true,
         localPreviewUrl: previewUrl,
+        uploadProgress: 0,
+        uploadStatus: 'uploading',
       };
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) => [
         ...(existing ?? []),
