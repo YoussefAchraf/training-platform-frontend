@@ -1,20 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { Send, Trash2 } from 'lucide-react';
+import { formatDuration } from '../utils';
 import styles from './MessageThread.module.css';
-
-function formatElapsed(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${String(seconds).padStart(2, '0')}`;
-}
 
 interface VoiceRecorderBarProps {
   elapsedSeconds: number;
+  levels: number[];
   onCancel: () => void;
   onSend: () => void;
 }
 
-export function VoiceRecorderBar({ elapsedSeconds, onCancel, onSend }: VoiceRecorderBarProps) {
+export function VoiceRecorderBar({ elapsedSeconds, levels, onCancel, onSend }: VoiceRecorderBarProps) {
   const { t } = useTranslation('messaging');
 
   return (
@@ -29,8 +25,12 @@ export function VoiceRecorderBar({ elapsedSeconds, onCancel, onSend }: VoiceReco
       </button>
       <span className={styles.recordingIndicator}>
         <span className={styles.recordingDot} aria-hidden="true" />
-        {t('MessageThread.recordingLabel')}
-        <span className={styles.recordingTimer}>{formatElapsed(elapsedSeconds)}</span>
+        <span className={styles.recordingWaveform} aria-hidden="true">
+          {levels.map((level, index) => (
+            <span key={index} className={styles.recordingWaveformBar} style={{ height: `${8 + Math.round(level * 92)}%` }} />
+          ))}
+        </span>
+        <span className={styles.recordingTimer}>{formatDuration(elapsedSeconds)}</span>
       </span>
       <button
         type="button"

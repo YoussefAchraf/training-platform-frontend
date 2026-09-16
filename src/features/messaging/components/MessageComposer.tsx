@@ -116,6 +116,7 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
     return (
       <VoiceRecorderBar
         elapsedSeconds={voiceRecorder.elapsedSeconds}
+        levels={voiceRecorder.levels}
         onCancel={handleCancelRecording}
         onSend={handleSendRecording}
       />

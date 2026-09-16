@@ -9,6 +9,7 @@ import type { ConversationParticipant, Message } from '../types';
 import type { OptimisticMessage } from '../hooks/useSendMessage';
 import { MessageActionsPopover } from './MessageActionsPopover';
 import { MessageInfoPopover } from './MessageInfoPopover';
+import { VoiceMessagePlayer } from './VoiceMessagePlayer';
 import styles from './MessageThread.module.css';
 
 interface MessageBubbleProps {
@@ -126,11 +127,10 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           )}
 
           {!isDeleted && message.type === 'voice' && (
-            <audio
-              controls
+            <VoiceMessagePlayer
               src={attachmentSrc(message)}
-              className={styles.messageAudio}
-              onClick={(event) => event.stopPropagation()}
+              storedDurationSeconds={message.attachmentDurationSeconds}
+              isOwn={isOwn}
             />
           )}
 
