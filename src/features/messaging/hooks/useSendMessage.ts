@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
 import { messagingApi } from '../api/messagingApi';
+import { deleteOutboxEntry, markOutboxEntryFailed, putOutboxEntry } from '../outbox/outboxDb';
 import type { Message } from '../types';
-import type { ChunkedUploadStatus } from '../upload/chunkedUploader';
+import { isRetryableError, type ChunkedUploadStatus } from '../upload/chunkedUploader';
 
 export interface OptimisticMessage extends Message {
   clientId: string;
@@ -25,8 +26,27 @@ export function useSendMessage(conversationId: number) {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: ({ body, replyToMessageId }: SendMessageVariables) =>
-      messagingApi.sendTextMessage(conversationId, body, replyToMessageId),
+    mutationFn: async ({ body, replyToMessageId, clientId }: SendMessageVariables) => {
+      await putOutboxEntry({
+        clientId,
+        kind: 'text',
+        conversationId,
+        body,
+        replyToMessageId,
+        createdAt: new Date().toISOString(),
+        status: 'pending',
+      });
+      try {
+        const message = await messagingApi.sendTextMessage(conversationId, body, replyToMessageId);
+        await deleteOutboxEntry(clientId);
+        return message;
+      } catch (error) {
+        if (!isRetryableError(error)) {
+          await markOutboxEntryFailed(clientId);
+        }
+        throw error;
+      }
+    },
     onMutate: ({ body, replyToMessageId, clientId }: SendMessageVariables) => {
       const optimisticMessage: OptimisticMessage = {
         id: -Date.now(),
@@ -61,7 +81,8 @@ export function useSendMessage(conversationId: number) {
           .sort((a, b) => a.id - b.id),
       );
     },
-    onError: (_error, _variables, context) => {
+    onError: (error, _variables, context) => {
+      if (isRetryableError(error)) return;
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) =>
         existing?.map((item) =>
           item.clientId === context?.clientId ? { ...item, pending: false, failed: true } : item,

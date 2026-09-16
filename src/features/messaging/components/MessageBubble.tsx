@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Ban, Check, CheckCheck, Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { messagingApi } from '../api/messagingApi';
+import { retryOutboxEntry } from '../outbox/outboxEngine';
 import { useMessagingUiStore } from '../messagingUiStore';
 import type { ConversationParticipant, Message } from '../types';
 import type { OptimisticMessage } from '../hooks/useSendMessage';
@@ -54,8 +55,13 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
   const isDeleted = Boolean(message.deletedAt);
 
   const canOpenActions = message.id > 0 && !failed && !isDeleted;
+  const canRetry = failed && 'clientId' in message;
 
   const handleBubbleClick = () => {
+    if (canRetry) {
+      retryOutboxEntry((message as OptimisticMessage).clientId);
+      return;
+    }
     if (!canOpenActions) return;
     setOpenActionsMessageId(isActionsOpen ? null : message.id);
   };
@@ -86,7 +92,8 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             failed && styles.messageBubbleFailed,
           )}
           onClick={handleBubbleClick}
-          disabled={!canOpenActions}
+          disabled={!canOpenActions && !canRetry}
+          aria-label={canRetry ? t('MessageBubble.retry') : undefined}
         >
           {isDeleted && (
             <span className={styles.deletedBody}>
@@ -173,7 +180,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             {message.editedAt && !pending && !failed && !isDeleted && (
               <span className={styles.editedLabel}>{t('MessageBubble.edited')}</span>
             )}
-            <span>{failed ? t('MessageBubble.failed') : formatTime(message.createdAt)}</span>
+            <span>{failed ? t('MessageBubble.failedTapToRetry') : formatTime(message.createdAt)}</span>
             {showTicks && (
               <span
                 className={styles.messageTickButton}
