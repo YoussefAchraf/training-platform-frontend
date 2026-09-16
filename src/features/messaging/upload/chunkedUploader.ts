@@ -25,7 +25,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function isRetryableError(error: unknown): boolean {
+export function isRetryableError(error: unknown): boolean {
   if (!axios.isAxiosError(error)) return true;
   const status = (error as AxiosError).response?.status;
   return status === undefined || status >= 500;

@@ -64,7 +64,8 @@
   },
   "MessageBubble": {
     "sending": "Sending...",
-    "failed": "Failed to send",
+    "failedTapToRetry": "Failed to send - tap to retry",
+    "retry": "Retry sending",
     "imageLabel": "Photo",
     "voiceLabel": "Voice message",
     "fileLabel": "File",

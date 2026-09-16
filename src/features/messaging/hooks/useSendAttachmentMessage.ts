@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/shared/lib/queryKeys';
-import { uploadFileInChunks } from '../upload/chunkedUploader';
+import { deleteOutboxEntry, markOutboxEntryFailed, putOutboxEntry } from '../outbox/outboxDb';
+import { isRetryableError, uploadFileInChunks } from '../upload/chunkedUploader';
 import type { MessageType } from '../types';
 import type { OptimisticMessage } from './useSendMessage';
 
@@ -27,14 +28,35 @@ export function useSendAttachmentMessage(conversationId: number) {
   }
 
   return useMutation({
-    mutationFn: ({ type, file, filename, replyToMessageId, clientId }: SendAttachmentVariables) =>
-      uploadFileInChunks(
-        { conversationId, type, file, originalName: filename, replyToMessageId },
-        {
-          onProgress: (uploadProgress) => patchOptimisticMessage(clientId, { uploadProgress }),
-          onStatusChange: (uploadStatus) => patchOptimisticMessage(clientId, { uploadStatus }),
-        },
-      ),
+    mutationFn: async ({ type, file, filename, replyToMessageId, clientId }: SendAttachmentVariables) => {
+      await putOutboxEntry({
+        clientId,
+        kind: 'attachment',
+        conversationId,
+        type,
+        file,
+        filename,
+        replyToMessageId,
+        createdAt: new Date().toISOString(),
+        status: 'pending',
+      });
+      try {
+        const message = await uploadFileInChunks(
+          { conversationId, type, file, originalName: filename, replyToMessageId },
+          {
+            onProgress: (uploadProgress) => patchOptimisticMessage(clientId, { uploadProgress }),
+            onStatusChange: (uploadStatus) => patchOptimisticMessage(clientId, { uploadStatus }),
+          },
+        );
+        await deleteOutboxEntry(clientId);
+        return message;
+      } catch (error) {
+        if (!isRetryableError(error)) {
+          await markOutboxEntryFailed(clientId);
+        }
+        throw error;
+      }
+    },
     onMutate: ({ type, filename, previewUrl, durationSeconds, sizeBytes, clientId }: SendAttachmentVariables) => {
       const optimisticMessage: OptimisticMessage = {
         id: -Date.now(),
@@ -72,7 +94,8 @@ export function useSendAttachmentMessage(conversationId: number) {
           .sort((a, b) => a.id - b.id),
       );
     },
-    onError: (_error, _variables, context) => {
+    onError: (error, _variables, context) => {
+      if (isRetryableError(error)) return;
       queryClient.setQueryData<OptimisticMessage[]>(queryKeys.messaging.messages(conversationId), (existing) =>
         existing?.map((item) =>
           item.clientId === context?.clientId ? { ...item, pending: false, failed: true } : item,
