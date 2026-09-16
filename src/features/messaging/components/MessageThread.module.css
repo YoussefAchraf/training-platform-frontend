@@ -214,7 +214,7 @@
 }
 
 .messageBubbleOther {
-  background-color: var(--color-bg-subtle);
+  background-color: var(--color-surface-hover);
   color: var(--color-text);
   border-bottom-left-radius: var(--radius-sm);
 }
@@ -432,6 +432,7 @@
   width: 220px;
   max-width: 100%;
   padding: 2px 0;
+  overflow: hidden;
 }
 
 .voicePlayerButton {
@@ -457,15 +458,16 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
   height: 28px;
   min-width: 0;
+  overflow: hidden;
   cursor: pointer;
 }
 
 .voiceWaveformBar {
-  flex: 1 0 2px;
-  max-width: 3px;
+  width: 2px;
+  flex-shrink: 0;
   min-height: 3px;
   border-radius: var(--radius-full);
   background-color: currentColor;
@@ -725,14 +727,15 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
   height: 24px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .recordingWaveformBar {
-  flex: 1 0 2px;
-  max-width: 3px;
+  width: 3px;
+  flex-shrink: 0;
   min-height: 2px;
   border-radius: var(--radius-full);
   background-color: var(--color-danger);
