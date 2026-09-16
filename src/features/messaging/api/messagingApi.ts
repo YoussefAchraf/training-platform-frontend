@@ -1,3 +1,4 @@
+import type { AxiosProgressEvent } from 'axios';
 import { apiClient } from '@/shared/lib/apiClient';
 import type { Conversation, ConversationParticipant, DirectoryPerson, Message, MessageType } from '../types';
 
@@ -54,25 +55,6 @@ export const messagingApi = {
       })
       .then((res) => res.data),
 
-  sendAttachmentMessage: (
-    conversationId: number,
-    type: MessageType,
-    file: File | Blob,
-    filename: string,
-    replyToMessageId?: number,
-  ) => {
-    const formData = new FormData();
-    formData.append('type', type);
-    formData.append('file', file, filename);
-    if (replyToMessageId) formData.append('replyToMessageId', String(replyToMessageId));
-
-    return apiClient
-      .post<Message>(`/messaging/conversations/${conversationId}/messages`, formData, {
-        headers: { 'Content-Type': undefined },
-      })
-      .then((res) => res.data);
-  },
-
   translateMessage: (messageId: number, targetLanguage: string) =>
     apiClient
       .post<{ translatedText: string }>(`/messaging/messages/${messageId}/translate`, { targetLanguage })
@@ -94,6 +76,34 @@ export const messagingApi = {
 
   setConversationMuted: (conversationId: number, muted: boolean) =>
     apiClient.post(`/messaging/conversations/${conversationId}/mute`, { muted }).then((res) => res.data),
+
+  initiateUpload: (conversationId: number, type: MessageType, originalName: string, sizeBytes: number) =>
+    apiClient
+      .post<{ uploadId: string; chunkSize: number; chunkCount: number }>(
+        `/messaging/conversations/${conversationId}/uploads`,
+        { type, originalName, sizeBytes },
+      )
+      .then((res) => res.data),
+
+  uploadChunk: (uploadId: string, index: number, chunk: Blob, onUploadProgress?: (event: AxiosProgressEvent) => void) =>
+    apiClient
+      .put<{ receivedIndexes: number[]; chunkCount: number }>(`/messaging/uploads/${uploadId}/chunks/${index}`, chunk, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+        onUploadProgress,
+      })
+      .then((res) => res.data),
+
+  completeUpload: (uploadId: string, replyToMessageId?: number) =>
+    apiClient
+      .post<Message>(`/messaging/uploads/${uploadId}/complete`, replyToMessageId ? { replyToMessageId } : {})
+      .then((res) => res.data),
+
+  abortUpload: (uploadId: string) => apiClient.delete(`/messaging/uploads/${uploadId}`).then((res) => res.data),
+
+  uploadStatus: (uploadId: string) =>
+    apiClient
+      .get<{ receivedIndexes: number[]; chunkCount: number; chunkSize: number }>(`/messaging/uploads/${uploadId}/status`)
+      .then((res) => res.data),
 
   attachmentUrl,
 };
