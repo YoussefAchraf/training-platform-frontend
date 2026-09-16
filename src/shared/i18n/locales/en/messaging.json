@@ -42,14 +42,19 @@
     "reply": "Reply",
     "forward": "Forward",
     "forwardTo": "Forward to...",
-    "groupInfo": "Group info"
+    "groupInfo": "Group info",
+    "edit": "Edit",
+    "editingMessage": "Editing message",
+    "cancelEdit": "Cancel edit",
+    "save": "Save"
   },
   "MessageBubble": {
     "sending": "Sending...",
     "failed": "Failed to send",
     "imageLabel": "Photo",
     "voiceLabel": "Voice message",
-    "fileLabel": "File"
+    "fileLabel": "File",
+    "edited": "(edited)"
   },
   "ConversationInfoPanel": {
     "title": "Group info",

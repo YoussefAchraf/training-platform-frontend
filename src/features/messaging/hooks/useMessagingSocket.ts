@@ -82,6 +82,12 @@ export function useMessagingSocket(): void {
       queryClient.invalidateQueries({ queryKey: queryKeys.messaging.conversations() });
     }
 
+    function handleMessageUpdated({ message }: { message: Message }) {
+      queryClient.setQueryData<Message[]>(queryKeys.messaging.messages(message.conversationId), (existing) =>
+        existing?.map((item) => (item.id === message.id ? message : item)),
+      );
+    }
+
     function updateParticipantMarker(
       payload: ConversationReadPayload | ConversationDeliveredPayload,
       field: 'lastReadMessageId' | 'lastDeliveredMessageId',
@@ -143,6 +149,7 @@ export function useMessagingSocket(): void {
     }
 
     socket.on('message:new', handleMessageNew);
+    socket.on('message:updated', handleMessageUpdated);
     socket.on('conversation:new', handleConversationsChanged);
     socket.on('participant:added', handleConversationsChanged);
     socket.on('participant:removed', handleConversationsChanged);
@@ -155,6 +162,7 @@ export function useMessagingSocket(): void {
 
     return () => {
       socket.off('message:new', handleMessageNew);
+      socket.off('message:updated', handleMessageUpdated);
       socket.off('conversation:new', handleConversationsChanged);
       socket.off('participant:added', handleConversationsChanged);
       socket.off('participant:removed', handleConversationsChanged);

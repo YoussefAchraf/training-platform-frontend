@@ -17,6 +17,7 @@ interface MessageBubbleProps {
   repliedToMessage: Message | OptimisticMessage | undefined;
   onReply: () => void;
   onForward: () => void;
+  onEdit: () => void;
 }
 
 function formatTime(iso: string): string {
@@ -38,7 +39,7 @@ function attachmentSrc(message: Message | OptimisticMessage): string {
   return optimistic.localPreviewUrl ?? '';
 }
 
-export function MessageBubble({ message, isOwn, participants, repliedToMessage, onReply, onForward }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwn, participants, repliedToMessage, onReply, onForward, onEdit }: MessageBubbleProps) {
   const { t } = useTranslation('messaging');
   const pending = 'pending' in message && message.pending;
   const failed = 'failed' in message && message.failed;
@@ -70,6 +71,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
             onClose={() => setOpenActionsMessageId(null)}
             onReply={onReply}
             onForward={onForward}
+            onEdit={onEdit}
           />
         )}
         <button
@@ -142,6 +144,9 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           <span className={styles.messageMeta}>
             {pending && <Clock size={11} />}
             {failed && <TriangleAlert size={11} />}
+            {message.editedAt && !pending && !failed && (
+              <span className={styles.editedLabel}>{t('MessageBubble.edited')}</span>
+            )}
             <span>{failed ? t('MessageBubble.failed') : formatTime(message.createdAt)}</span>
             {showTicks && (
               <span

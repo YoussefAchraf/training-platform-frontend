@@ -38,6 +38,7 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   const recordingUserIds = recordingUserIdsRaw.filter((id) => id !== user?.id);
   const selectConversation = useMessagingUiStore((state) => state.selectConversation);
   const setReplyTarget = useMessagingUiStore((state) => state.setReplyTarget);
+  const setEditTarget = useMessagingUiStore((state) => state.setEditTarget);
   const forwardMessageId = useMessagingUiStore((state) => state.forwardMessageId);
   const setForwardMessageId = useMessagingUiStore((state) => state.setForwardMessageId);
   const conversationInfoOpen = useMessagingUiStore((state) => state.conversationInfoOpen);
@@ -67,11 +68,17 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   const otherRecording = !otherTyping && recordingUserIds.length > 0;
 
   const handleReply = (message: Message | OptimisticMessage) => {
+    setEditTarget(conversationId, null);
     setReplyTarget(conversationId, {
       messageId: message.id,
       senderName: message.senderName ?? '',
       preview: message.type === 'text' ? (message.body ?? '') : t(`MessageBubble.${message.type}Label` as 'MessageBubble.imageLabel'),
     });
+  };
+
+  const handleEdit = (message: Message | OptimisticMessage) => {
+    setReplyTarget(conversationId, null);
+    setEditTarget(conversationId, { messageId: message.id, body: message.body ?? '' });
   };
 
   return (
@@ -115,6 +122,7 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
                 repliedToMessage={message.replyToMessageId ? messagesById.get(message.replyToMessageId) : undefined}
                 onReply={() => handleReply(message)}
                 onForward={() => setForwardMessageId(message.id)}
+                onEdit={() => handleEdit(message)}
               />
             </motion.div>
           ))}
