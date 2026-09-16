@@ -33,8 +33,17 @@ export const messagingApi = {
       .post<ConversationParticipant>(`/messaging/conversations/${conversationId}/read`, { messageId })
       .then((res) => res.data),
 
-  listMessages: (conversationId: number, params?: { cursor?: number; limit?: number }) =>
+  listMessages: (conversationId: number, params?: { cursor?: number; limit?: number; search?: string }) =>
     apiClient.get<Message[]>(`/messaging/conversations/${conversationId}/messages`, { params }).then((res) => res.data),
+
+  listConversationMedia: (
+    conversationId: number,
+    filter: 'media' | 'files' | 'links',
+    params?: { cursor?: number; limit?: number },
+  ) =>
+    apiClient
+      .get<Message[]>(`/messaging/conversations/${conversationId}/media`, { params: { filter, ...params } })
+      .then((res) => res.data),
 
   sendTextMessage: (conversationId: number, body: string, replyToMessageId?: number) =>
     apiClient
