@@ -55,6 +55,7 @@ USER root
 
 
 RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache --upgrade libssl3 libcrypto3
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY docker/default.conf.template /etc/nginx/default.conf.template
 COPY docker/docker-entrypoint.sh /docker-entrypoint.d/40-render-nginx-config.sh
