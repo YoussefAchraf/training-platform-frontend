@@ -17,12 +17,13 @@ import { useToast } from '@/shared/hooks/useToast';
 import type { Client } from '@/shared/types/domain';
 import { COUNTRY_CODES } from '@/shared/data/countries';
 import { useCreateClient, useUpdateClient } from '../hooks/useClients';
+import { toClientPayload } from '../utils/clientPayload';
 
 function buildClientSchema(t: TFunction<'clients'>) {
   return z
     .object({
       companyName: z.string().trim().min(1, t('ClientFormModal.errors.companyNameRequired')).max(150),
-      email: z.union([z.email(t('ClientFormModal.errors.emailInvalid')), z.literal('')]).optional(),
+      email: z.union([z.email(t('ClientFormModal.errors.emailInvalid')).max(150), z.literal('')]).optional(),
       country: z.union([z.enum(COUNTRY_CODES as [string, ...string[]]), z.literal('')]).optional(),
       phone: z.string().trim().max(30).optional(),
     })
@@ -91,10 +92,12 @@ export function ClientFormModal({ isOpen, onClose, editing = null }: ClientFormM
       handleClose();
     };
 
+    const payload = toClientPayload(values);
+
     if (editing) {
-      updateClient.mutate({ id: editing.id, payload: values }, { onSuccess });
+      updateClient.mutate({ id: editing.id, payload }, { onSuccess });
     } else {
-      createClient.mutate(values, { onSuccess });
+      createClient.mutate(payload, { onSuccess });
     }
   });
 

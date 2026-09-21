@@ -251,7 +251,7 @@
 }
 
 .messageTickRead {
-  color: var(--color-info);
+  color: var(--blue-200);
 }
 
 .messageInfoPopover {
@@ -444,6 +444,7 @@
   flex-shrink: 0;
   border-radius: var(--radius-full);
   color: inherit;
+  cursor: pointer;
 }
 
 .voicePlayerOwn .voicePlayerButton {

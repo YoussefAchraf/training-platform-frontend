@@ -26,6 +26,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
     handleSubmit,
     watch,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<ImportFormValues>();
 
@@ -35,8 +36,9 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
 
   const selectedFile = watch('file')?.[0] ?? null;
 
-  const clearFile = () => {
-    setValue('file', null, { shouldValidate: true });
+  const clearFile = ({ validate }: { validate: boolean }) => {
+    setValue('file', null, { shouldValidate: validate });
+    if (!validate) clearErrors('file');
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -45,7 +47,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
     if (!file) return;
     importAttendees.mutate(
       { id: sessionId, file },
-      { onSuccess: clearFile },
+      { onSuccess: () => clearFile({ validate: false }) },
     );
   });
 
@@ -86,7 +88,7 @@ export function AttendeeImportForm({ sessionId }: AttendeeImportFormProps) {
               {selectedFile.name}
               <button
                 type="button"
-                onClick={clearFile}
+                onClick={() => clearFile({ validate: true })}
                 aria-label={t('AttendeeImportForm.removeFile')}
                 className={styles.chipClear}
               >
