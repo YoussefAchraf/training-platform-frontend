@@ -126,5 +126,6 @@ describe('ClientFormModal', () => {
     await user.click(screen.getByRole('button', { name: /add client/i }));
 
     await waitFor(() => expect(mockedClientsApi.create).toHaveBeenCalled());
+    expect(JSON.parse(JSON.stringify(mockedClientsApi.create.mock.calls[0]?.[0]))).toEqual({ companyName: 'Acme' });
   });
 });

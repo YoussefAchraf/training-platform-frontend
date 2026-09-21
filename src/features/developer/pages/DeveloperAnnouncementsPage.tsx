@@ -31,7 +31,7 @@ const TARGETABLE_ROLES: TargetableRole[] = ['Sales', 'Manager', 'Instructor', 'S
 
 function buildAnnouncementSchema(t: TFunction<'developer'>) {
   return z.object({
-    title: z.string().trim().min(1, t('DeveloperAnnouncementsPage.errors.titleRequired')).max(200),
+    title: z.string().trim().min(1, t('DeveloperAnnouncementsPage.errors.titleRequired')).max(150),
     description: z.string().trim().min(1, t('DeveloperAnnouncementsPage.errors.descriptionRequired')).max(4000),
     targetRoles: z
       .array(z.enum(TARGETABLE_ROLES))
