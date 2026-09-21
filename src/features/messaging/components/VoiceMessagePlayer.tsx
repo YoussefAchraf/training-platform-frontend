@@ -135,17 +135,24 @@ export function VoiceMessagePlayer({ src, storedDurationSeconds, isOwn }: VoiceM
       className={cn(styles.voicePlayer, isOwn ? styles.voicePlayerOwn : styles.voicePlayerOther)}
       onClick={(event) => event.stopPropagation()}
     >
-      <button
-        type="button"
+      <span
+        role="button"
+        tabIndex={0}
         className={styles.voicePlayerButton}
         onClick={(event) => {
+          event.stopPropagation();
+          togglePlay();
+        }}
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
           event.stopPropagation();
           togglePlay();
         }}
         aria-label={t(playing ? 'MessageBubble.pauseVoice' : 'MessageBubble.playVoice')}
       >
         {playing ? <Pause size={16} /> : <Play size={16} />}
-      </button>
+      </span>
       <div
         className={styles.voiceWaveform}
         onPointerDown={(event) => {

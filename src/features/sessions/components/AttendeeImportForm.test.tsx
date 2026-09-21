@@ -65,6 +65,23 @@ describe('AttendeeImportForm', () => {
     expect(await screen.findByText('2 imported')).toBeInTheDocument()
   })
 
+  it('does not flag the reset file picker as an error after a successful import', async () => {
+    const user = userEvent.setup()
+    mockedSessionsApi.importAttendees.mockResolvedValue({
+      importedCount: 2,
+      skippedCount: 0,
+      attendees: [],
+      skipped: [],
+    })
+    renderWithClient(<AttendeeImportForm sessionId={42} />)
+
+    await user.upload(screen.getByLabelText(/attendee spreadsheet file/i), makeFile())
+    await user.click(screen.getByRole('button', { name: /import attendees/i }))
+
+    expect(await screen.findByText('2 imported')).toBeInTheDocument()
+    expect(screen.queryByText(/choose a \.xlsx or \.csv file/i)).not.toBeInTheDocument()
+  })
+
   it('shows an error banner when the import request fails', async () => {
     const user = userEvent.setup()
     mockedSessionsApi.importAttendees.mockRejectedValue(new Error('Could not read the uploaded file'))
