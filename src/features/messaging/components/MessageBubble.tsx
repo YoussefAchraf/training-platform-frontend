@@ -41,8 +41,33 @@ function attachmentSrc(message: Message | OptimisticMessage): string {
   return optimistic.localPreviewUrl ?? '';
 }
 
+interface FileTileProps {
+  href: string;
+  name: string;
+  sizeBytes: number | null;
+}
+
+function FileTile({ href, name, sizeBytes }: FileTileProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={styles.messageFile}
+      onClick={(event) => event.stopPropagation()}
+    >
+      <FileIcon size={20} />
+      <span className={styles.messageFileDetails}>
+        <span className={styles.messageFileName}>{name}</span>
+        {sizeBytes != null && <span className={styles.messageFileSize}>{formatSize(sizeBytes)}</span>}
+      </span>
+    </a>
+  );
+}
+
 export function MessageBubble({ message, isOwn, participants, repliedToMessage, onReply, onForward, onEdit }: MessageBubbleProps) {
   const { t } = useTranslation('messaging');
+  const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
   const pending = 'pending' in message && message.pending;
   const failed = 'failed' in message && message.failed;
   const uploadProgress = 'uploadProgress' in message ? message.uploadProgress : undefined;
@@ -54,6 +79,9 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
   const isActionsOpen = openActionsMessageId === message.id;
   const [infoOpen, setInfoOpen] = useState(false);
   const isDeleted = Boolean(message.deletedAt);
+
+  const imageSrc = message.type === 'image' ? attachmentSrc(message) : '';
+  const imageFailed = failedImageSrc !== null && failedImageSrc === imageSrc;
 
   const canOpenActions = message.id > 0 && !failed && !isDeleted;
   const canRetry = failed && 'clientId' in message;
@@ -114,15 +142,24 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
 
           {!isDeleted && message.type === 'text' && <span className={styles.messageBody}>{message.body}</span>}
 
-          {!isDeleted && message.type === 'image' && (
+          {!isDeleted && message.type === 'image' && !imageFailed && (
             <img
-              src={attachmentSrc(message)}
+              src={imageSrc}
               alt={message.attachmentOriginalName ?? t('MessageBubble.imageLabel')}
               className={styles.messageImage}
+              onError={() => setFailedImageSrc(imageSrc)}
               onClick={(event) => {
                 event.stopPropagation();
-                window.open(attachmentSrc(message), '_blank', 'noopener,noreferrer');
+                window.open(imageSrc, '_blank', 'noopener,noreferrer');
               }}
+            />
+          )}
+
+          {!isDeleted && message.type === 'image' && imageFailed && (
+            <FileTile
+              href={imageSrc}
+              name={message.attachmentOriginalName ?? t('MessageBubble.imageLabel')}
+              sizeBytes={message.attachmentSizeBytes}
             />
           )}
 
@@ -135,21 +172,11 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           )}
 
           {!isDeleted && message.type === 'file' && (
-            <a
+            <FileTile
               href={attachmentSrc(message)}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.messageFile}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <FileIcon size={20} />
-              <span className={styles.messageFileDetails}>
-                <span className={styles.messageFileName}>{message.attachmentOriginalName ?? t('MessageBubble.fileLabel')}</span>
-                {message.attachmentSizeBytes != null && (
-                  <span className={styles.messageFileSize}>{formatSize(message.attachmentSizeBytes)}</span>
-                )}
-              </span>
-            </a>
+              name={message.attachmentOriginalName ?? t('MessageBubble.fileLabel')}
+              sizeBytes={message.attachmentSizeBytes}
+            />
           )}
 
           {!isDeleted && showUploadBar && (

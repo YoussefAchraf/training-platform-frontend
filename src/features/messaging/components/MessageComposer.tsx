@@ -9,6 +9,7 @@ import { useTypingBroadcast } from '../hooks/useTypingBroadcast';
 import { useRecordingBroadcast } from '../hooks/useRecordingBroadcast';
 import { useVoiceRecorder } from '../hooks/useVoiceRecorder';
 import { useMessagingUiStore } from '../messagingUiStore';
+import { prepareImageForSending } from '../imageFormats';
 import type { MessageType } from '../types';
 import { EmojiPickerButton } from './EmojiPickerButton';
 import { VoiceRecorderBar } from './VoiceRecorderBar';
@@ -68,13 +69,25 @@ export function MessageComposer({ conversationId }: MessageComposerProps) {
     setReplyTarget(conversationId, null);
   };
 
-  const handleFileSelected = (type: MessageType) => (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFileSelected = (type: MessageType) => async (event: ChangeEvent<HTMLInputElement>) => {
+    const picked = event.target.files?.[0];
     event.target.value = '';
-    if (!file) return;
-    const previewUrl = type === 'image' ? URL.createObjectURL(file) : undefined;
+    if (!picked) return;
+
+    let file = picked;
+    let attachmentType = type;
+    if (type === 'image') {
+      const displayable = await prepareImageForSending(picked);
+      if (displayable) {
+        file = displayable;
+      } else {
+        attachmentType = 'file';
+      }
+    }
+
+    const previewUrl = attachmentType === 'image' ? URL.createObjectURL(file) : undefined;
     sendAttachment.mutate({
-      type,
+      type: attachmentType,
       file,
       filename: file.name,
       previewUrl,
