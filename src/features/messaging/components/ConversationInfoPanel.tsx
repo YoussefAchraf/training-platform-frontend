@@ -34,6 +34,25 @@ function firstUrl(text: string | null): string | null {
   return match ? match[0].replace(/[.,;:!?)]+$/, '') : null;
 }
 
+function MediaThumb({ messageId }: { messageId: number }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <span className={panelStyles.mediaThumbFallback}>
+        <FileIcon size={24} />
+      </span>
+    );
+  }
+  return (
+    <img
+      src={messagingApi.attachmentUrl(messageId)}
+      alt=""
+      className={panelStyles.mediaThumb}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 export function ConversationInfoPanel({ conversation, onClose }: ConversationInfoPanelProps) {
   const { t } = useTranslation('messaging');
   const { user } = useAuth();
@@ -84,7 +103,7 @@ export function ConversationInfoPanel({ conversation, onClose }: ConversationInf
           rel="noreferrer"
           className={panelStyles.mediaThumbLink}
         >
-          <img src={messagingApi.attachmentUrl(message.id)} alt="" className={panelStyles.mediaThumb} />
+          <MediaThumb messageId={message.id} />
         </a>
       ))}
     </div>
