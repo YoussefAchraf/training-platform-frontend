@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Forward, Languages, Pencil, Reply, Trash2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -6,6 +7,7 @@ import { useTranslateMessage } from '../hooks/useTranslateMessage';
 import { useDeleteMessage } from '../hooks/useDeleteMessage';
 import { useMessagingUiStore } from '../messagingUiStore';
 import type { Message } from '../types';
+import { AnchoredPopover } from './AnchoredPopover';
 import styles from './MessageThread.module.css';
 
 const DELETE_FOR_EVERYONE_WINDOW_MS = 2 * 60 * 1000;
@@ -14,40 +16,20 @@ const DELETE_WINDOW_CHECK_INTERVAL_MS = 5000;
 interface MessageActionsPopoverProps {
   message: Message;
   isOwn: boolean;
+  anchorRef: RefObject<HTMLElement | null>;
   onClose: () => void;
   onReply: () => void;
   onForward: () => void;
   onEdit: () => void;
 }
 
-export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForward, onEdit }: MessageActionsPopoverProps) {
+export function MessageActionsPopover({ message, isOwn, anchorRef, onClose, onReply, onForward, onEdit }: MessageActionsPopoverProps) {
   const { t, i18n } = useTranslation('messaging');
   const translateMessage = useTranslateMessage();
   const deleteMessage = useDeleteMessage();
   const translations = useMessagingUiStore((state) => state.translations);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [placement, setPlacement] = useState<'above' | 'below'>('above');
   const [showDeleteOptions, setShowDeleteOptions] = useState(false);
   const [now, setNow] = useState(() => Date.now());
-
-  useLayoutEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.top < 0) {
-      setPlacement('below');
-    }
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [onClose]);
 
   useEffect(() => {
     if (!showDeleteOptions || !isOwn) return undefined;
@@ -66,14 +48,7 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
   };
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        styles.actionsPopover,
-        isOwn ? styles.actionsPopoverOwn : styles.actionsPopoverOther,
-        placement === 'below' && styles.actionsPopoverBelow,
-      )}
-    >
+    <AnchoredPopover anchorRef={anchorRef} align={isOwn ? 'own' : 'other'} onClose={onClose} className={styles.actionsPopover}>
       {!showDeleteOptions && (
         <>
           {canTranslate && (
@@ -163,6 +138,6 @@ export function MessageActionsPopover({ message, isOwn, onClose, onReply, onForw
           </button>
         </>
       )}
-    </div>
+    </AnchoredPopover>
   );
 }

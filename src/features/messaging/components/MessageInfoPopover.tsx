@@ -1,53 +1,25 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, CheckCheck } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { formatDateTime } from '../utils';
 import type { ConversationParticipant, Message } from '../types';
+import { AnchoredPopover } from './AnchoredPopover';
 import styles from './MessageThread.module.css';
 
 interface MessageInfoPopoverProps {
   message: Message;
   participants: ConversationParticipant[];
+  anchorRef: RefObject<HTMLElement | null>;
   onClose: () => void;
 }
 
-export function MessageInfoPopover({ message, participants, onClose }: MessageInfoPopoverProps) {
+export function MessageInfoPopover({ message, participants, anchorRef, onClose }: MessageInfoPopoverProps) {
   const { t } = useTranslation('messaging');
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [placement, setPlacement] = useState<'above' | 'below'>('above');
-
-  useLayoutEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.top < 0) {
-      setPlacement('below');
-    }
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [onClose]);
-
   const others = participants.filter((participant) => participant.userId !== message.senderId);
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        styles.actionsPopover,
-        styles.actionsPopoverOwn,
-        styles.messageInfoPopover,
-        placement === 'below' && styles.actionsPopoverBelow,
-      )}
-    >
+    <AnchoredPopover anchorRef={anchorRef} align="own" onClose={onClose} className={cn(styles.actionsPopover, styles.messageInfoPopover)}>
       <span className={styles.messageInfoTitle}>{t('MessageInfoPopover.title')}</span>
       <ul className={styles.messageInfoList}>
         {others.map((participant) => {
@@ -83,6 +55,6 @@ export function MessageInfoPopover({ message, participants, onClose }: MessageIn
           );
         })}
       </ul>
-    </div>
+    </AnchoredPopover>
   );
 }

@@ -158,14 +158,13 @@
   color: var(--color-text);
 }
 
+
 .conversationMenu {
-  position: absolute;
-  top: 100%;
-  right: var(--space-2);
   z-index: var(--z-popover);
   display: flex;
   flex-direction: column;
   min-width: 180px;
+  max-width: min(240px, calc(100vw - 24px));
   padding: var(--space-1);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MessageSquareText } from 'lucide-react';
 import { useIsDesktop, useStandaloneDeviceClass } from '@/shared/hooks/useMediaQuery';
 import { useViewportFillHeight } from '@/shared/hooks/useViewportFillHeight';
+import { useVisualViewportHeight } from '@/shared/hooks/useVisualViewportHeight';
 import { cn } from '@/shared/utils/cn';
 import { useMessagingUiStore } from '../messagingUiStore';
 import { ConversationsPane } from '../components/ConversationsPane';
@@ -18,6 +19,7 @@ export function MessagingPage() {
   const isSplit = useIsDesktop();
   const selectedConversationId = useMessagingUiStore((state) => state.selectedConversationId);
   const { ref: fillRef, height: fillHeight } = useViewportFillHeight<HTMLDivElement>(0);
+  const visualViewportHeight = useVisualViewportHeight();
 
   const showList = isSplit || selectedConversationId == null;
   const showThread = isSplit || selectedConversationId != null;
@@ -45,7 +47,12 @@ export function MessagingPage() {
   );
 
   if (isPhone) {
-    return createPortal(<div className={styles.fullscreen}>{body}</div>, document.body);
+    return createPortal(
+      <div className={styles.fullscreen} style={visualViewportHeight ? { height: visualViewportHeight } : undefined}>
+        {body}
+      </div>,
+      document.body,
+    );
   }
 
   return (

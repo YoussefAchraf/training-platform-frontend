@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BellOff, Bell, MoreVertical, Trash2 } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -9,6 +9,7 @@ import { useHideConversation } from '../hooks/useHideConversation';
 import { useSetConversationMuted } from '../hooks/useSetConversationMuted';
 import { useMessagingUiStore } from '../messagingUiStore';
 import { conversationDisplayName, initialsFromName } from '../utils';
+import { AnchoredPopover } from './AnchoredPopover';
 import styles from './ConversationsPane.module.css';
 
 export function ConversationList() {
@@ -21,18 +22,9 @@ export function ConversationList() {
   const setConversationMuted = useSetConversationMuted();
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (openMenuId == null) return undefined;
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setOpenMenuId(null);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [openMenuId]);
+  
+  
+  const moreButtonRef = useRef<HTMLSpanElement | null>(null);
 
   if (isLoading) {
     return <p className={styles.statusText}>{t('PeopleDirectory.loading')}</p>;
@@ -94,6 +86,9 @@ export function ConversationList() {
                 )}
               </button>
               <span
+                ref={(el) => {
+                  if (conversation.id === openMenuId) moreButtonRef.current = el;
+                }}
                 role="button"
                 tabIndex={0}
                 className={styles.conversationMoreButton}
@@ -113,7 +108,12 @@ export function ConversationList() {
               </span>
 
               {openMenuId === conversation.id && (
-                <div ref={menuRef} className={styles.conversationMenu}>
+                <AnchoredPopover
+                  anchorRef={moreButtonRef}
+                  align="own"
+                  onClose={() => setOpenMenuId(null)}
+                  className={styles.conversationMenu}
+                >
                   <button
                     type="button"
                     className={styles.conversationMenuItem}
@@ -137,7 +137,7 @@ export function ConversationList() {
                     <Trash2 size={15} />
                     {t('ConversationList.deleteConversation')}
                   </button>
-                </div>
+                </AnchoredPopover>
               )}
             </div>
           </li>
