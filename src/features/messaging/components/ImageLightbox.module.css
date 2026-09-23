@@ -1,0 +1,45 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 88%);
+  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px)
+    env(safe-area-inset-left, 16px);
+}
+
+.image {
+  max-width: 92vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  cursor: default;
+}
+
+.toolbar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + var(--space-3));
+  right: calc(env(safe-area-inset-right, 0px) + var(--space-3));
+  display: flex;
+  gap: var(--space-2);
+  z-index: 1;
+}
+
+.toolbarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  color: #fff;
+  background-color: rgb(255 255 255 / 12%);
+}
+
+.toolbarButton:hover {
+  background-color: rgb(255 255 255 / 22%);
+}

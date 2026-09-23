@@ -97,5 +97,8 @@
     "sent": "Sent",
     "deliveredAt": "Delivered {{time}}",
     "readAt": "Read {{time}}"
+  },
+  "ImageLightbox": {
+    "download": "Download image"
   }
 }

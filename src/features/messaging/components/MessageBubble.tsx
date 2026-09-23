@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Ban, Check, CheckCheck, Clock, File as FileIcon, TriangleAlert } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -7,6 +7,7 @@ import { retryOutboxEntry } from '../outbox/outboxEngine';
 import { useMessagingUiStore } from '../messagingUiStore';
 import type { ConversationParticipant, Message } from '../types';
 import type { OptimisticMessage } from '../hooks/useSendMessage';
+import { ImageLightbox } from './ImageLightbox';
 import { MessageActionsPopover } from './MessageActionsPopover';
 import { MessageInfoPopover } from './MessageInfoPopover';
 import { VoiceMessagePlayer } from './VoiceMessagePlayer';
@@ -20,6 +21,7 @@ interface MessageBubbleProps {
   onReply: () => void;
   onForward: () => void;
   onEdit: () => void;
+  onJumpToReply: (messageId: number) => void;
 }
 
 function formatTime(iso: string): string {
@@ -65,9 +67,20 @@ function FileTile({ href, name, sizeBytes }: FileTileProps) {
   );
 }
 
-export function MessageBubble({ message, isOwn, participants, repliedToMessage, onReply, onForward, onEdit }: MessageBubbleProps) {
+export function MessageBubble({
+  message,
+  isOwn,
+  participants,
+  repliedToMessage,
+  onReply,
+  onForward,
+  onEdit,
+  onJumpToReply,
+}: MessageBubbleProps) {
   const { t } = useTranslation('messaging');
+  const wrapRef = useRef<HTMLDivElement>(null);
   const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const pending = 'pending' in message && message.pending;
   const failed = 'failed' in message && message.failed;
   const uploadProgress = 'uploadProgress' in message ? message.uploadProgress : undefined;
@@ -102,11 +115,12 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
 
   return (
     <div className={cn(styles.messageRow, isOwn ? styles.messageRowOwn : styles.messageRowOther)}>
-      <div className={styles.messageBubbleWrap}>
+      <div className={styles.messageBubbleWrap} ref={wrapRef}>
         {isActionsOpen && (
           <MessageActionsPopover
             message={message}
             isOwn={isOwn}
+            anchorRef={wrapRef}
             onClose={() => setOpenActionsMessageId(null)}
             onReply={onReply}
             onForward={onForward}
@@ -132,7 +146,21 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
           )}
 
           {!isDeleted && repliedToMessage && (
-            <div className={styles.quotedReply}>
+            <div
+              className={styles.quotedReply}
+              role="button"
+              tabIndex={0}
+              onClick={(event) => {
+                event.stopPropagation();
+                onJumpToReply(repliedToMessage.id);
+              }}
+              onKeyDown={(event) => {
+                if (event.key !== 'Enter' && event.key !== ' ') return;
+                event.preventDefault();
+                event.stopPropagation();
+                onJumpToReply(repliedToMessage.id);
+              }}
+            >
               <span className={styles.quotedReplyName}>{repliedToMessage.senderName ?? ''}</span>
               <span className={styles.quotedReplyText}>
                 {repliedToMessage.type === 'text' ? repliedToMessage.body : t(`MessageBubble.${repliedToMessage.type}Label` as 'MessageBubble.imageLabel')}
@@ -150,7 +178,7 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
               onError={() => setFailedImageSrc(imageSrc)}
               onClick={(event) => {
                 event.stopPropagation();
-                window.open(imageSrc, '_blank', 'noopener,noreferrer');
+                setLightboxOpen(true);
               }}
             />
           )}
@@ -238,9 +266,23 @@ export function MessageBubble({ message, isOwn, participants, repliedToMessage, 
         </button>
 
         {infoOpen && (
-          <MessageInfoPopover message={message as Message} participants={participants} onClose={() => setInfoOpen(false)} />
+          <MessageInfoPopover
+            message={message as Message}
+            participants={participants}
+            anchorRef={wrapRef}
+            onClose={() => setInfoOpen(false)}
+          />
         )}
       </div>
+
+      {lightboxOpen && message.type === 'image' && !imageFailed && (
+        <ImageLightbox
+          src={imageSrc}
+          alt={message.attachmentOriginalName ?? t('MessageBubble.imageLabel')}
+          downloadHref={imageSrc}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </div>
   );
 }

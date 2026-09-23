@@ -97,5 +97,8 @@
     "sent": "Envoye",
     "deliveredAt": "Distribue {{time}}",
     "readAt": "Lu {{time}}"
+  },
+  "ImageLightbox": {
+    "download": "Télécharger l'image"
   }
 }
