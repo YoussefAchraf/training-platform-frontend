@@ -399,6 +399,13 @@
   background-color: rgb(0 0 0 / 8%);
   opacity: 0.85;
   font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.quotedReply:hover,
+.quotedReply:focus-visible {
+  opacity: 1;
 }
 
 .messageBubbleOther .quotedReply {
@@ -569,34 +576,18 @@
   opacity: 0.7;
 }
 
+
 .actionsPopover {
-  position: absolute;
-  bottom: 100%;
-  margin-bottom: 8px;
   z-index: var(--z-popover);
   display: flex;
   flex-direction: column;
   min-width: 160px;
+  max-width: min(280px, calc(100vw - 24px));
   padding: var(--space-1);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
   box-shadow: var(--shadow-lg);
-}
-
-.actionsPopoverBelow {
-  bottom: auto;
-  top: 100%;
-  margin-bottom: 0;
-  margin-top: 8px;
-}
-
-.actionsPopoverOwn {
-  right: 0;
-}
-
-.actionsPopoverOther {
-  left: 0;
 }
 
 .actionsPopoverItem {

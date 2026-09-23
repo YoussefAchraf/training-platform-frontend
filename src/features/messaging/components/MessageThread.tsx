@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Info, Search, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useIsDesktop } from '@/shared/hooks/useMediaQuery';
+import { useVisualViewportHeight } from '@/shared/hooks/useVisualViewportHeight';
 import { cn } from '@/shared/utils/cn';
 import { listItem, staggerContainer } from '@/shared/motion/variants';
 import { useConversations } from '../hooks/useConversations';
@@ -57,6 +58,11 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
 
   const listRef = useRef<HTMLDivElement>(null);
   const lastMessageId = messages && messages.length > 0 ? messages[messages.length - 1].id : undefined;
+  
+  
+  
+  
+  const visualViewportHeight = useVisualViewportHeight();
 
   const messagesById = useMemo(() => {
     const map = new Map<number, Message | OptimisticMessage>();
@@ -67,7 +73,7 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, typingUserIds.length, recordingUserIds.length]);
+  }, [messages, typingUserIds.length, recordingUserIds.length, visualViewportHeight]);
 
   useEffect(() => {
     if (lastMessageId == null || lastMessageId < 0) return;
@@ -92,15 +98,18 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
     setEditTarget(conversationId, { messageId: message.id, body: message.body ?? '' });
   };
 
-  const handleSearchResultClick = (messageId: number) => {
+  const jumpToMessage = (messageId: number) => {
     const element = document.getElementById(`message-${messageId}`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setHighlightedMessageId(messageId);
-      window.setTimeout(() => setHighlightedMessageId(null), 2000);
-      setSearchOpen(false);
-      setSearchTerm('');
-    }
+    if (!element) return;
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setHighlightedMessageId(messageId);
+    window.setTimeout(() => setHighlightedMessageId(null), 2000);
+  };
+
+  const handleSearchResultClick = (messageId: number) => {
+    jumpToMessage(messageId);
+    setSearchOpen(false);
+    setSearchTerm('');
   };
 
   const handleCloseSearch = () => {
@@ -203,6 +212,7 @@ export function MessageThread({ conversationId }: MessageThreadProps) {
                 onReply={() => handleReply(message)}
                 onForward={() => setForwardMessageId(message.id)}
                 onEdit={() => handleEdit(message)}
+                onJumpToReply={jumpToMessage}
               />
             </motion.div>
           ))}
